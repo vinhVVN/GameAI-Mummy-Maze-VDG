@@ -1,0 +1,20 @@
+import os
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 480
+MAZE_PANEL_WIDTH = 494
+CONTROL_PANEL_WIDTH = SCREEN_WIDTH - MAZE_PANEL_WIDTH
+
+MAZE_COORD_X = 67
+MAZE_COORD_Y = 80
+
+COLOR_WHITE = (255,255,255)
+COLOR_BLACK = (0,0,0)
+COLOR_PANEL_BG = (50,50,50)
+
+PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ASSETS_PATH = os.path.join(PROJECT_PATH, "assets")
+IMAGES_PATH = os.path.join(ASSETS_PATH, "images")
+MAPS_PATH = os.path.join(ASSETS_PATH, "maps")
+
+FPS = 30
