@@ -1,0 +1,19 @@
+thiết kế và đặt ra quy luật cho map:
+
+vị trí nhân vật chỉ đc ở vị trí lẻ, từ 1,1 trở đi
+đặt ở 0 là dính viền
+mỗi lượt nó đi 1 bước = 2 dấu cách
+
+
+2 dấu cách là bằng 1 ô trong game để ngăn cách với tường ngang và tường đứng rõ ràng
+-> map 13x13 sau trừ đi viền là 12/2 = 6 ô
+
+tường ngang được vẽ ở hàng chẵn và cột lẻ 
+để có thể chặn nhân vật lên, xuống vì nhân vật chỉ có thể di chuyển với x,y lẻ và (y' + y)/2 
+luôn là một hàng chẵn nên ta chỉ cần xét có tường ở vị trí đó. 
+
+tương tự, tường đứng được vẽ ở hàng lẻ, cột chẵn
+
+cầu thang ở viền là ở cột chẵn nên cần đc đặt ở hàng lẻ
+
+

@@ -87,6 +87,7 @@ class Character:
             self.target_pixel_pos = self.get_screen_pos_from_grid(cell_size, next_grid_x, next_grid_y)
             self.target_grid_pos = (next_grid_x, next_grid_y)  
             
+            
                   
             
 class Player(Character):
@@ -126,3 +127,39 @@ class Mummy(Character):
         
         return animations
     
+    def classic_move(self, player_pos, maze):
+        actions = []
+        
+        x, y = self.grid_x, self.grid_y
+        player_x, player_y = player_pos
+        dist_x = player_x - x
+        dist_y = player_y - y
+        
+        move_x = (dist_x // abs(dist_x) * 2) if dist_x != 0 else 0 # // abs chỉ để lấy dấu (+ -)
+        move_y = (dist_y // abs(dist_y) * 2) if dist_y != 0 else 0 # * 2 để ra bước đi
+        
+        if dist_x == 0: # trùng chiều dọc
+            move = [(0, move_y, "DOWN" if move_y > 0 else "UP")] * 2
+        elif dist_y == 0:
+            move = [(move_x, 0, "RIGHT" if move_x > 0 else "LEFT")] * 2
+        elif abs(dist_x) > abs(dist_y): # ưu tiên đi theo chiều ngang trước 
+            move = [(move_x, 0, "RIGHT" if move_x > 0 else "LEFT"),
+                    (0, move_y, "DOWN" if move_y > 0 else "UP")]
+        else:
+            move = [(0, move_y, "DOWN" if move_y > 0 else "UP"),
+                    (move_x, 0, "RIGHT" if move_x > 0 else "LEFT")]
+        
+        cur_x, cur_y = x, y
+        for dx, dy, action in move:
+            if dx == 0 and dy == 0:
+                continue
+            
+            wall_x = cur_x + dx//2
+            wall_y = cur_y + dy//2
+            if maze.is_passable(wall_x, wall_y):
+                actions.append(action)
+                cur_x += dx
+                cur_y += dy
+        
+        return actions
+            

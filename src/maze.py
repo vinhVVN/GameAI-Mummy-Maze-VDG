@@ -41,7 +41,22 @@ class Maze:
                     
                 self.map_data.append(row)
                 
-    
+    def calculate_stair(self):
+        sx, sy = self.stair_pos
+        gx, gy = 0, 0
+        if self.stair_pos[0] == 0: # LEFT
+            gx = 1
+            gy = sy
+        elif self.stair_pos[0] >= self.maze_size * 2: # RIGHT
+            gx = sx - 1
+            gy = sy
+        elif self.stair_pos[1] >= self.maze_size: # DOWN
+            gx = sx
+            gy = sy + 1
+        else:
+            gx = sx
+            gy = sy - 1
+        return gx, gy
         
     def load_assets(self):
         self.backdrop_img = pygame.image.load(os.path.join(IMAGES_PATH, "backdrop.png"))
