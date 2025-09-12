@@ -17,7 +17,7 @@ class Game:
         self.maze = Maze("map6_1.txt")
         cell_size = self.maze.cell_size
         self.player = Player(1,1,self.maze.maze_size, cell_size)
-        self.mummy = Mummy(3,11, self.maze.maze_size, cell_size)
+        self.mummy = Mummy(5,9, self.maze.maze_size, cell_size)
 
         self.panel = Panel(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
         self.set_buttons()
@@ -55,20 +55,7 @@ class Game:
         if self.ai_running:
             return
         
-        sx, sy = self.maze.stair_pos
-        gx, gy = 0, 0
-        if self.maze.stair_pos[0] == 0: # LEFT
-            gx = 1
-            gy = sy
-        elif self.maze.stair_pos[0] >= self.maze.maze_size * 2: # RIGHT
-            gx = sx - 1
-            gy = sy
-        elif self.maze.stair_pos[1] >= self.maze.maze_size: # DOWN
-            gx = sx
-            gy = sy + 1
-        else:
-            gx = sx
-            gy = sy - 1
+        gx, gy = self.maze.calculate_stair()
         
         
         problem = MazeProblem(self.maze, 
@@ -120,6 +107,8 @@ class Game:
                 
         
     def update(self): 
+        
+        # AI người chơi
         if self.ai_running and self.solution_paths and not self.player.is_moving:
             action = self.solution_paths.pop(0)
             dx, dy = 0, 0
@@ -139,16 +128,23 @@ class Game:
             print("AI đã chạy xong!")
         
         
-        
+        # di chuyển mummy
         if self.mummy_calculate and not self.player.is_moving: 
-            problem = MazeProblem(
-                maze=self.maze,
-                start_pos=(self.mummy.grid_x, self.mummy.grid_y),
-                goal_pos=(self.player.grid_x, self.player.grid_y)
-                )
-            path = BFS(problem)
-            if path:
-                self.mummy_path = path
+            # problem = MazeProblem(
+            #     maze=self.maze,
+            #     start_pos=(self.mummy.grid_x, self.mummy.grid_y),
+            #     goal_pos=(self.player.grid_x, self.player.grid_y)
+            #     )
+            # path = BFS(problem)
+            # if path:
+            #     self.mummy_path = path
+            #     self.mummy.move_turns = min(2, len(self.mummy_path))
+            
+            player_pos = (self.player.grid_x, self.player.grid_y)
+            actions = self.mummy.classic_move(player_pos, self.maze)
+            
+            if actions:
+                self.mummy_path = actions
                 self.mummy.move_turns = min(2, len(self.mummy_path))
             
             self.mummy_calculate = False
@@ -169,6 +165,17 @@ class Game:
            
         self.player.update()
         self.mummy.update()
+        
+        if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
+                print("WINNNN")
+                congratulate_path = os.path.join(IMAGES_PATH, "j97_win.jpg")
+                congratulate_image = pygame.image.load(congratulate_path).convert()
+                congratulate_image = pygame.transform.scale(congratulate_image, (MAZE_PANEL_WIDTH,SCREEN_HEIGHT))
+                self.screen.blit(congratulate_image, (0, 0))
+                pygame.display.flip()
+                pygame.time.delay(2000)
+                
+                self.running = False
         
         if (self.player.grid_x == self.mummy.grid_x and self.player.grid_y == self.mummy.grid_y):
                 print("Game Over")
