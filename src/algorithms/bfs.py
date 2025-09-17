@@ -19,7 +19,7 @@ def BFS(problem):
             print(path)
             return path
         
-        for next_state, action in problem.get_move(cur_state):
+        for next_state, action, _ in problem.get_move(cur_state):
             if next_state not in visited:
                 visited.add(next_state)
                 paths[next_state] = (cur_state, action)

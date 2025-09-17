@@ -1,0 +1,7 @@
+Nêú ở chế độ tìm kiếm ko co thông tin thì ==>
+- Không vẽ mummy
+- Không chạy hàm kiểm tra có thua không?
+- Không cho mummy di chuyển
+
+tìm kiêếm dòng sau đây va thay đổi
+if self.player_algo not in ["BFS", "IDS", "DFS"]:
