@@ -69,3 +69,27 @@ class MazeProblem:
         player_pos, mummy_pos = state
         # chi phí dựa trên khoảng cách của Player tới cầu thang
         return abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
+
+class SimpleMazeProblem:
+    def __init__(self, maze, start, goal):
+        self.maze = maze
+        self.start_state = start
+        self.goal = goal
+
+    def get_init_state(self):
+        return self.start_state
+
+    def is_goal_state(self, state):
+        return state == self.goal
+
+    def get_move(self, state):
+        moves = []
+        px, py = state
+        actions = [(0, -2, "UP"), (0, 2, "DOWN"), (-2, 0, "LEFT"), (2, 0, "RIGHT")]
+        for dx, dy, action in actions:
+            wall_x = px + dx // 2
+            wall_y = py + dy // 2
+            if self.maze.is_passable(wall_x, wall_y):
+                new_pos = (px + dx, py + dy)
+                moves.append((new_pos, action, 0))  # cost = 1
+        return moves

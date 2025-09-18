@@ -10,7 +10,8 @@ class Maze:
         self.key_pos = None
         self.gate_pos = None
         self.trap_pos = None
-        
+
+        self.map_name = map_name
         self.loadmap(map_name)
                 
         self.maze_pixel_size = 360
