@@ -1,8 +1,6 @@
-import heapq # Thư viện cho hàng đợi ưu tiên
+import heapq 
 
 def AStar(problem):
-    # Hàng đợi ưu tiên chứa: (f_cost, g_cost, state)
-    # g_cost là chi phí thực tế từ đầu đến state
     frontier = [(0, 0, problem.get_init_state())] 
     
     visited = set()

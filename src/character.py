@@ -112,7 +112,7 @@ class Player(Character):
 
 class Mummy(Character):
     def __init__(self, start_pos_x, start_pos_y, maze_size, cell_size):
-        sprite_path = os.path.join(IMAGES_PATH, f"j97_{maze_size}.png")
+        sprite_path = os.path.join(IMAGES_PATH, f"mummy_white{maze_size}.png")
         super().__init__(sprite_path, start_pos_x, start_pos_y, cell_size)
         self.move_turns = 0
         
@@ -158,6 +158,8 @@ class Mummy(Character):
                     cur_y += move_y
                     moved_this_attempt = True
                     continue 
+                
+            
             
             if not moved_this_attempt:
                 break 

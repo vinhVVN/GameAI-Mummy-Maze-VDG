@@ -16,10 +16,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         
-        self.maze = Maze("map6_5.txt")
+        self.maze = Maze("map6_2.txt")
         cell_size = self.maze.cell_size
-        self.player = Player(1,9,self.maze.maze_size, cell_size)
-        self.mummy = Mummy(11,9, self.maze.maze_size, cell_size)
+        self.player = Player(5,9,self.maze.maze_size, cell_size)
+        self.mummy = Mummy(7,3, self.maze.maze_size, cell_size)
 
         self.player_algo = "BFS"  # hoặc BFS/IDS…
         self.mummy_algo = "classic"  # classic = di chuyển greedy
@@ -40,8 +40,8 @@ class Game:
     def load_new_map(self, map_name):
         self.maze = Maze(map_name)
         cell_size = self.maze.cell_size
-        self.player = Player(3, 7, self.maze.maze_size, cell_size)
-        self.mummy = Mummy(11, 5, self.maze.maze_size, cell_size)
+        self.player = Player(1, 15, self.maze.maze_size, cell_size)
+        self.mummy = Mummy(9, 13, self.maze.maze_size, cell_size)
 
     def set_buttons(self):
         btn_w, btn_h = 220, 40
@@ -63,7 +63,7 @@ class Game:
 
         def change_map():
             # đổi giữa các map có sẵn
-            maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt"]
+            maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt","map8_1.txt"]
             current = maps.index(self.maze.map_name)
             new_map = maps[(current + 1) % len(maps)]
             print(f"Đổi sang {new_map}")
@@ -97,7 +97,7 @@ class Game:
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
                              (self.mummy.grid_x, self.mummy.grid_y))
-            problem = MazeProblem(self.maze, initial_state, (gx, gy))
+            problem = MazeProblem(self.maze, initial_state, (gx, gy), self.maze.trap_pos)
 
         algo_map = {
             "BFS": BFS,
@@ -232,7 +232,8 @@ class Game:
                         problem = MazeProblem(self.maze,
                                               ((self.mummy.grid_x, self.mummy.grid_y),
                                                (self.player.grid_x, self.player.grid_y)),
-                                              player_pos)
+                                              player_pos,
+                                              self.maze.trap_pos)
                         actions = BFS(problem)
 
                     if actions:
@@ -270,11 +271,22 @@ class Game:
 
                     # self.running = False
                     self.reset_game()
+            
+            if self.maze.trap_pos and (self.player.grid_x, self.player.grid_y) == self.maze.trap_pos:
+                    print("Game Over - Đậm phải trap")
+                    jumpscare_path = os.path.join(IMAGES_PATH, "dinhbay.jpg")
+                    jumpscare_image = pygame.image.load(jumpscare_path).convert()
+                    jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+                    self.screen.blit(jumpscare_image, (0, 0))
+                    pygame.display.flip()
+                    pygame.time.delay(2000)
+                    # self.running = False
+                    self.reset_game()
 
         # uninformed search
         if self.player_algo not in ["BFS", "IDS", "DFS"]:
             if (self.player.grid_x == self.mummy.grid_x and self.player.grid_y == self.mummy.grid_y):
-                print("Game Over")
+                print("Game Over - bị ma bắt")
                 jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
                 jumpscare_image = pygame.image.load(jumpscare_path).convert()
                 jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))

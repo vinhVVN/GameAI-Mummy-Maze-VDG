@@ -23,6 +23,7 @@ class Maze:
         self.wall_sprites = {}
         self.stair_sprites = [] # các hướng của cầu thang
         
+        
         self.load_assets()
         
     def loadmap(self, map_name):
@@ -62,10 +63,15 @@ class Maze:
     def load_assets(self):
         self.backdrop_img = pygame.image.load(os.path.join(IMAGES_PATH, "backdrop.png"))
         self.floor_img = pygame.image.load(os.path.join(IMAGES_PATH, f"floor{self.maze_size}.jpg"))
+        self.trap_img = pygame.image.load(os.path.join(IMAGES_PATH,f"trap{self.maze_size}.png"))
         wall_sheet = Spritesheet(os.path.join(IMAGES_PATH, f"walls{self.maze_size}.png"))
         if self.maze_size == 6:
             self.wall_sprites['left'] = wall_sheet.get_image(0,0,12,78)
             self.wall_sprites['up'] = wall_sheet.get_image(12,0,72,18)
+        
+        if self.maze_size == 8:
+            self.wall_sprites['left'] = wall_sheet.get_image(0,0,11,58)
+            self.wall_sprites['up'] = wall_sheet.get_image(11,0,50,13)
         
         stair_sheet = Spritesheet(os.path.join(IMAGES_PATH, f"stairs{self.maze_size}.png"))
         sw = stair_sheet.sheet.get_width() // 4 # chiều rộng 1 sprite
@@ -80,6 +86,7 @@ class Maze:
         surface.blit(self.floor_img, (MAZE_COORD_X, MAZE_COORD_Y))
         self.draw_stairs(surface)
         self.draw_walls(surface)
+        self.draw_trap(surface)
 
         
     def draw_stairs(self, surface):
@@ -130,6 +137,14 @@ class Maze:
                     surface.blit(self.wall_sprites['left'],
                                  (draw_x + offset_x, draw_y + offset_y))
     
+    
+    def draw_trap(self, surface):
+        if not self.trap_pos:
+            return
+        
+        draw_x = MAZE_COORD_X + (self.trap_pos[0] // 2) * self.cell_size
+        draw_y = MAZE_COORD_Y + (self.trap_pos[1] // 2) * self.cell_size
+        surface.blit(self.trap_img, (draw_x, draw_y))
     
     def is_passable(self, grid_x, grid_y):
         if 0 <= grid_x < len(self.map_data[0]) and 0 <= grid_y < len(self.map_data):

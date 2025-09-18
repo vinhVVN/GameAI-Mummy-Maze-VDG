@@ -1,7 +1,7 @@
 from src.character import Mummy
 
 class MazeProblem:
-    def __init__(self, maze, start_state, goal_pos):
+    def __init__(self, maze, start_state, goal_pos, trap_pos):
         self.maze = maze
         # start_state bao gồm ((player_x, player_y), (mummy_x, mummy_y))
         self.start_state = start_state
@@ -10,6 +10,8 @@ class MazeProblem:
 
         # Tạo một đối tượng Mummy tạm thời để mô phỏng
         self.sim_mummy = Mummy(1, 1, maze.maze_size, maze.cell_size)
+        
+        self.trap_pos = trap_pos
         
     def get_init_state(self):
         return self.start_state
@@ -60,6 +62,9 @@ class MazeProblem:
                 # Nếu bước đi này dẫn đến thua, đặt chi phí cực lớn
                 if new_player_pos == new_mummy_pos:
                     cost = float(self.FEAR_FACTOR * 5)
+                
+                if self.trap_pos and new_player_pos == self.trap_pos:
+                    cost = float('inf')
                 
                 moves.append((next_state, action, cost))
         
