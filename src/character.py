@@ -112,7 +112,7 @@ class Player(Character):
 
 class Mummy(Character):
     def __init__(self, start_pos_x, start_pos_y, maze_size, cell_size):
-        sprite_path = os.path.join(IMAGES_PATH, f"j97_{maze_size}.png")
+        sprite_path = os.path.join(IMAGES_PATH, f"mummy_white{maze_size}.png")
         super().__init__(sprite_path, start_pos_x, start_pos_y, cell_size)
         self.move_turns = 0
         
@@ -129,35 +129,40 @@ class Mummy(Character):
         return animations
     
     def classic_move(self, player_pos, maze):
+        """
+        Di chuyển theo quy tắc White Mummy: luôn ưu tiên đi ngang (horizontal) trước.
+        Có thể đi 2 bước ngang nếu được.
+        """
         actions = []
-        
-        x, y = self.grid_x, self.grid_y
+        cur_x, cur_y = self.grid_x, self.grid_y
         player_x, player_y = player_pos
-        dist_x = player_x - x
-        dist_y = player_y - y
-        
-        move_x = (dist_x // abs(dist_x) * 2) if dist_x != 0 else 0 # // abs chỉ để lấy dấu (+ -)
-        move_y = (dist_y // abs(dist_y) * 2) if dist_y != 0 else 0 # * 2 để ra bước đi
-        
-        
-        if abs(dist_x) > abs(dist_y): # ưu tiên đi theo chiều ngang trước 
-            move = [(move_x, 0, "RIGHT" if move_x > 0 else "LEFT"),
-                    (0, move_y, "DOWN" if move_y > 0 else "UP")]
-        else:
-            move = [(0, move_y, "DOWN" if move_y > 0 else "UP"),
-                    (move_x, 0, "RIGHT" if move_x > 0 else "LEFT")]
-        
-        cur_x, cur_y = x, y
-        for dx, dy, action in move:
-            if dx == 0 and dy == 0:
-                continue
+
+        for _ in range(2):
+            dist_x = player_x - cur_x
+            dist_y = player_y - cur_y
+
+            moved_this_attempt = False
+
+            if dist_x != 0:
+                move_x = (dist_x // abs(dist_x) * 2)
+                if maze.is_passable(cur_x + move_x // 2, cur_y):
+                    actions.append("RIGHT" if move_x > 0 else "LEFT")
+                    cur_x += move_x
+                    moved_this_attempt = True
+                    continue
+
+            if dist_y != 0:
+                move_y = (dist_y // abs(dist_y) * 2)
+                if maze.is_passable(cur_x, cur_y + move_y // 2):
+                    actions.append("UP" if move_y < 0 else "DOWN")
+                    cur_y += move_y
+                    moved_this_attempt = True
+                    continue 
+                
             
-            wall_x = cur_x + dx//2
-            wall_y = cur_y + dy//2
-            if maze.is_passable(wall_x, wall_y):
-                actions.append(action)
-                cur_x += dx
-                cur_y += dy
-        
+            
+            if not moved_this_attempt:
+                break 
+
         return actions
             
