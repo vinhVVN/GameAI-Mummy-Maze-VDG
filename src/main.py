@@ -7,6 +7,7 @@ from src.mazeproblem import MazeProblem, SimpleMazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
 from src.algorithms.ids import IDS
+from src.algorithms.greedy import Greedy
 
 class Game:
     def __init__(self):
@@ -48,7 +49,7 @@ class Game:
         btn_x = MAZE_PANEL_WIDTH + (CONTROL_PANEL_WIDTH - btn_w) / 2
 
         def toggle_player_algo():
-            algos = ["BFS", "IDS", "DFS", "UCS",]  # thêm vào các thuật toán ở đây
+            algos = ["BFS", "IDS", "DFS", "UCS", "Greedy"]  # thêm vào các thuật toán ở đây
             current_index = algos.index(self.player_algo)
             new_index = (current_index + 1) % len(algos)
             self.player_algo = algos[new_index]
@@ -103,6 +104,7 @@ class Game:
             "BFS": BFS,
             "UCS": UCS,
             "IDS": lambda prob: IDS(prob, max_depth=100),  # ví dụ truyền thêm tham số
+            "Greedy": Greedy,
             # "DFS": DFS,
         }
 
