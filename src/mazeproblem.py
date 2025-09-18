@@ -1,4 +1,4 @@
-from src.character import Mummy # Cần import Mummy để mô phỏng
+from src.character import Mummy
 
 class MazeProblem:
     def __init__(self, maze, start_state, goal_pos):
@@ -6,7 +6,7 @@ class MazeProblem:
         # start_state bao gồm ((player_x, player_y), (mummy_x, mummy_y))
         self.start_state = start_state
         self.goal_pos = goal_pos
-        self.FEAR_FACTOR = 100
+        self.FEAR_FACTOR = 50
 
         # Tạo một đối tượng Mummy tạm thời để mô phỏng
         self.sim_mummy = Mummy(1, 1, maze.maze_size, maze.cell_size)
@@ -59,7 +59,7 @@ class MazeProblem:
                 
                 # Nếu bước đi này dẫn đến thua, đặt chi phí cực lớn
                 if new_player_pos == new_mummy_pos:
-                    cost = float('inf')
+                    cost = float(self.FEAR_FACTOR * 5)
                 
                 moves.append((next_state, action, cost))
         

@@ -6,6 +6,8 @@ from src.ui import Panel , Button
 from src.mazeproblem import MazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
+from src.algorithms.a_star import AStar
+from src.mazeproblem2 import MazeProblem2 # test có cần suy luận trong đầu trước ko 
 
 class Game:
     def __init__(self):
@@ -15,10 +17,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         
-        self.maze = Maze("map6_4.txt")
+        self.maze = Maze("map6_5.txt")
         cell_size = self.maze.cell_size
-        self.player = Player(3,7,self.maze.maze_size, cell_size)
-        self.mummy = Mummy(11,5, self.maze.maze_size, cell_size)
+        self.player = Player(1,9,self.maze.maze_size, cell_size)
+        self.mummy = Mummy(11,9, self.maze.maze_size, cell_size)
 
         self.panel = Panel(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
         self.set_buttons()
@@ -65,7 +67,7 @@ class Game:
         problem = MazeProblem(self.maze, 
                               initial_state,
                               (gx, gy))
-        path = UCS(problem)
+        path = BFS(problem)
         print(f"Player path: {path}")
         if path:
             self.solution_paths = path
@@ -113,6 +115,8 @@ class Game:
                     moved = True
                 elif event.key == pygame.K_RIGHT:
                     self.player.move(dx = 2, maze=self.maze, cell_size = cell_size)
+                    moved = True
+                elif event.key == pygame.K_SPACE: # bỏ lượt
                     moved = True
                 
                 if moved:
