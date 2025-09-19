@@ -22,7 +22,7 @@ class Game:
         self.player = Player(1,15,self.maze.maze_size, cell_size)
         self.mummies = [
             Mummy(1,1, self.maze.maze_size, cell_size),
-            Mummy(1,3,self.maze.maze_size, cell_size)   # Mummy thứ 2
+            Mummy(5,7,self.maze.maze_size, cell_size)   # Mummy thứ 2
         ]    
         self.player_algo = "BFS"  # hoặc BFS/IDS…
         self.mummy_algo = "classic"  # classic = di chuyển greedy

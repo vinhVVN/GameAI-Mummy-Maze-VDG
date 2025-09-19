@@ -59,18 +59,11 @@ class MazeProblem:
 
                 next_state = (new_player_pos, tuple(sorted(new_mummies_pos)))
                 
-                min_dist_to_mummy = float('inf')
-                is_captured = False
-                for mummy_pos in new_mummies_pos: # tính chi phí dựa trên mummy gần nhất
-                    if new_player_pos == mummy_pos:
-                        is_captured = True
-                        break
-                    dist = abs(new_player_pos[0]-mummy_pos[0]) + abs(new_player_pos[1] - mummy_pos[1])
-                    if dist < min_dist_to_mummy:
-                        min_dist_to_mummy = dist
+                min_dist_to_mummy = self.min_dist(new_mummies_pos, new_player_pos)
+                
                 
                 # Nếu bước đi này dẫn đến thua, đặt chi phí lớn
-                if is_captured:
+                if min_dist_to_mummy == 0:
                     cost = float(self.FEAR_FACTOR * 5)
                 
                 elif self.trap_pos and new_player_pos == self.trap_pos:
@@ -84,11 +77,22 @@ class MazeProblem:
         return moves
     
 
+    def min_dist(self, mummies_pos, player_pos):
+        min_dist_to_mummy = float('inf')
+        for mummy_pos in mummies_pos: # tính chi phí dựa trên mummy gần nhất
+            if player_pos == mummy_pos:
+                return 0
+            dist = abs(player_pos[0]-mummy_pos[0]) + abs(player_pos[1] - mummy_pos[1])
+            if dist < min_dist_to_mummy:
+                min_dist_to_mummy = dist
+                
+        return min_dist_to_mummy
+    
     def heuristic(self, state):
-        player_pos, mummy_pos = state
+        player_pos, mummies_pos = state
         # chi phí dựa trên khoảng cách của Player tới cầu thang
         dist_goal = abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
-        dist_mummy = abs(player_pos[0] - mummy_pos[0]) + abs(player_pos[1] - mummy_pos[1])
+        dist_mummy = self.min_dist(mummies_pos, player_pos)
 
         fear = self.FEAR_FACTOR / (dist_mummy + 1)  # FEAR_FACTOR là hằng số (ví dụ 50-200)
         return dist_goal + fear
