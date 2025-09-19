@@ -83,10 +83,15 @@ class MazeProblem:
         
         return moves
     
-    def heuristic(self, state): 
-        player_pos, mummies_pos = state
+
+    def heuristic(self, state):
+        player_pos, mummy_pos = state
         # chi phí dựa trên khoảng cách của Player tới cầu thang
-        return abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
+        dist_goal = abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
+        dist_mummy = abs(player_pos[0] - mummy_pos[0]) + abs(player_pos[1] - mummy_pos[1])
+
+        fear = self.FEAR_FACTOR / (dist_mummy + 1)  # FEAR_FACTOR là hằng số (ví dụ 50-200)
+        return dist_goal + fear
 
 class SimpleMazeProblem:
     def __init__(self, maze, start, goal):
