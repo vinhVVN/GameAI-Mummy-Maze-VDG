@@ -115,6 +115,7 @@ class Mummy(Character):
         sprite_path = os.path.join(IMAGES_PATH, f"mummy_white{maze_size}.png")
         super().__init__(sprite_path, start_pos_x, start_pos_y, cell_size)
         self.move_turns = 0
+        self.path = []
         
     def load_animations(self):
         animations = {}

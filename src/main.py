@@ -17,11 +17,13 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         
-        self.maze = Maze("map6_2.txt")
+        self.maze = Maze("map8_1.txt")
         cell_size = self.maze.cell_size
-        self.player = Player(5,9,self.maze.maze_size, cell_size)
-        self.mummy = Mummy(7,3, self.maze.maze_size, cell_size)
-
+        self.player = Player(1,15,self.maze.maze_size, cell_size)
+        self.mummies = [
+            Mummy(1,1, self.maze.maze_size, cell_size),
+            Mummy(5,7,self.maze.maze_size, cell_size)   # Mummy thứ 2
+        ]    
         self.player_algo = "BFS"  # hoặc BFS/IDS…
         self.mummy_algo = "classic"  # classic = di chuyển greedy
 
@@ -31,18 +33,21 @@ class Game:
         self.solution_paths = []
         self.ai_mode_active = False
         self.is_player_turn = True
+        self.current_mummy_index = 0
         
-        self.mummy_path = []
         self.is_waiting = False  # Cờ báo hiệu game có đang trong trạng thái chờ không
         self.wait_start_time = 0 # Mốc thời gian bắt đầu chờ
         self.wait_duration = 1000 # Thời gian chờ
-
+        
 
     def load_new_map(self, map_name):
         self.maze = Maze(map_name)
         cell_size = self.maze.cell_size
         self.player = Player(1, 15, self.maze.maze_size, cell_size)
-        self.mummy = Mummy(9, 13, self.maze.maze_size, cell_size)
+        self.mummies = [
+            Mummy(1, 9, self.maze.maze_size, cell_size),
+            Mummy(13, 9, self.maze.maze_size, cell_size)
+        ]
 
     def set_buttons(self):
         btn_w, btn_h = 220, 40
@@ -92,13 +97,19 @@ class Game:
 
     def find_path(self):
         gx, gy = self.maze.calculate_stair()
+        mummy_positions = [(m.grid_x, m.grid_y) for m in self.mummies]
+        
         if self.player_algo in ["BFS", "IDS", "DFS"]:
             initial_state = (self.player.grid_x, self.player.grid_y)
             problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
-                             (self.mummy.grid_x, self.mummy.grid_y))
-            problem = MazeProblem(self.maze, initial_state, (gx, gy), self.maze.trap_pos)
+                             tuple(sorted(mummy_positions)))
+            
+            problem = MazeProblem(self.maze, 
+                                  initial_state,
+                                  (gx, gy), 
+                                  self.maze.trap_pos)
 
         algo_map = {
             "BFS": BFS,
@@ -168,7 +179,9 @@ class Game:
     def update(self): 
         
         self.player.update()
-        self.mummy.update()
+        for mummy in self.mummies:
+            mummy.update()
+        
         
         
         if self.is_waiting:
@@ -178,8 +191,8 @@ class Game:
                 return # Vẫn đang trong thời gian chờ, không làm gì cả
         
         
-        
-        if self.player.is_moving or self.mummy.is_moving:
+        any_mummy_moving = any(m.is_moving for m in self.mummies) # Kiểm tra xem có mummy nào di chuyển
+        if self.player.is_moving or any_mummy_moving:
             return
         
         
@@ -221,32 +234,34 @@ class Game:
                     self.ai_mode_active = False
                     print("AI đã chạy xong!")
 
+
         # di chuyển mummy
         if self.player_algo not in ["BFS", "IDS", "DFS"]:
             if not self.is_player_turn and not self.player.is_moving:
-                if not self.mummy_path:
+                if not self.mummies: # Nếu không còn mummy nào thì trả lượt
+                    self.is_player_turn = True
+                    return
+                
+                current_mummy = self.mummies[self.current_mummy_index] # xác định lượt mummy nào
+                if not current_mummy.path:
                     player_pos = (self.player.grid_x, self.player.grid_y)
-
                     if self.mummy_algo == "classic":
-                        actions = self.mummy.classic_move(player_pos, self.maze)
+                        actions = current_mummy.classic_move(player_pos, self.maze)
                     else:
                         # BFS để mummy tìm tới Player
                         problem = MazeProblem(self.maze,
-                                              ((self.mummy.grid_x, self.mummy.grid_y),
-                                               (self.player.grid_x, self.player.grid_y)),
-                                              player_pos,
-                                              self.maze.trap_pos)
+                                            ((mummy.grid_x, mummy.grid_y),
+                                            (self.player.grid_x, self.player.grid_y)),
+                                            player_pos,
+                                            self.maze.trap_pos)
                         actions = BFS(problem)
-
+                        
                     if actions:
-                        self.mummy_path = actions
-                    else:
-                        self.is_player_turn = True
-
-                    print(actions)
-
-                if self.mummy_path:
-                    action = self.mummy_path.pop(0)
+                        current_mummy.path = actions
+                        print(actions)
+                
+                if current_mummy.path:
+                    action = current_mummy.path.pop(0)
                     dx, dy = 0, 0
                     if action == "UP":
                         dy = -2
@@ -257,10 +272,22 @@ class Game:
                     elif action == "RIGHT":
                         dx = 2
 
-                    print("mummy đi")
-                    self.mummy.move(dx, dy, self.maze, self.maze.cell_size)
-                    if not self.mummy_path:
+                    print(f"Mummy {self.current_mummy_index + 1} at ({current_mummy.grid_x}, {current_mummy.grid_y}) moves {action}")
+                    current_mummy.move(dx, dy, self.maze, self.maze.cell_size)
+                    self.handle_mummy_collisions()
+                        
+                        
+                # Nếu mummy này đã đi hết các bước, chuyển lượt cho mummy tiếp theo
+                if not current_mummy.path:
+                    self.current_mummy_index += 1
+                    self.start_wait() 
+                    
+                    # Nếu đã đi hết lượt của tất cả các mummy, trả lại lượt cho Player
+                    if self.current_mummy_index >= len(self.mummies):
+                        self.current_mummy_index = 0 # Reset lại cho lượt sau
                         self.is_player_turn = True
+                        
+                
 
             if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
                     print("WINNNN")
@@ -286,17 +313,19 @@ class Game:
                     self.reset_game()
 
         # uninformed search
-        if self.player_algo not in ["BFS", "IDS", "DFS"]:
-            if (self.player.grid_x == self.mummy.grid_x and self.player.grid_y == self.mummy.grid_y):
-                print("Game Over - bị ma bắt")
-                jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
-                jumpscare_image = pygame.image.load(jumpscare_path).convert()
-                jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-                self.screen.blit(jumpscare_image, (0, 0))
-                pygame.display.flip()
-                pygame.time.delay(2000)
-                # self.running = False
-                self.reset_game()
+        for mummy in self.mummies:
+            if self.player_algo not in ["BFS", "IDS", "DFS"]:
+                if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
+                    print("Game Over - bị ma bắt")
+                    jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
+                    jumpscare_image = pygame.image.load(jumpscare_path).convert()
+                    jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+                    self.screen.blit(jumpscare_image, (0, 0))
+                    pygame.display.flip()
+                    pygame.time.delay(2000)
+                    # self.running = False
+                    self.reset_game()
+                    
 
     def draw(self):
         self.screen.fill(COLOR_BLACK)
@@ -305,10 +334,13 @@ class Game:
         
         self.player.draw(self.screen)
         if self.player_algo not in ["BFS", "IDS", "DFS"]:
-            self.mummy.draw(self.screen)
+            for mummy in self.mummies:
+                mummy.draw(self.screen)
         
         self.panel.draw(self.screen)
         pygame.display.flip() # hiển thị những gì đã vẽ
+    
+    
     
     def draw_control_panel(self):
         panel_rect = pygame.Rect(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
@@ -326,16 +358,32 @@ class Game:
         # reset player & mummy về vị trí gốc
         cell_size = self.maze.cell_size
         self.player = Player(3, 7, self.maze.maze_size, cell_size)
-        self.mummy = Mummy(11, 5, self.maze.maze_size, cell_size)
+        self.mummies = [
+            Mummy(1, 1, self.maze.maze_size, cell_size),
+            Mummy(13, 9, self.maze.maze_size, cell_size)
+        ]
 
         # reset trạng thái
         self.solution_paths = []
         self.ai_mode_active = False
         self.is_player_turn = True
-        self.mummy_path = []
         self.is_waiting = False
         self.wait_start_time = 0
         self.wait_duration = 1000
+        self.current_mummy_index = 0
 
         print("Game đã reset về trạng thái ban đầu!")
 
+    def handle_mummy_collisions(self):
+        i = 0
+        while i < len(self.mummies):
+            j = i + 1
+            while j < len(self.mummies):
+                mummy1 = self.mummies[i]
+                mummy2 = self.mummies[j]
+                if (mummy1.grid_x, mummy1.grid_y) == (mummy2.grid_x, mummy2.grid_y):
+                    print("Hai con mummy chơi nhau !")
+                    self.mummies.pop(j) # xoá mummy thứ 2
+                    continue
+                j += 1
+            i += 1
