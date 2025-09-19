@@ -17,12 +17,13 @@ class MazeProblem:
         return self.start_state
     
     def is_goal_state(self, state):
-        player_pos, mummy_pos = state
+        player_pos, mummies_pos = state
         return player_pos == self.goal_pos
     
     def get_move(self, state):
         moves = []
-        player_pos, mummy_pos = state
+        player_pos, mummies_pos_tuple = state
+        mummies_pos = list(mummies_pos_tuple)
         
         # Các hành động có thể của Player
         possible_actions = [(0, -2, "UP"), (0, 2, "DOWN"), (-2, 0, "LEFT"), (2, 0, "RIGHT")]
@@ -37,41 +38,53 @@ class MazeProblem:
                 new_player_pos = (px + dx, py + dy)
                 
                 # Cập nhật vị trí của mummy mô phỏng
-                self.sim_mummy.grid_x, self.sim_mummy.grid_y = mummy_pos
-                # Dự đoán các bước đi của mummy
-                mummy_actions = self.sim_mummy.classic_move(new_player_pos, self.maze)
-                
-                # Tính toán vị trí cuối cùng của mummy sau lượt đi của nó
-                mx, my = mummy_pos
-                for m_action in mummy_actions:
-                    if m_action == "UP": 
-                        my -= 2
-                    elif m_action == "DOWN":
-                        my += 2
-                    elif m_action == "LEFT": 
-                        mx -= 2
-                    elif m_action == "RIGHT": 
-                        mx += 2
-                new_mummy_pos = (mx, my)
+                new_mummies_pos = []
+                for mummy_pos in mummies_pos:
+                    self.sim_mummy.grid_x, self.sim_mummy.grid_y = mummy_pos
+                    # Dự đoán các bước đi của mummy
+                    mummy_actions = self.sim_mummy.classic_move(new_player_pos, self.maze)
+                    
+                    # Tính toán vị trí cuối cùng của mummy sau lượt đi của nó
+                    mx, my = mummy_pos
+                    for m_action in mummy_actions:
+                        if m_action == "UP": 
+                            my -= 2
+                        elif m_action == "DOWN":
+                            my += 2
+                        elif m_action == "LEFT": 
+                            mx -= 2
+                        elif m_action == "RIGHT": 
+                            mx += 2
+                    new_mummies_pos.append((mx,my))
 
-                next_state = (new_player_pos, new_mummy_pos)
+                next_state = (new_player_pos, tuple(sorted(new_mummies_pos)))
                 
-                dist_to_mummy = abs(new_player_pos[0] - new_mummy_pos[0]) + abs(new_player_pos[1] - new_mummy_pos[1])
-                cost = 1 + (self.FEAR_FACTOR / (dist_to_mummy + 0.1))
+                min_dist_to_mummy = float('inf')
+                is_captured = False
+                for mummy_pos in new_mummies_pos: # tính chi phí dựa trên mummy gần nhất
+                    if new_player_pos == mummy_pos:
+                        is_captured = True
+                        break
+                    dist = abs(new_player_pos[0]-mummy_pos[0]) + abs(new_player_pos[1] - mummy_pos[1])
+                    if dist < min_dist_to_mummy:
+                        min_dist_to_mummy = dist
                 
-                # Nếu bước đi này dẫn đến thua, đặt chi phí cực lớn
-                if new_player_pos == new_mummy_pos:
+                # Nếu bước đi này dẫn đến thua, đặt chi phí lớn
+                if is_captured:
                     cost = float(self.FEAR_FACTOR * 5)
                 
-                if self.trap_pos and new_player_pos == self.trap_pos:
+                elif self.trap_pos and new_player_pos == self.trap_pos:
                     cost = float('inf')
-                
+                    
+                else:
+                    cost = 1 + (self.FEAR_FACTOR / (min_dist_to_mummy + 0.1))
+                    
                 moves.append((next_state, action, cost))
         
         return moves
     
     def heuristic(self, state): 
-        player_pos, mummy_pos = state
+        player_pos, mummies_pos = state
         # chi phí dựa trên khoảng cách của Player tới cầu thang
         return abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
 
