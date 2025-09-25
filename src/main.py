@@ -23,8 +23,8 @@ class Game:
         cell_size = self.maze.cell_size
         self.player = Player(1,15,self.maze.maze_size, cell_size)
         self.mummies = [
-            Mummy(1,1, self.maze.maze_size, cell_size),
-            Mummy(5,7,self.maze.maze_size, cell_size)   # Mummy thứ 2
+            Mummy(9,1, self.maze.maze_size, cell_size),
+            Mummy(9,13, self.maze.maze_size, cell_size)
         ]    
         self.player_algo = "BFS"  # hoặc BFS/IDS…
         self.mummy_algo = "classic"  # classic = di chuyển greedy
@@ -40,6 +40,13 @@ class Game:
         self.is_waiting = False  # Cờ báo hiệu game có đang trong trạng thái chờ không
         self.wait_start_time = 0 # Mốc thời gian bắt đầu chờ
         self.wait_duration = 1000 # Thời gian chờ
+        
+        self.arrow_images = {
+            "UP": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "up_arrow.png")).convert_alpha(), size=(self.maze.cell_size, self.maze.cell_size)),
+            "DOWN": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "down_arrow.png")).convert_alpha(), size= (self.maze.cell_size, self.maze.cell_size)),
+            "LEFT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "left_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size)),
+            "RIGHT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size))
+        }
         
 
     def load_new_map(self, map_name):
@@ -143,6 +150,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
+            
             self.clock.tick(FPS)
         
         pygame.quit()
@@ -179,14 +187,11 @@ class Game:
                 
                 
         
-    def update(self): 
-        
+    def update(self):         
         self.player.update()
         for mummy in self.mummies:
             mummy.update()
-        
-        
-        
+
         if self.is_waiting:
             if pygame.time.get_ticks() - self.wait_start_time >= self.wait_duration:
                 self.is_waiting = False # Hết giờ chờ, lượt đi tiếp theo có thể bắt đầu
@@ -203,7 +208,6 @@ class Game:
         # AI người chơi
         if self.is_player_turn:
             if self.ai_mode_active:
-                # chỉ gọi find_path khi solution_paths đang rỗng
                 if not self.solution_paths:
                     self.find_path()
 
@@ -329,13 +333,18 @@ class Game:
                     # self.running = False
                     self.reset_game()
                     
-
+    
+            
+        
+    
     def draw(self):
         self.screen.fill(COLOR_BLACK)
         self.maze.draw(self.screen)
         
-        
+        self.draw_path(self.screen)
         self.player.draw(self.screen)
+        
+        
         if self.player_algo not in ["BFS", "IDS", "DFS"]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
@@ -344,6 +353,36 @@ class Game:
         pygame.display.flip() # hiển thị những gì đã vẽ
     
     
+    def draw_path(self, surface):
+        
+        if not self.ai_mode_active:
+            return
+        
+        if self.player.is_moving:
+            start_x, start_y = self.player.target_grid_pos
+        else:
+            start_x, start_y = self.player.grid_x, self.player.grid_y
+            
+        if not self.solution_paths:
+            return
+        
+        player_x, player_y = start_x, start_y
+        
+        for action in self.solution_paths:
+            if action == "UP":
+                player_y -= 2
+            if action == "DOWN":
+                player_y += 2
+            if action == "RIGHT":
+                player_x += 2
+            if action == "LEFT":
+                player_x -= 2
+        
+            arrow_img = self.arrow_images.get(action)
+            if arrow_img:
+                x = MAZE_COORD_X + (player_x//2) * self.maze.cell_size
+                y = MAZE_COORD_Y + (player_y//2) * self.maze.cell_size
+                surface.blit(arrow_img, (x,y))
     
     def draw_control_panel(self):
         panel_rect = pygame.Rect(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
