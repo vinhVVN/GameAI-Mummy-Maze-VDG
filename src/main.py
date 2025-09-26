@@ -10,7 +10,7 @@ from src.algorithms.ids import IDS
 from src.algorithms.greedy import Greedy
 from src.algorithms.dfs import DFS
 from src.algorithms.AStart import AStar
-
+from src.algorithms.beam import Beam
 class Game:
     def __init__(self):
         pygame.init()
@@ -63,7 +63,7 @@ class Game:
         btn_x = MAZE_PANEL_WIDTH + (CONTROL_PANEL_WIDTH - btn_w) / 2
 
         def toggle_player_algo():
-            algos = ["BFS", "IDS", "DFS", "UCS", "Greedy", "AStart"]  # thêm vào các thuật toán ở đây
+            algos = ["BFS", "IDS", "DFS", "UCS", "Greedy", "AStart", "Beam"]  # thêm vào các thuật toán ở đây
             current_index = algos.index(self.player_algo)
             new_index = (current_index + 1) % len(algos)
             self.player_algo = algos[new_index]
@@ -78,7 +78,7 @@ class Game:
 
         def change_map():
             # đổi giữa các map có sẵn
-            maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt","map8_1.txt"]
+            maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]
             current = maps.index(self.maze.map_name)
             new_map = maps[(current + 1) % len(maps)]
             print(f"Đổi sang {new_map}")
@@ -126,7 +126,8 @@ class Game:
             "IDS": lambda prob: IDS(prob, max_depth=100),  # ví dụ truyền thêm tham số
             "Greedy": Greedy,
             "DFS": DFS,
-            "AStart" : AStar
+            "AStart" : AStar,
+            "Beam" : Beam,
         }
 
         if self.player_algo in algo_map:
