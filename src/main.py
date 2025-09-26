@@ -19,12 +19,12 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         
-        self.maze = Maze("map8_1.txt")
+        self.maze = Maze("map6_1.txt")
         cell_size = self.maze.cell_size
-        self.player = Player(1,15,self.maze.maze_size, cell_size)
+        self.player = Player(1,1,self.maze.maze_size, cell_size)
         self.mummies = [
-            Mummy(9,1, self.maze.maze_size, cell_size),
-            Mummy(9,13, self.maze.maze_size, cell_size)
+            Mummy(5,9, self.maze.maze_size, cell_size),
+            # Mummy(9,13, self.maze.maze_size, cell_size)
         ]    
         self.player_algo = "BFS"  # hoặc BFS/IDS…
         self.mummy_algo = "classic"  # classic = di chuyển greedy
@@ -47,15 +47,16 @@ class Game:
             "LEFT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "left_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size)),
             "RIGHT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size))
         }
-        
 
-    def load_new_map(self, map_name):
+    def load_new_map(self, map_name, player_pos=(1, 15), mummy_pos=[(1, 9)]):
         self.maze = Maze(map_name)
         cell_size = self.maze.cell_size
-        self.player = Player(1, 15, self.maze.maze_size, cell_size)
+
+        self.player = Player(player_pos[0], player_pos[1], self.maze.maze_size, cell_size)
+
         self.mummies = [
-            Mummy(1, 9, self.maze.maze_size, cell_size),
-            Mummy(13, 9, self.maze.maze_size, cell_size)
+            Mummy(mx, my, self.maze.maze_size, cell_size)
+            for (mx, my) in mummy_pos
         ]
 
     def set_buttons(self):
@@ -76,14 +77,32 @@ class Game:
                 self.mummy_algo = "classic"
             btn_mummy_algo.text = f"Mummy: {self.mummy_algo}"
 
-        def change_map():
-            # đổi giữa các map có sẵn
-            maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]
-            current = maps.index(self.maze.map_name)
-            new_map = maps[(current + 1) % len(maps)]
+        def change_map(_new_map = None):
+            if _new_map is not None:
+                new_map = _new_map
+            else:
+                # đổi giữa các map có sẵn
+                maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]
+                current = maps.index(self.maze.map_name)
+                new_map = maps[(current + 1) % len(maps)]
             print(f"Đổi sang {new_map}")
-            self.load_new_map(new_map)
+            if new_map == "map6_1.txt":
+                self.load_new_map(new_map, player_pos=(1, 1), mummy_pos=[(5, 9)])
+            elif new_map == "map6_2.txt":
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)]) #Đã tối ưu vị trí, thể hiện sự khác nhau giữa UCS và Greedy đừng sửa nha
+            elif new_map == "map6_3.txt":
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)]) #Đã tối ưu vị trí, thể hiện sự khác nhau giữa UCS và Greedy đừng sửa nha
+            elif new_map == "map6_4.txt":
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)]) #Đã tối ưu vị trí, thể hiện sự khác nhau giữa UCS và Greedy (thay đổi map)
+            elif new_map == "map6_5.txt":
+                # Thể hiện được lừa mummy bằng thuật UCS(pass), Greedy(pass), Beam(fail-bị bắt)
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(9, 9)])
+            elif new_map == "map8_1.txt":
+                # Cũng cũng đi, UCS(pass), A*(pass), Greedy(fail), Beam(fail)
+                self.load_new_map(new_map, player_pos=(5, 5), mummy_pos=[(15, 11), (3, 3)])
             btn_change_map.text = str(new_map)
+
+        self._change_map_func = change_map
 
         def start_ai():
             self.start_ai_search()
@@ -334,10 +353,7 @@ class Game:
                     # self.running = False
                     self.reset_game()
                     
-    
-            
-        
-    
+
     def draw(self):
         self.screen.fill(COLOR_BLACK)
         self.maze.draw(self.screen)
@@ -394,17 +410,12 @@ class Game:
         self.wait_start_time = pygame.time.get_ticks()
 
     def reset_game(self):
-        # load lại map hiện tại
+        # lấy tên map hiện tại từ nút bấm
         current_map = self.maze.map_name
-        self.maze = Maze(current_map)
 
-        # reset player & mummy về vị trí gốc
-        cell_size = self.maze.cell_size
-        self.player = Player(3, 7, self.maze.maze_size, cell_size)
-        self.mummies = [
-            Mummy(1, 1, self.maze.maze_size, cell_size),
-            Mummy(13, 9, self.maze.maze_size, cell_size)
-        ]
+        # gọi lại change_map nhưng truyền đúng map hiện tại
+        if hasattr(self, "_change_map_func"):
+            self._change_map_func(current_map)
 
         # reset trạng thái
         self.solution_paths = []
@@ -415,7 +426,7 @@ class Game:
         self.wait_duration = 1000
         self.current_mummy_index = 0
 
-        print("Game đã reset về trạng thái ban đầu!")
+        print(f"Game đã reset về map {current_map}!")
 
     def handle_mummy_collisions(self):
         i = 0
