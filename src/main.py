@@ -52,7 +52,7 @@ class Game:
 
     def choose_algorithm_popup(self):
         """Hiển thị popup chọn thuật toán và trả về thuật toán được chọn"""
-        popup_width, popup_height = 720, 610
+        popup_width, popup_height = 600, 350  # Giảm thêm kích thước
         
         # Danh sách thuật toán với tên ngắn gọn để sử dụng trong code
         algorithm_categories = {
@@ -74,58 +74,44 @@ class Game:
         
         selected_algo = self.player_algo
         scroll_offset = 0
-        scroll_dragging = False
-        scroll_start_y = 0
         
-        # Load font từ file hoặc system font
+        # Load font với kích thước nhỏ hơn nữa
         try:
-            # Thử load font từ thư mục game
             font_path = os.path.join(os.path.dirname(__file__), "NotoSans-Regular.ttf")
             if os.path.exists(font_path):
-                font_title = pygame.font.Font(font_path, 28)
-                font_category = pygame.font.Font(font_path, 20)
-                font_name = pygame.font.Font(font_path, 18)
-                font_desc = pygame.font.Font(font_path, 14)
+                font_title = pygame.font.Font(font_path, 22)
+                font_category = pygame.font.Font(font_path, 16)
+                font_name = pygame.font.Font(font_path, 14)
+                font_desc = pygame.font.Font(font_path, 11)
+                font_button = pygame.font.Font(font_path, 10)
             else:
-                # Fallback to system fonts that support Vietnamese
-                font_title = pygame.font.SysFont("Arial", 28)
-                font_category = pygame.font.SysFont("Arial", 20)
-                font_name = pygame.font.SysFont("Arial", 18)
-                font_desc = pygame.font.SysFont("Arial", 14)
+                font_title = pygame.font.SysFont("Arial", 22)
+                font_category = pygame.font.SysFont("Arial", 16)
+                font_name = pygame.font.SysFont("Arial", 14)
+                font_desc = pygame.font.SysFont("Arial", 11)
+                font_button = pygame.font.SysFont("Arial", 10)
         except:
-            # Ultimate fallback
-            font_title = pygame.font.Font(None, 28)
-            font_category = pygame.font.Font(None, 20)
-            font_name = pygame.font.Font(None, 18)
-            font_desc = pygame.font.Font(None, 14)
+            font_title = pygame.font.Font(None, 22)
+            font_category = pygame.font.Font(None, 16)
+            font_name = pygame.font.Font(None, 14)
+            font_desc = pygame.font.Font(None, 11)
+            font_button = pygame.font.Font(None, 10)
         
-        # Tính toán tổng chiều cao nội dung
+        # Tính toán tổng chiều cao nội dung với kích thước nhỏ hơn
         content_height = 0
         for category, algorithms_list in algorithm_categories.items():
-            content_height += 35
-            content_height += len(algorithms_list) * 55
+            content_height += 25  # Giảm chiều cao category
+            content_height += len(algorithms_list) * 50  # Giảm chiều cao mỗi thuật toán
         
-        visible_height = popup_height - 90
+        visible_height = popup_height - 80  # Chiều cao khung nhìn
         max_scroll = max(0, content_height - visible_height)
-        
-        def draw_scrollbar(popup_rect):
-            scroll_area_height = popup_rect.height - 100
-            if content_height > visible_height:
-                scrollbar_height = max(30, (visible_height / content_height) * scroll_area_height)
-                scroll_ratio = scroll_offset / (content_height - visible_height) if (content_height - visible_height) > 0 else 0
-                scrollbar_y = popup_rect.y + 100 + (scroll_area_height - scrollbar_height) * scroll_ratio
-                
-                scrollbar_rect = pygame.Rect(popup_rect.right - 15, scrollbar_y, 8, scrollbar_height)
-                pygame.draw.rect(self.screen, (180, 180, 180), scrollbar_rect, border_radius=4)
-                pygame.draw.rect(self.screen, (120, 120, 120), scrollbar_rect, 1, border_radius=4)
-                return scrollbar_rect
-            return None
         
         running_popup = True
         btns = []
-        scrollbar_rect = None
         
         while running_popup:
+            mouse_pos = pygame.mouse.get_pos()
+            
             # Xử lý sự kiện
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -137,46 +123,35 @@ class Game:
                     elif event.key == pygame.K_RETURN and selected_algo:
                         return selected_algo
                     elif event.key == pygame.K_UP:
-                        scroll_offset = max(0, scroll_offset - 30)
+                        scroll_offset = max(0, scroll_offset - 25)
                     elif event.key == pygame.K_DOWN:
-                        scroll_offset = min(max_scroll, scroll_offset + 30)
+                        scroll_offset = min(max_scroll, scroll_offset + 25)
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         # Kiểm tra click trên các nút thuật toán
                         for btn, name in btns:
-                            if btn.collidepoint(event.pos):
-                                return name
-                        
-                        # Kiểm tra click trên scrollbar
-                        if scrollbar_rect and scrollbar_rect.collidepoint(event.pos):
-                            scroll_dragging = True
-                            scroll_start_y = event.pos[1]
+                            if btn.collidepoint(mouse_pos):
+                                selected_algo = name
+                                return selected_algo
                     
                     elif event.button == 4:  # Cuộn lên
-                        scroll_offset = max(0, scroll_offset - 30)
+                        scroll_offset = max(0, scroll_offset - 25)
                     elif event.button == 5:  # Cuộn xuống
-                        scroll_offset = min(max_scroll, scroll_offset + 30)
-
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    if event.button == 1:
-                        scroll_dragging = False
-
-                elif event.type == pygame.MOUSEMOTION:
-                    if scroll_dragging and scrollbar_rect:
-                        delta_y = event.pos[1] - scroll_start_y
-                        scroll_area_height = popup_height - 130
-                        scroll_ratio = delta_y / scroll_area_height
-                        scroll_offset = max(0, min(max_scroll, scroll_offset + scroll_ratio * content_height))
-                        scroll_start_y = event.pos[1]
+                        scroll_offset = min(max_scroll, scroll_offset + 25)
             
-            # Vẽ toàn bộ màn hình game trước
+            # Vẽ toàn bộ màn hình game trước với hiệu ứng mờ
             self.screen.fill(COLOR_BLACK)
             self.maze.draw(self.screen)
             self.player.draw(self.screen)
             for mummy in self.mummies:
                 mummy.draw(self.screen)
             self.panel.draw(self.screen)
+            
+            # Vẽ lớp phủ mờ
+            overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 180))
+            self.screen.blit(overlay, (0, 0))
             
             # Vẽ popup
             popup_rect = pygame.Rect(
@@ -185,110 +160,130 @@ class Game:
                 popup_width, popup_height
             )
             
-            # Vẽ nền popup
-            pygame.draw.rect(self.screen, (245, 245, 245), popup_rect, border_radius=10)
-            pygame.draw.rect(self.screen, (200, 200, 200), popup_rect, 2, border_radius=10)
+            # Vẽ nền popup chính
+            pygame.draw.rect(self.screen, (250, 250, 252), popup_rect, border_radius=10)
+            pygame.draw.rect(self.screen, (100, 150, 220), popup_rect, 2, border_radius=10)
             
-            # Tiêu đề chính
-            title_text = "CHỌN THUẬT TOÁN TÌM ĐƯỜNG"
-            title = font_title.render(title_text, True, (0, 102, 204))
-            self.screen.blit(title, (popup_rect.centerx - title.get_width()//2, popup_rect.y + 15))
+            # Header - LUÔN HIỂN THỊ
+            header_rect = pygame.Rect(popup_rect.x, popup_rect.y, popup_rect.width, 40)
+            pygame.draw.rect(self.screen, (70, 130, 230), header_rect, border_radius=10)
+            pygame.draw.rect(self.screen, (40, 100, 200), header_rect, 2, border_radius=10)
+            
+            # Tiêu đề chính - LUÔN HIỂN THỊ
+            title_text = "CHỌN THUẬT TOÁN"
+            title = font_title.render(title_text, True, (255, 255, 255))
+            self.screen.blit(title, (popup_rect.centerx - title.get_width()//2, popup_rect.y + 12))
 
             # Cập nhật scroll offset
             scroll_offset = max(0, min(scroll_offset, max_scroll))
             
-            # Vẽ scrollbar
-            scrollbar_rect = draw_scrollbar(popup_rect)
+            # Vẽ scrollbar nếu cần
+            if content_height > visible_height:
+                scroll_area_height = popup_rect.height - 60
+                scrollbar_height = max(25, (visible_height / content_height) * scroll_area_height)
+                scroll_ratio = scroll_offset / max_scroll if max_scroll > 0 else 0
+                scrollbar_y = popup_rect.y + 50 + (scroll_area_height - scrollbar_height) * scroll_ratio
+                
+                scrollbar_rect = pygame.Rect(popup_rect.right - 8, scrollbar_y, 5, scrollbar_height)
+                pygame.draw.rect(self.screen, (150, 180, 230), scrollbar_rect, border_radius=2)
+                pygame.draw.rect(self.screen, (80, 120, 200), scrollbar_rect, 1, border_radius=2)
 
-            # Tạo surface cho nội dung cuộn
-            content_surface = pygame.Surface((popup_rect.width - 35, visible_height))
-            content_surface.fill((245, 245, 245))
+            # Vùng nội dung có thể cuộn - VẼ NỀN TRƯỚC
+            content_bg_rect = pygame.Rect(popup_rect.x + 10, popup_rect.y + 50, popup_rect.width - 20, visible_height)
+            pygame.draw.rect(self.screen, (245, 248, 250), content_bg_rect, border_radius=6)
             
             # Reset danh sách nút
             btns = []
             current_y = -scroll_offset
             
-            # Vẽ nội dung
+            # Vẽ nội dung CHỈ các phần tử trong vùng nhìn thấy
             for category, algorithms_list in algorithm_categories.items():
-                if current_y + 35 > 0 and current_y < visible_height:
-                    # Category background
-                    category_bg = pygame.Rect(5, current_y, popup_rect.width - 45, 30)
-                    pygame.draw.rect(content_surface, (210, 225, 240), category_bg, border_radius=4)
-                    pygame.draw.rect(content_surface, (80, 130, 180), category_bg, 1, border_radius=4)
-                    
-                    category_text = font_category.render(category, True, (0, 70, 140))
-                    content_surface.blit(category_text, (10, current_y + 6))
+                # Vẽ category nếu nằm trong vùng nhìn thấy
+                category_top = popup_rect.y + 50 + current_y
+                category_bottom = category_top + 25
                 
-                current_y += 35
+                if category_bottom > popup_rect.y + 50 and category_top < popup_rect.y + 50 + visible_height:
+                    # Category background
+                    category_bg = pygame.Rect(popup_rect.x + 15, category_top, popup_rect.width - 30, 20)
+                    pygame.draw.rect(self.screen, (180, 210, 240), category_bg, border_radius=4)
+                    pygame.draw.rect(self.screen, (60, 110, 190), category_bg, 1, border_radius=4)
+                    
+                    category_text = font_category.render(category, True, (20, 60, 140))
+                    self.screen.blit(category_text, (popup_rect.x + 20, category_top + 3))
+                
+                current_y += 25
                 
                 for name, desc, color in algorithms_list:
-                    if current_y + 55 > 0 and current_y < visible_height:
+                    # Vẽ thuật toán nếu nằm trong vùng nhìn thấy
+                    algo_top = popup_rect.y + 50 + current_y
+                    algo_bottom = algo_top + 50
+                    
+                    if algo_bottom > popup_rect.y + 50 and algo_top < popup_rect.y + 50 + visible_height:
                         # Algorithm background
-                        algo_bg = pygame.Rect(8, current_y, popup_rect.width - 55, 50)
-                        if selected_algo == name:
-                            pygame.draw.rect(content_surface, (255, 250, 200), algo_bg, border_radius=6)
+                        algo_bg = pygame.Rect(popup_rect.x + 20, algo_top, popup_rect.width - 40, 40)
+                        
+                        # Xác định màu sắc dựa trên trạng thái
+                        is_hovered = algo_bg.collidepoint(mouse_pos)
+                        if is_hovered:
+                            bg_color = (255, 255, 240)
+                            border_color = (min(color[0] + 40, 255), min(color[1] + 40, 255), min(color[2] + 40, 255))
+                        elif selected_algo == name:
+                            bg_color = (255, 250, 220)
+                            border_color = color
                         else:
-                            pygame.draw.rect(content_surface, (255, 255, 255), algo_bg, border_radius=6)
-                        pygame.draw.rect(content_surface, (210, 210, 210), algo_bg, 1, border_radius=6)
+                            bg_color = (255, 255, 255)
+                            border_color = (220, 220, 220)
+                        
+                        # Vẽ nền chính
+                        pygame.draw.rect(self.screen, bg_color, algo_bg, border_radius=5)
+                        pygame.draw.rect(self.screen, border_color, algo_bg, 1, border_radius=5)
 
                         # Tên thuật toán
-                        name_text = font_name.render(name, True, (0, 90, 0))
-                        content_surface.blit(name_text, (12, current_y + 5))
+                        name_text = font_name.render(name, True, (30, 100, 30))
+                        self.screen.blit(name_text, (popup_rect.x + 25, algo_top + 5))
 
-                        # Mô tả
-                        desc_lines = []
-                        if len(desc) > 50:
-                            words = desc.split()
-                            line1 = ' '.join(words[:len(words)//2])
-                            line2 = ' '.join(words[len(words)//2:])
-                            desc_lines = [line1, line2]
-                        else:
-                            desc_lines = [desc]
-                        
-                        for i, line in enumerate(desc_lines):
-                            desc_text = font_desc.render(line, True, (70, 70, 70))
-                            content_surface.blit(desc_text, (12, current_y + 25 + i*15))
+                        # Mô tả ngắn gọn hơn
+                        if len(desc) > 40:
+                            desc = desc[:37] + "..."
+                        desc_text = font_desc.render(desc, True, (80, 80, 80))
+                        self.screen.blit(desc_text, (popup_rect.x + 25, algo_top + 22))
 
-                        # Nút chọn
-                        btn = pygame.Rect(popup_rect.width - 140, current_y + 8, 80, 32)
-                        mouse_pos = pygame.mouse.get_pos()
-                        adjusted_mouse_pos = (mouse_pos[0] - popup_rect.x - 20, mouse_pos[1] - popup_rect.y - 90)
+                        # Nút chọn nhỏ hơn
+                        btn = pygame.Rect(popup_rect.x + popup_rect.width - 75, algo_top + 10, 50, 18)
                         
                         btn_color = color
-                        if btn.collidepoint(adjusted_mouse_pos):
-                            btn_color = tuple(min(c + 20, 255) for c in color)
+                        if btn.collidepoint(mouse_pos):
+                            btn_color = (min(color[0] + 30, 255), min(color[1] + 30, 255), min(color[2] + 30, 255))
                         
-                        pygame.draw.rect(content_surface, btn_color, btn, border_radius=6)
-                        pygame.draw.rect(content_surface, (255, 255, 255), btn, 1, border_radius=6)
+                        # Vẽ nút
+                        pygame.draw.rect(self.screen, btn_color, btn, border_radius=3)
+                        pygame.draw.rect(self.screen, (255, 255, 255), btn, 1, border_radius=3)
                         
-                        label = font_desc.render("CHỌN", True, (255, 255, 255))
+                        label = font_button.render("CHỌN", True, (255, 255, 255))
                         label_rect = label.get_rect(center=btn.center)
-                        content_surface.blit(label, label_rect)
+                        self.screen.blit(label, label_rect)
 
-                        # Lưu vị trí thực của nút
-                        real_btn = pygame.Rect(
-                            popup_rect.x + 20 + btn.x, 
-                            popup_rect.y + 90 + btn.y, 
-                            btn.width, btn.height
-                        )
-                        btns.append((real_btn, name))
+                        btns.append((btn, name))
                     
-                    current_y += 55
+                    current_y += 50
             
-            # Hiển thị content surface
-            self.screen.blit(content_surface, (popup_rect.x + 20, popup_rect.y + 80))
+            # Footer - LUÔN HIỂN THỊ
+            footer_rect = pygame.Rect(popup_rect.x, popup_rect.y + popup_height - 40, popup_rect.width, 40)
+            pygame.draw.rect(self.screen, (240, 245, 250), footer_rect, border_radius=10)
+            pygame.draw.rect(self.screen, (200, 220, 240), footer_rect, 1, border_radius=10)
             
             # Hiển thị thuật toán đã chọn
             if selected_algo:
-                selected_bg = pygame.Rect(popup_rect.x + 20, popup_rect.y + 540, popup_rect.width - 40, 40)
-                pygame.draw.rect(self.screen, (230, 240, 255), selected_bg, border_radius=6)
-                pygame.draw.rect(self.screen, (80, 130, 200), selected_bg, 1, border_radius=6)
-                
                 selected_text = f"ĐÃ CHỌN: {selected_algo}"
-                if len(selected_text) > 40:
-                    selected_text = selected_text[:37] + "..."
-                selected_surface = font_category.render(selected_text, True, (0, 0, 150))
-                self.screen.blit(selected_surface, (popup_rect.centerx - selected_surface.get_width()//2, popup_rect.y + 550))
+                if len(selected_text) > 25:
+                    selected_text = selected_text[:22] + "..."
+                selected_surface = font_category.render(selected_text, True, (0, 80, 180))
+                self.screen.blit(selected_surface, (popup_rect.centerx - selected_surface.get_width()//2, popup_rect.y + popup_height - 28))
+            
+            # Hướng dẫn ngắn gọn
+            hint_text = "ESC: Thoát • ENTER: Xác nhận"
+            hint_surface = font_desc.render(hint_text, True, (120, 120, 140))
+            self.screen.blit(hint_surface, (popup_rect.centerx - hint_surface.get_width()//2, popup_rect.y + popup_height - 12))
             
             pygame.display.flip()
             self.clock.tick(60)
@@ -666,21 +661,84 @@ class Game:
             i += 1
     
     def scale_arrow_images(self, new_size):
-        self.arrow_images = {
-            "UP": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "up_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            ),
-            "DOWN": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "down_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            ),
-            "LEFT": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "left_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            ),
-            "RIGHT": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            )
-        }
+        """Scale lại kích thước các ảnh mũi tên với xử lý lỗi"""
+        try:
+            # Tạo dictionary mới cho arrow images
+            scaled_arrow_images = {}
+            
+            # Danh sách các hướng và file tương ứng
+            arrow_directions = {
+                "UP": "up_arrow.png",
+                "DOWN": "down_arrow.png", 
+                "LEFT": "left_arrow.png",
+                "RIGHT": "right_arrow.png"
+            }
+            
+            for direction, filename in arrow_directions.items():
+                try:
+                    # Tạo đường dẫn đầy đủ đến file ảnh
+                    image_path = os.path.join(IMAGES_PATH, filename)
+                    
+                    # Kiểm tra file có tồn tại không
+                    if not os.path.exists(image_path):
+                        print(f"Cảnh báo: Không tìm thấy file {image_path}")
+                        # Tạo một surface màu thay thế để debug
+                        fallback_surface = pygame.Surface((new_size, new_size), pygame.SRCALPHA)
+                        # Mỗi hướng có màu khác nhau để dễ phân biệt
+                        colors = {
+                            "UP": (255, 0, 0, 128),      # Đỏ
+                            "DOWN": (0, 255, 0, 128),    # Xanh lá
+                            "LEFT": (0, 0, 255, 128),    # Xanh dương
+                            "RIGHT": (255, 255, 0, 128)  # Vàng
+                        }
+                        fallback_surface.fill(colors[direction])
+                        
+                        # Vẽ mũi tên đơn giản
+                        pygame.draw.polygon(fallback_surface, (255, 255, 255), [
+                            (new_size//2, 5),
+                            (5, new_size-5),
+                            (new_size-5, new_size-5)
+                        ] if direction == "UP" else [
+                            (new_size//2, new_size-5),
+                            (5, 5),
+                            (new_size-5, 5)
+                        ] if direction == "DOWN" else [
+                            (5, new_size//2),
+                            (new_size-5, 5),
+                            (new_size-5, new_size-5)
+                        ] if direction == "LEFT" else [
+                            (new_size-5, new_size//2),
+                            (5, 5),
+                            (5, new_size-5)
+                        ])
+                        
+                        scaled_arrow_images[direction] = fallback_surface
+                        continue
+                    
+                    # Load và scale ảnh
+                    original_image = pygame.image.load(image_path).convert_alpha()
+                    scaled_image = pygame.transform.scale(original_image, (new_size, new_size))
+                    scaled_arrow_images[direction] = scaled_image
+                    
+                    print(f"Đã scale ảnh {direction} thành kích thước {new_size}x{new_size}")
+                    
+                except pygame.error as e:
+                    print(f"Lỗi khi load ảnh {filename}: {e}")
+                    # Tạo surface mặc định
+                    default_surface = pygame.Surface((new_size, new_size), pygame.SRCALPHA)
+                    default_surface.fill((128, 128, 128, 128))  # Màu xám trong suốt
+                    scaled_arrow_images[direction] = default_surface
+            
+            # Cập nhật arrow_images
+            self.arrow_images = scaled_arrow_images
+            print("Đã hoàn thành scale tất cả ảnh mũi tên")
+            
+        except Exception as e:
+            print(f"Lỗi không xác định trong scale_arrow_images: {e}")
+            # Đảm bảo arrow_images luôn có giá trị hợp lệ
+            self.arrow_images = {
+                "UP": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
+                "DOWN": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
+                "LEFT": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
+                "RIGHT": pygame.Surface((new_size, new_size), pygame.SRCALPHA)
+            }
