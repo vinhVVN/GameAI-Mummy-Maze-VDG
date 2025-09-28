@@ -11,6 +11,8 @@ from src.algorithms.greedy import Greedy
 from src.algorithms.dfs import DFS
 from src.algorithms.AStart import AStar
 from src.algorithms.beam import Beam
+from src.algorithms.simulated_annealing import Simulated_Annealing
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -64,7 +66,8 @@ class Game:
         btn_x = MAZE_PANEL_WIDTH + (CONTROL_PANEL_WIDTH - btn_w) / 2
 
         def toggle_player_algo():
-            algos = ["BFS", "IDS", "DFS", "UCS", "Greedy", "AStart", "Beam"]  # thêm vào các thuật toán ở đây
+            algos = ["BFS", "IDS", "DFS", "UCS", "Greedy", "AStart", "Beam",
+                     "SA"]  # thêm vào các thuật toán ở đây
             current_index = algos.index(self.player_algo)
             new_index = (current_index + 1) % len(algos)
             self.player_algo = algos[new_index]
@@ -85,6 +88,7 @@ class Game:
                 maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]
                 current = maps.index(self.maze.map_name)
                 new_map = maps[(current + 1) % len(maps)]
+                self.scale_arrow_images(360//int(new_map[3]))
             print(f"Đổi sang {new_map}")
             if new_map == "map6_1.txt":
                 self.load_new_map(new_map, player_pos=(1, 1), mummy_pos=[(5, 9)])
@@ -147,6 +151,7 @@ class Game:
             "DFS": DFS,
             "AStart" : AStar,
             "Beam" : Beam,
+            "SA" : Simulated_Annealing
         }
 
         if self.player_algo in algo_map:
@@ -441,3 +446,23 @@ class Game:
                     continue
                 j += 1
             i += 1
+    
+    def scale_arrow_images(self, new_size):
+        self.arrow_images = {
+            "UP": pygame.transform.scale(
+                pygame.image.load(os.path.join(IMAGES_PATH, "up_arrow.png")).convert_alpha(), 
+                size=(new_size, new_size)
+            ),
+            "DOWN": pygame.transform.scale(
+                pygame.image.load(os.path.join(IMAGES_PATH, "down_arrow.png")).convert_alpha(), 
+                size=(new_size, new_size)
+            ),
+            "LEFT": pygame.transform.scale(
+                pygame.image.load(os.path.join(IMAGES_PATH, "left_arrow.png")).convert_alpha(), 
+                size=(new_size, new_size)
+            ),
+            "RIGHT": pygame.transform.scale(
+                pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), 
+                size=(new_size, new_size)
+            )
+    }
