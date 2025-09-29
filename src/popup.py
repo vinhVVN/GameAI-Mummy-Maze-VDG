@@ -7,12 +7,13 @@ from src.settings import SCREEN_WIDTH, SCREEN_HEIGHT, COLOR_BLACK
 class AlgorithmPopup:
     def __init__(self, game):
         self.game = game
-        # Mở rộng kích thước popup cho ấn tượng hơn
-        self.width = min(980, SCREEN_WIDTH - 80)
-        self.height = min(640, SCREEN_HEIGHT - 80)
+        # Điều chỉnh kích thước popup cho phù hợp với màn hình
+        self.width = min(650, SCREEN_WIDTH - 40)  # Giảm kích thước để phù hợp với 800px
+        self.height = min(400, SCREEN_HEIGHT - 40)  # Giảm kích thước để phù hợp với 480px
         self.selected_algo = game.player_algo
         self.scroll_offset = 0
         self.buttons = []
+        self.scroll_speed = 30  # Tốc độ scroll
         
         # Load fonts
         self.fonts = self.load_fonts()
@@ -50,15 +51,19 @@ class AlgorithmPopup:
         """Tính tổng chiều cao nội dung"""
         height = 0
         for category, algorithms in GameConfig.ALGORITHM_CATEGORIES.items():
-            height += 25  # Category height
-            height += len(algorithms) * 50  # Algorithm items height
+            height += 30  # Category height (tăng một chút)
+            height += len(algorithms) * 60  # Algorithm items height (tăng để dễ nhìn)
+        height += 20  # Thêm padding cuối
         return height
     
     def show(self):
         """Hiển thị popup và trả về thuật toán được chọn"""
         content_height = self.calculate_content_height()
-        visible_height = self.height - 80
+        visible_height = self.height - 120  # Tăng header và footer space
         max_scroll = max(0, content_height - visible_height)
+        
+        # Debug print
+        print(f"Content height: {content_height}, Visible height: {visible_height}, Max scroll: {max_scroll}")
         
         running = True
         while running:
@@ -77,18 +82,18 @@ class AlgorithmPopup:
                     elif event.key == pygame.K_RETURN and self.selected_algo:
                         return self.selected_algo
                     elif event.key == pygame.K_UP:
-                        self.scroll_offset = max(0, self.scroll_offset - 25)
+                        self.scroll_offset = max(0, self.scroll_offset - self.scroll_speed)
                     elif event.key == pygame.K_DOWN:
-                        self.scroll_offset = min(max_scroll, self.scroll_offset + 25)
+                        self.scroll_offset = min(max_scroll, self.scroll_offset + self.scroll_speed)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         for btn_rect, algo_name in self.buttons:
                             if btn_rect.collidepoint(mouse_pos):
                                 return algo_name
                     elif event.button == 4:  # Scroll up
-                        self.scroll_offset = max(0, self.scroll_offset - 25)
+                        self.scroll_offset = max(0, self.scroll_offset - self.scroll_speed)
                     elif event.button == 5:  # Scroll down
-                        self.scroll_offset = min(max_scroll, self.scroll_offset + 25)
+                        self.scroll_offset = min(max_scroll, self.scroll_offset + self.scroll_speed)
             pygame.display.flip()
             self.game.clock.tick(60)
         
@@ -131,12 +136,17 @@ class AlgorithmPopup:
         self.game.screen.blit(title_text, (popup_rect.centerx - title_text.get_width()//2, popup_rect.y + 16))
         
         # Content area
-        visible_height = self.height - 110
-        content_bg_rect = pygame.Rect(popup_rect.x + 16, popup_rect.y + 66, popup_rect.width - 32, visible_height)
+        visible_height = self.height - 120  # Đồng bộ với tính toán trong show()
+        content_bg_rect = pygame.Rect(popup_rect.x + 16, popup_rect.y + 70, popup_rect.width - 32, visible_height)
         pygame.draw.rect(self.game.screen, (245, 248, 250), content_bg_rect, border_radius=10)
         
         # Vẽ nội dung có thể cuộn
         self.draw_scrollable_content(popup_rect, mouse_pos, visible_height)
+        
+        # Vẽ scroll indicator nếu cần
+        content_height = self.calculate_content_height()
+        if content_height > visible_height:
+            self.draw_scroll_indicator(popup_rect, visible_height, content_height)
         
         # Footer
         footer_rect = pygame.Rect(popup_rect.x, popup_rect.y + self.height - 44, popup_rect.width, 44)
@@ -149,36 +159,60 @@ class AlgorithmPopup:
             self.game.screen.blit(selected_surface, (popup_rect.centerx - selected_surface.get_width()//2, popup_rect.y + self.height - 28))
         
         # Hướng dẫn
-        hint_text = "ESC: Thoát • ENTER: Xác nhận"
+        hint_text = "ESC: Thoát • ENTER: Xác nhận • ↑↓ hoặc Mouse Wheel: Cuộn"
         hint_surface = self.fonts['desc'].render(hint_text, True, (120, 120, 140))
         self.game.screen.blit(hint_surface, (popup_rect.centerx - hint_surface.get_width()//2, popup_rect.y + self.height - 14))
     
     def draw_scrollable_content(self, popup_rect, mouse_pos, visible_height):
         """Vẽ nội dung có thể cuộn"""
         current_y = -self.scroll_offset
+        content_start_y = popup_rect.y + 70  # Đồng bộ với content area
         
         for category, algorithms in GameConfig.ALGORITHM_CATEGORIES.items():
             # Vẽ category nếu trong view
-            category_top = popup_rect.y + 66 + current_y
-            if category_top + 30 > popup_rect.y + 66 and category_top < popup_rect.y + 66 + visible_height:
-                category_bg = pygame.Rect(popup_rect.x + 22, category_top, popup_rect.width - 44, 26)
+            category_top = content_start_y + current_y
+            if category_top + 30 > content_start_y and category_top < content_start_y + visible_height:
+                category_bg = pygame.Rect(popup_rect.x + 22, category_top, popup_rect.width - 44, 28)
                 pygame.draw.rect(self.game.screen, (200, 220, 245), category_bg, border_radius=6)
                 category_text = self.fonts['category'].render(category, True, (20, 60, 140))
-                self.game.screen.blit(category_text, (category_bg.x + 10, category_bg.y + 4))
+                self.game.screen.blit(category_text, (category_bg.x + 10, category_bg.y + 6))
             
             current_y += 30
             
             # Vẽ algorithms
             for name, desc, color in algorithms:
-                algo_top = popup_rect.y + 66 + current_y
-                if algo_top + 58 > popup_rect.y + 66 and algo_top < popup_rect.y + 66 + visible_height:
+                algo_top = content_start_y + current_y
+                if algo_top + 60 > content_start_y and algo_top < content_start_y + visible_height:
                     self.draw_algorithm_item(popup_rect, algo_top, name, desc, color, mouse_pos)
                 
-                current_y += 58
+                current_y += 60
+    
+    def draw_scroll_indicator(self, popup_rect, visible_height, content_height):
+        """Vẽ thanh scroll indicator"""
+        # Vẽ thanh scroll ở bên phải
+        scrollbar_x = popup_rect.right - 20
+        scrollbar_y = popup_rect.y + 70
+        scrollbar_height = visible_height
+        scrollbar_width = 8
+        
+        # Background của scrollbar
+        scrollbar_bg = pygame.Rect(scrollbar_x, scrollbar_y, scrollbar_width, scrollbar_height)
+        pygame.draw.rect(self.game.screen, (200, 200, 200), scrollbar_bg, border_radius=4)
+        
+        # Tính toán vị trí và kích thước của scroll thumb
+        max_scroll = content_height - visible_height
+        if max_scroll > 0:
+            scroll_ratio = self.scroll_offset / max_scroll
+            thumb_height = max(20, int(scrollbar_height * visible_height / content_height))
+            thumb_y = scrollbar_y + int((scrollbar_height - thumb_height) * scroll_ratio)
+            
+            # Vẽ scroll thumb
+            thumb_rect = pygame.Rect(scrollbar_x, thumb_y, scrollbar_width, thumb_height)
+            pygame.draw.rect(self.game.screen, (100, 100, 100), thumb_rect, border_radius=4)
     
     def draw_algorithm_item(self, popup_rect, top, name, desc, color, mouse_pos):
         """Vẽ một item thuật toán"""
-        algo_bg = pygame.Rect(popup_rect.x + 26, top, popup_rect.width - 52, 48)
+        algo_bg = pygame.Rect(popup_rect.x + 26, top, popup_rect.width - 52, 55)  # Tăng chiều cao item
         
         # Xác định màu dựa trên trạng thái
         is_hovered = algo_bg.collidepoint(mouse_pos)
