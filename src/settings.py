@@ -16,5 +16,6 @@ PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ASSETS_PATH = os.path.join(PROJECT_PATH, "assets")
 IMAGES_PATH = os.path.join(ASSETS_PATH, "images")
 MAPS_PATH = os.path.join(ASSETS_PATH, "maps")
+SOUNDS_PATH = os.path.join(ASSETS_PATH, "sounds")
 
 FPS = 30

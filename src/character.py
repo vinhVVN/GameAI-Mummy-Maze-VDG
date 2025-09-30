@@ -1,6 +1,7 @@
 import pygame
 from src.settings import *
 from src.sprites import *
+from src.sound_manager import sound_manager
 
 class Character:
     def __init__(self, sprite_path, start_pos_x, start_pos_y, cell_size):
@@ -86,8 +87,16 @@ class Character:
             self.start_pixel_pos = (self.pixel_x, self.pixel_y)
             self.target_pixel_pos = self.get_screen_pos_from_grid(cell_size, next_grid_x, next_grid_y)
             self.target_grid_pos = (next_grid_x, next_grid_y)  
+            
+            # Phát âm thanh chuyển động dựa trên loại nhân vật
+            self.play_move_sound()
+            
             return True
         return False
+    
+    def play_move_sound(self):
+        """Override trong subclass để phát âm thanh phù hợp"""
+        pass
             
                   
             
@@ -107,6 +116,10 @@ class Player(Character):
         animations["LEFT"] = [self.spritesheet.get_image(i*w, h*3, w, h) for i in range(5)]
         
         return animations
+    
+    def play_move_sound(self):
+        """Phát âm thanh khi con người di chuyển"""
+        sound_manager.play_human_move()
     
     
 
@@ -128,6 +141,10 @@ class Mummy(Character):
         animations["LEFT"] = [self.spritesheet.get_image(i*w, h*3, w, h) for i in range(5)]
         
         return animations
+    
+    def play_move_sound(self):
+        """Phát âm thanh khi quái vật di chuyển"""
+        sound_manager.play_monster_move()
     
     def classic_move(self, player_pos, maze):
         """

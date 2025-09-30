@@ -3,6 +3,8 @@ from src.settings import *
 from src.maze import *
 from src.character import Player, Mummy
 from src.ui import Panel , Button
+from src.popup import AlgorithmPopup
+from src.settings import SOUNDS_PATH
 from src.mazeproblem import MazeProblem, SimpleMazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
@@ -20,6 +22,18 @@ class Game:
         pygame.display.set_caption("MummyGame - Vinh Say Gex")
         self.clock = pygame.time.Clock()
         self.running = True
+        
+        # Nhạc nền game
+        try:
+            if pygame.mixer.get_init() is None:
+                pygame.mixer.init()
+            game_music = os.path.join(SOUNDS_PATH, "music_game.mp3")
+            if os.path.exists(game_music):
+                pygame.mixer.music.load(game_music)
+                pygame.mixer.music.set_volume(0.6)
+                pygame.mixer.music.play(-1)
+        except Exception as e:
+            print(f"Khởi tạo nhạc game lỗi: {e}")
         
         self.maze = Maze("map6_1.txt")
         cell_size = self.maze.cell_size
@@ -50,6 +64,10 @@ class Game:
             "RIGHT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size))
         }
 
+    def choose_algorithm_popup(self):
+        popup = AlgorithmPopup(self)
+        return popup.show()
+
     def load_new_map(self, map_name, player_pos=(1, 15), mummy_pos=[(1, 9)]):
         self.maze = Maze(map_name)
         cell_size = self.maze.cell_size
@@ -66,19 +84,25 @@ class Game:
         btn_x = MAZE_PANEL_WIDTH + (CONTROL_PANEL_WIDTH - btn_w) / 2
 
         def toggle_player_algo():
-            algos = ["BFS", "IDS", "DFS", "UCS", "Greedy", "AStart", "Beam",
-                     "SA"]  # thêm vào các thuật toán ở đây
-            current_index = algos.index(self.player_algo)
-            new_index = (current_index + 1) % len(algos)
-            self.player_algo = algos[new_index]
-            btn_player_algo.text = f"Player: {self.player_algo}"
+            # Hiển thị popup chọn thuật toán
+            new_algo = self.choose_algorithm_popup()
+            if new_algo:
+                self.player_algo = new_algo
+                # Cập nhật text cho button
+                for widget in self.panel.widgets:
+                    if hasattr(widget, 'text') and widget.text.startswith("Player:"):
+                        widget.text = f"Player: {self.player_algo}"
+                print(f"Đã chọn thuật toán: {new_algo}")
 
         def toggle_mummy_algo():
             if self.mummy_algo == "classic":
                 self.mummy_algo = "BFS"
             else:
                 self.mummy_algo = "classic"
-            btn_mummy_algo.text = f"Mummy: {self.mummy_algo}"
+            # Cập nhật text cho button
+            for widget in self.panel.widgets:
+                if hasattr(widget, 'text') and widget.text.startswith("Mummy:"):
+                    widget.text = f"Mummy: {self.mummy_algo}"
 
         def change_map(_new_map = None):
             if _new_map is not None:
@@ -93,18 +117,19 @@ class Game:
             if new_map == "map6_1.txt":
                 self.load_new_map(new_map, player_pos=(1, 1), mummy_pos=[(5, 9)])
             elif new_map == "map6_2.txt":
-                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)]) #Đã tối ưu vị trí, thể hiện sự khác nhau giữa UCS và Greedy đừng sửa nha
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)])
             elif new_map == "map6_3.txt":
-                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)]) #Đã tối ưu vị trí, thể hiện sự khác nhau giữa UCS và Greedy đừng sửa nha
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)])
             elif new_map == "map6_4.txt":
-                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)]) #Đã tối ưu vị trí, thể hiện sự khác nhau giữa UCS và Greedy (thay đổi map)
+                self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(3, 3)])
             elif new_map == "map6_5.txt":
-                # Thể hiện được lừa mummy bằng thuật UCS(pass), Greedy(pass), Beam(fail-bị bắt)
                 self.load_new_map(new_map, player_pos=(1, 11), mummy_pos=[(9, 9)])
             elif new_map == "map8_1.txt":
-                # Cũng cũng đi, UCS(pass), A*(pass), Greedy(fail), Beam(fail)
                 self.load_new_map(new_map, player_pos=(5, 5), mummy_pos=[(15, 11), (3, 3)])
-            btn_change_map.text = str(new_map)
+            # Cập nhật text cho button
+            for widget in self.panel.widgets:
+                if hasattr(widget, 'text') and widget.text in ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]:
+                    widget.text = str(new_map)
 
         self._change_map_func = change_map
 
@@ -115,7 +140,6 @@ class Game:
             self.reset_game()
 
         btn_reset = Button(btn_x, 400, btn_w, btn_h, "Reset", reset_game_btn)
-
         btn_player_algo = Button(btn_x, 100, btn_w, btn_h, f"Player: {self.player_algo}", toggle_player_algo)
         btn_mummy_algo = Button(btn_x, 150, btn_w, btn_h, f"Mummy: {self.mummy_algo}", toggle_mummy_algo)
         btn_change_map = Button(btn_x, 250, btn_w, btn_h, self.maze.map_name, change_map)
@@ -146,12 +170,12 @@ class Game:
         algo_map = {
             "BFS": BFS,
             "UCS": UCS,
-            "IDS": lambda prob: IDS(prob, max_depth=100),  # ví dụ truyền thêm tham số
+            "IDS": lambda prob: IDS(prob, max_depth=100),
             "Greedy": Greedy,
             "DFS": DFS,
-            "AStart" : AStar,
-            "Beam" : Beam,
-            "SA" : Simulated_Annealing
+            "AStart": AStar,
+            "Beam": Beam,
+            "SA": Simulated_Annealing
         }
 
         if self.player_algo in algo_map:
@@ -169,48 +193,42 @@ class Game:
         self.solution_paths = []
         self.ai_mode_active = True
         
-        
     def run(self): 
         while self.running:
             self.events()
             self.update()
-            self.draw()
-            
+            self.draw() 
             self.clock.tick(FPS)
-        
         pygame.quit()
-        
         
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
 
-            self.panel.handle_event(event) # chuyển sự kiện cho panel xử lý
+            self.panel.handle_event(event)
             
             if not self.ai_mode_active and event.type == pygame.KEYDOWN and not self.player.is_moving and self.is_player_turn:
                 cell_size = self.maze.cell_size
                 moved = False
                 if event.key == pygame.K_UP:
-                    self.player.move(dy=-2, maze = self.maze, cell_size = cell_size)
+                    self.player.move(dy=-2, maze=self.maze, cell_size=cell_size)
                     moved = True
                 elif event.key == pygame.K_DOWN:
-                    self.player.move(dy = 2, maze=self.maze, cell_size = cell_size)
+                    self.player.move(dy=2, maze=self.maze, cell_size=cell_size)
                     moved = True
                 elif event.key == pygame.K_LEFT:
-                    self.player.move(dx= -2, maze=self.maze, cell_size = cell_size)
+                    self.player.move(dx=-2, maze=self.maze, cell_size=cell_size)
                     moved = True
                 elif event.key == pygame.K_RIGHT:
-                    self.player.move(dx = 2, maze=self.maze, cell_size = cell_size)
+                    self.player.move(dx=2, maze=self.maze, cell_size=cell_size)
                     moved = True
-                elif event.key == pygame.K_SPACE: # bỏ lượt
+                elif event.key == pygame.K_SPACE:
                     moved = True
                 
                 if moved:
                     self.start_wait()
                     self.is_player_turn = False
-                
-                
         
     def update(self):         
         self.player.update()
@@ -219,16 +237,13 @@ class Game:
 
         if self.is_waiting:
             if pygame.time.get_ticks() - self.wait_start_time >= self.wait_duration:
-                self.is_waiting = False # Hết giờ chờ, lượt đi tiếp theo có thể bắt đầu
+                self.is_waiting = False
             else:
-                return # Vẫn đang trong thời gian chờ, không làm gì cả
+                return
         
-        
-        any_mummy_moving = any(m.is_moving for m in self.mummies) # Kiểm tra xem có mummy nào di chuyển
+        any_mummy_moving = any(m.is_moving for m in self.mummies)
         if self.player.is_moving or any_mummy_moving:
             return
-        
-        
         
         # AI người chơi
         if self.is_player_turn:
@@ -252,7 +267,7 @@ class Game:
                         print("Người đi")
                         self.start_wait()
                         if self.player_algo in ["BFS", "IDS", "DFS"]:
-                            self.is_player_turn = True  # 🔑 giữ lượt Player luôn
+                            self.is_player_turn = True
                         else:
                             self.is_player_turn = False
                     else:
@@ -261,28 +276,25 @@ class Game:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
-
                 else:
                     self.ai_mode_active = False
                     print("AI đã chạy xong!")
 
-
         # di chuyển mummy
         if self.player_algo not in ["BFS", "IDS", "DFS"]:
             if not self.is_player_turn and not self.player.is_moving:
-                if not self.mummies: # Nếu không còn mummy nào thì trả lượt
+                if not self.mummies:
                     self.is_player_turn = True
                     return
                 
-                current_mummy = self.mummies[self.current_mummy_index] # xác định lượt mummy nào
+                current_mummy = self.mummies[self.current_mummy_index]
                 if not current_mummy.path:
                     player_pos = (self.player.grid_x, self.player.grid_y)
                     if self.mummy_algo == "classic":
                         actions = current_mummy.classic_move(player_pos, self.maze)
                     else:
-                        # BFS để mummy tìm tới Player
                         problem = MazeProblem(self.maze,
-                                            ((mummy.grid_x, mummy.grid_y),
+                                            ((current_mummy.grid_x, current_mummy.grid_y),
                                             (self.player.grid_x, self.player.grid_y)),
                                             player_pos,
                                             self.maze.trap_pos)
@@ -308,18 +320,13 @@ class Game:
                     current_mummy.move(dx, dy, self.maze, self.maze.cell_size)
                     self.handle_mummy_collisions()
                         
-                        
-                # Nếu mummy này đã đi hết các bước, chuyển lượt cho mummy tiếp theo
                 if not current_mummy.path:
                     self.current_mummy_index += 1
                     self.start_wait() 
                     
-                    # Nếu đã đi hết lượt của tất cả các mummy, trả lại lượt cho Player
                     if self.current_mummy_index >= len(self.mummies):
-                        self.current_mummy_index = 0 # Reset lại cho lượt sau
+                        self.current_mummy_index = 0
                         self.is_player_turn = True
-                        
-                
 
             if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
                     print("WINNNN")
@@ -329,8 +336,6 @@ class Game:
                     self.screen.blit(congratulate_image, (0, 0))
                     pygame.display.flip()
                     pygame.time.delay(2000)
-
-                    # self.running = False
                     self.reset_game()
             
             if self.maze.trap_pos and (self.player.grid_x, self.player.grid_y) == self.maze.trap_pos:
@@ -341,10 +346,8 @@ class Game:
                     self.screen.blit(jumpscare_image, (0, 0))
                     pygame.display.flip()
                     pygame.time.delay(2000)
-                    # self.running = False
                     self.reset_game()
 
-        # uninformed search
         for mummy in self.mummies:
             if self.player_algo not in ["BFS", "IDS", "DFS"]:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
@@ -355,28 +358,22 @@ class Game:
                     self.screen.blit(jumpscare_image, (0, 0))
                     pygame.display.flip()
                     pygame.time.delay(2000)
-                    # self.running = False
                     self.reset_game()
                     
-
     def draw(self):
         self.screen.fill(COLOR_BLACK)
         self.maze.draw(self.screen)
-        
         self.draw_path(self.screen)
         self.player.draw(self.screen)
-        
         
         if self.player_algo not in ["BFS", "IDS", "DFS"]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         
         self.panel.draw(self.screen)
-        pygame.display.flip() # hiển thị những gì đã vẽ
-    
+        pygame.display.flip()
     
     def draw_path(self, surface):
-        
         if not self.ai_mode_active:
             return
         
@@ -415,14 +412,9 @@ class Game:
         self.wait_start_time = pygame.time.get_ticks()
 
     def reset_game(self):
-        # lấy tên map hiện tại từ nút bấm
         current_map = self.maze.map_name
-
-        # gọi lại change_map nhưng truyền đúng map hiện tại
         if hasattr(self, "_change_map_func"):
             self._change_map_func(current_map)
-
-        # reset trạng thái
         self.solution_paths = []
         self.ai_mode_active = False
         self.is_player_turn = True
@@ -430,7 +422,6 @@ class Game:
         self.wait_start_time = 0
         self.wait_duration = 1000
         self.current_mummy_index = 0
-
         print(f"Game đã reset về map {current_map}!")
 
     def handle_mummy_collisions(self):
@@ -442,27 +433,90 @@ class Game:
                 mummy2 = self.mummies[j]
                 if (mummy1.grid_x, mummy1.grid_y) == (mummy2.grid_x, mummy2.grid_y):
                     print("Hai con mummy chơi nhau !")
-                    self.mummies.pop(j) # xoá mummy thứ 2
+                    self.mummies.pop(j)
                     continue
                 j += 1
             i += 1
     
     def scale_arrow_images(self, new_size):
-        self.arrow_images = {
-            "UP": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "up_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            ),
-            "DOWN": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "down_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            ),
-            "LEFT": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "left_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            ),
-            "RIGHT": pygame.transform.scale(
-                pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), 
-                size=(new_size, new_size)
-            )
-    }
+        """Scale lại kích thước các ảnh mũi tên với xử lý lỗi"""
+        try:
+            # Tạo dictionary mới cho arrow images
+            scaled_arrow_images = {}
+            
+            # Danh sách các hướng và file tương ứng
+            arrow_directions = {
+                "UP": "up_arrow.png",
+                "DOWN": "down_arrow.png", 
+                "LEFT": "left_arrow.png",
+                "RIGHT": "right_arrow.png"
+            }
+            
+            for direction, filename in arrow_directions.items():
+                try:
+                    # Tạo đường dẫn đầy đủ đến file ảnh
+                    image_path = os.path.join(IMAGES_PATH, filename)
+                    
+                    # Kiểm tra file có tồn tại không
+                    if not os.path.exists(image_path):
+                        print(f"Cảnh báo: Không tìm thấy file {image_path}")
+                        # Tạo một surface màu thay thế để debug
+                        fallback_surface = pygame.Surface((new_size, new_size), pygame.SRCALPHA)
+                        # Mỗi hướng có màu khác nhau để dễ phân biệt
+                        colors = {
+                            "UP": (255, 0, 0, 128),      # Đỏ
+                            "DOWN": (0, 255, 0, 128),    # Xanh lá
+                            "LEFT": (0, 0, 255, 128),    # Xanh dương
+                            "RIGHT": (255, 255, 0, 128)  # Vàng
+                        }
+                        fallback_surface.fill(colors[direction])
+                        
+                        # Vẽ mũi tên đơn giản
+                        pygame.draw.polygon(fallback_surface, (255, 255, 255), [
+                            (new_size//2, 5),
+                            (5, new_size-5),
+                            (new_size-5, new_size-5)
+                        ] if direction == "UP" else [
+                            (new_size//2, new_size-5),
+                            (5, 5),
+                            (new_size-5, 5)
+                        ] if direction == "DOWN" else [
+                            (5, new_size//2),
+                            (new_size-5, 5),
+                            (new_size-5, new_size-5)
+                        ] if direction == "LEFT" else [
+                            (new_size-5, new_size//2),
+                            (5, 5),
+                            (5, new_size-5)
+                        ])
+                        
+                        scaled_arrow_images[direction] = fallback_surface
+                        continue
+                    
+                    # Load và scale ảnh
+                    original_image = pygame.image.load(image_path).convert_alpha()
+                    scaled_image = pygame.transform.scale(original_image, (new_size, new_size))
+                    scaled_arrow_images[direction] = scaled_image
+                    
+                    print(f"Đã scale ảnh {direction} thành kích thước {new_size}x{new_size}")
+                    
+                except pygame.error as e:
+                    print(f"Lỗi khi load ảnh {filename}: {e}")
+                    # Tạo surface mặc định
+                    default_surface = pygame.Surface((new_size, new_size), pygame.SRCALPHA)
+                    default_surface.fill((128, 128, 128, 128))  # Màu xám trong suốt
+                    scaled_arrow_images[direction] = default_surface
+            
+            # Cập nhật arrow_images
+            self.arrow_images = scaled_arrow_images
+            print("Đã hoàn thành scale tất cả ảnh mũi tên")
+            
+        except Exception as e:
+            print(f"Lỗi không xác định trong scale_arrow_images: {e}")
+            # Đảm bảo arrow_images luôn có giá trị hợp lệ
+            self.arrow_images = {
+                "UP": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
+                "DOWN": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
+                "LEFT": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
+                "RIGHT": pygame.Surface((new_size, new_size), pygame.SRCALPHA)
+            }
