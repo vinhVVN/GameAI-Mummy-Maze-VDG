@@ -48,5 +48,8 @@ class GameConfig:
         "THUẬT TOÁN TỐI ƯU": [
             ("SA", "Tìm kiếm mô phỏng luyện kim", (199, 21, 133)),
             ("Beam", "Tìm đường theo chiều rộng nhưng giới hạn lựa chọn", (139, 69, 19)),
+        ],
+        "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
+            ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
         ]
     }
