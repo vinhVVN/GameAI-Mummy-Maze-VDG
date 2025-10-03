@@ -16,10 +16,6 @@ class PartialObservationProblem:
         return len(belief_state) == 1 and self.goal_pos in belief_state
 
     def get_successors(self, belief_state):
-        """
-        Hàm này giờ đây rất giống với SensorlessProblem.
-        Nó chỉ dự đoán belief state tiếp theo sau một hành động.
-        """
         possible_actions = ["UP", "DOWN", "LEFT", "RIGHT"]
         successors = []
 
@@ -36,9 +32,8 @@ class PartialObservationProblem:
                     new_belief_state.add((x + dx, y + dy))
                 else:
                     new_belief_state.add((x, y))
-            
-            # Mỗi hành động chỉ dẫn đến MỘT trạng thái niềm tin dự đoán
-            successors.append((frozenset(new_belief_state), action, 1))
+        
+            successors.append((frozenset(new_belief_state), action, 0))
             
         return successors
 
@@ -46,8 +41,7 @@ class PartialObservationProblem:
         """Heuristic là khoảng cách nhỏ nhất từ belief state đến đích."""
         if not belief_state:
             return float('inf')
-        
-        # Lấy khoảng cách Manhattan từ ô gần đích nhất trong belief state
+
         min_dist = min(abs(s[0] - self.goal_pos[0]) + abs(s[1] - self.goal_pos[1]) for s in belief_state)
         
         # Thêm một phần thưởng nhỏ cho việc giảm kích thước belief state
