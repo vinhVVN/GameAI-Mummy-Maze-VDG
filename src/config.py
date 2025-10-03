@@ -30,7 +30,7 @@ class GameConfig:
         "map6_3.txt": {"player": (1, 11), "mummies": [(3, 3)]},
         "map6_4.txt": {"player": (1, 11), "mummies": [(3, 3)]},
         "map6_5.txt": {"player": (1, 11), "mummies": [(9, 9)]},
-        "map8_1.txt": {"player": (5, 5), "mummies": [(15, 11), (3, 3)]}
+        "map8_1.txt": {"player": (1, 15), "mummies": [(15, 11), (3, 3)]}
     }
     
     # Algorithm categories for popup
@@ -48,5 +48,8 @@ class GameConfig:
         "THUẬT TOÁN TỐI ƯU": [
             ("SA", "Tìm kiếm mô phỏng luyện kim", (199, 21, 133)),
             ("Beam", "Tìm đường theo chiều rộng nhưng giới hạn lựa chọn", (139, 69, 19)),
+        ],
+        "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
+            ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
         ]
     }

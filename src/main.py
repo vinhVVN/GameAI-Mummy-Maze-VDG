@@ -14,6 +14,8 @@ from src.algorithms.dfs import DFS
 from src.algorithms.AStart import AStar
 from src.algorithms.beam import Beam
 from src.algorithms.simulated_annealing import Simulated_Annealing
+from src.algorithms.a_star_belief import AStar_Belief
+from src.algorithms.partial_observation import PartialObservationProblem
 
 class Game:
     def __init__(self):
@@ -158,6 +160,9 @@ class Game:
         if self.player_algo in ["BFS", "IDS", "DFS"]:
             initial_state = (self.player.grid_x, self.player.grid_y)
             problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
+        elif self.player_algo == "PO_search":
+            problem = PartialObservationProblem(self.maze)
+            
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
                              tuple(sorted(mummy_positions)))
@@ -180,6 +185,8 @@ class Game:
 
         if self.player_algo in algo_map:
             path = algo_map[self.player_algo](problem)
+        elif self.player_algo == "PO_search":
+            path = AStar_Belief(problem)
         else:
             print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
             path = None
@@ -248,7 +255,7 @@ class Game:
         # AI người chơi
         if self.is_player_turn:
             if self.ai_mode_active:
-                if not self.solution_paths:
+                if not self.solution_paths and (self.player.grid_x, self.player.grid_y) != self.maze.calculate_stair():
                     self.find_path()
 
                 if self.solution_paths:
@@ -266,13 +273,13 @@ class Game:
                     if self.player.move(dx, dy, self.maze, self.maze.cell_size):
                         print("Người đi")
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
                     else:
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
@@ -281,7 +288,7 @@ class Game:
                     print("AI đã chạy xong!")
 
         # di chuyển mummy
-        if self.player_algo not in ["BFS", "IDS", "DFS"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
             if not self.is_player_turn and not self.player.is_moving:
                 if not self.mummies:
                     self.is_player_turn = True
@@ -349,7 +356,7 @@ class Game:
                     self.reset_game()
 
         for mummy in self.mummies:
-            if self.player_algo not in ["BFS", "IDS", "DFS"]:
+            if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
                     print("Game Over - bị ma bắt")
                     jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
@@ -366,7 +373,7 @@ class Game:
         self.draw_path(self.screen)
         self.player.draw(self.screen)
         
-        if self.player_algo not in ["BFS", "IDS", "DFS"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         
