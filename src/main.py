@@ -13,9 +13,11 @@ from src.algorithms.greedy import Greedy
 from src.algorithms.dfs import DFS
 from src.algorithms.AStart import AStar
 from src.algorithms.beam import Beam
+from src.algorithms.hill_climbing import HillClimbing
 from src.algorithms.simulated_annealing import Simulated_Annealing
 from src.algorithms.a_star_belief import AStar_Belief
 from src.algorithms.partial_observation import PartialObservationProblem
+from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 
 class Game:
     def __init__(self):
@@ -162,15 +164,17 @@ class Game:
             problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
         elif self.player_algo == "PO_search":
             problem = PartialObservationProblem(self.maze)
-            
+        elif self.player_algo == "Non_infor":
+            # SỬA Ở ĐÂY: Không truyền mummy positions cho Non_infor
+            problem = NoInformationProblem(self.maze)
         else:
+            # Các thuật toán khác vẫn dùng mummy positions
             initial_state = ((self.player.grid_x, self.player.grid_y),
-                             tuple(sorted(mummy_positions)))
-            
+                            tuple(sorted(mummy_positions)))
             problem = MazeProblem(self.maze, 
-                                  initial_state,
-                                  (gx, gy), 
-                                  self.maze.trap_pos)
+                                initial_state,
+                                (gx, gy), 
+                                self.maze.trap_pos)
 
         algo_map = {
             "BFS": BFS,
@@ -179,8 +183,10 @@ class Game:
             "Greedy": Greedy,
             "DFS": DFS,
             "AStart": AStar,
+            "Hill climbing" : HillClimbing,
             "Beam": Beam,
-            "SA": Simulated_Annealing
+            "SA": Simulated_Annealing,
+            "Non_infor": BFS_NoInformation_Limited
         }
 
         if self.player_algo in algo_map:
@@ -273,13 +279,14 @@ class Game:
                     if self.player.move(dx, dy, self.maze, self.maze.cell_size):
                         print("Người đi")
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search"]:
+                        # SỬA Ở ĐÂY: Thêm Non_infor vào danh sách không cần mummy
+                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "Non_infor"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
                     else:
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "Non_infor"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
@@ -287,8 +294,8 @@ class Game:
                     self.ai_mode_active = False
                     print("AI đã chạy xong!")
 
-        # di chuyển mummy
-        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
+        # SỬA Ở ĐÂY: Chỉ di chuyển mummy khi KHÔNG dùng Non_infor
+        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "Non_infor"]:
             if not self.is_player_turn and not self.player.is_moving:
                 if not self.mummies:
                     self.is_player_turn = True
@@ -335,28 +342,31 @@ class Game:
                         self.current_mummy_index = 0
                         self.is_player_turn = True
 
-            if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
-                    print("WINNNN")
-                    congratulate_path = os.path.join(IMAGES_PATH, "j97_win.jpg")
-                    congratulate_image = pygame.image.load(congratulate_path).convert()
-                    congratulate_image = pygame.transform.scale(congratulate_image, (MAZE_PANEL_WIDTH,SCREEN_HEIGHT))
-                    self.screen.blit(congratulate_image, (0, 0))
-                    pygame.display.flip()
-                    pygame.time.delay(2000)
-                    self.reset_game()
-            
-            if self.maze.trap_pos and (self.player.grid_x, self.player.grid_y) == self.maze.trap_pos:
-                    print("Game Over - Đậm phải trap")
-                    jumpscare_path = os.path.join(IMAGES_PATH, "dinhbay.jpg")
-                    jumpscare_image = pygame.image.load(jumpscare_path).convert()
-                    jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-                    self.screen.blit(jumpscare_image, (0, 0))
-                    pygame.display.flip()
-                    pygame.time.delay(2000)
-                    self.reset_game()
+        # Kiểm tra win condition
+        if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
+                print("WINNNN")
+                congratulate_path = os.path.join(IMAGES_PATH, "j97_win.jpg")
+                congratulate_image = pygame.image.load(congratulate_path).convert()
+                congratulate_image = pygame.transform.scale(congratulate_image, (MAZE_PANEL_WIDTH,SCREEN_HEIGHT))
+                self.screen.blit(congratulate_image, (0, 0))
+                pygame.display.flip()
+                pygame.time.delay(2000)
+                self.reset_game()
+        
+        # Kiểm tra trap condition
+        if self.maze.trap_pos and (self.player.grid_x, self.player.grid_y) == self.maze.trap_pos:
+                print("Game Over - Đậm phải trap")
+                jumpscare_path = os.path.join(IMAGES_PATH, "dinhbay.jpg")
+                jumpscare_image = pygame.image.load(jumpscare_path).convert()
+                jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+                self.screen.blit(jumpscare_image, (0, 0))
+                pygame.display.flip()
+                pygame.time.delay(2000)
+                self.reset_game()
 
-        for mummy in self.mummies:
-            if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
+        # SỬA Ở ĐÂY: Chỉ kiểm tra mummy collision khi KHÔNG dùng Non_infor
+        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "Non_infor"]:
+            for mummy in self.mummies:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
                     print("Game Over - bị ma bắt")
                     jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
@@ -373,7 +383,8 @@ class Game:
         self.draw_path(self.screen)
         self.player.draw(self.screen)
         
-        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
+        # SỬA Ở ĐÂY: Chỉ vẽ mummy khi KHÔNG dùng Non_infor
+        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "Non_infor"]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         

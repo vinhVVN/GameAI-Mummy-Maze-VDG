@@ -46,10 +46,12 @@ class GameConfig:
             ("UCS", "Tìm đường với chi phí tích lũy nhỏ nhất", (100, 149, 237)),
         ],
         "THUẬT TOÁN TỐI ƯU": [
+            ("Hill climbing"," sẽ không bao giờ đi xuống", (255, 215, 0)),
             ("SA", "Tìm kiếm mô phỏng luyện kim", (199, 21, 133)),
             ("Beam", "Tìm đường theo chiều rộng nhưng giới hạn lựa chọn", (139, 69, 19)),
         ],
         "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
+            ("Non_infor","Không có thông tin gì",(199, 21, 0)),
             ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
         ]
     }
