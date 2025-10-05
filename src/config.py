@@ -51,5 +51,9 @@ class GameConfig:
         ],
         "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
             ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
+        ],
+        "TÌM KIẾM CÓ RÀNG BUỘC":[
+            ("Backtracking", "Khám phá và quay lui khi gặp ngõ cụt", (255, 215, 0)),
         ]
+        
     }

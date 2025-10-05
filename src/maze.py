@@ -54,10 +54,10 @@ class Maze:
             gy = sy
         elif self.stair_pos[1] >= self.maze_size: # DOWN
             gx = sx
-            gy = sy + 1
+            gy = sy - 1
         else:
             gx = sx
-            gy = sy - 1
+            gy = sy + 1
         return gx, gy
         
     def load_assets(self):

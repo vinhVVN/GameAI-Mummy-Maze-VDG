@@ -19,11 +19,12 @@ from src.algorithms.beam import Beam
 from src.algorithms.simulated_annealing import Simulated_Annealing, optimize_path
 from src.algorithms.a_star_belief import AStar_Belief
 from src.algorithms.partial_observation import PartialObservationProblem
+from src.algorithms.backtracking import Backtracking
+
 
 class Game:
     def __init__(self):
         pygame.init()
-        
         self.collapsed_width = MAZE_PANEL_WIDTH + CONTROL_PANEL_WIDTH
         self.expanded_width = self.collapsed_width + LOG_PANEL_WIDTH
         self.log_panel_expanded = False
@@ -58,7 +59,6 @@ class Game:
         
         self.panel = Panel(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
         
-        
         log_panel_x = MAZE_PANEL_WIDTH + CONTROL_PANEL_WIDTH
         self.log_panel = LogPanel(log_panel_x, 0, LOG_PANEL_WIDTH, SCREEN_HEIGHT)
         self.set_buttons()
@@ -82,6 +82,8 @@ class Game:
         self.logger = Logger("mummy_maze_log.txt")
         self.popup = AlgorithmPopup(self)
         self.popup.width = 400
+        
+        
 
     def choose_algorithm_popup(self):
         
@@ -115,16 +117,6 @@ class Game:
                         widget.text = f"Player: {self.player_algo}"
                 print(f"Đã chọn thuật toán: {new_algo}")
                 
-
-        def toggle_mummy_algo():
-            if self.mummy_algo == "classic":
-                self.mummy_algo = "BFS"
-            else:
-                self.mummy_algo = "classic"
-            # Cập nhật text cho button
-            for widget in self.panel.widgets:
-                if hasattr(widget, 'text') and widget.text.startswith("Mummy:"):
-                    widget.text = f"Mummy: {self.mummy_algo}"
 
         def change_map(_new_map = None):
             if _new_map is not None:
@@ -165,12 +157,13 @@ class Game:
         
         btn_reset = Button(btn_x, 400, btn_w, btn_h, "Reset", reset_game_btn)
         btn_player_algo = Button(btn_x, 100, btn_w, btn_h, f"Player: {self.player_algo}", toggle_player_algo)
-        btn_mummy_algo = Button(btn_x, 150, btn_w, btn_h, f"Mummy: {self.mummy_algo}", toggle_mummy_algo)
+        # compare_button = Button(btn_x, 150, btn_w, btn_h, "Compare", command=lambda: self.set_screen("COMPARISON"))
         btn_change_map = Button(btn_x, 250, btn_w, btn_h, self.maze.map_name, change_map)
         btn_start = Button(btn_x, 350, btn_w, btn_h, "Start", start_ai)
-
+        
+        
         self.panel.add_widget(btn_player_algo)
-        self.panel.add_widget(btn_mummy_algo)
+        # self.panel.add_widget(compare_button)
         self.panel.add_widget(btn_change_map)
         self.panel.add_widget(btn_start)
         self.panel.add_widget(btn_reset)
@@ -191,13 +184,14 @@ class Game:
     def find_path(self):
         gx, gy = self.maze.calculate_stair()
         mummy_positions = [(m.grid_x, m.grid_y) for m in self.mummies]
+        initial_state = (self.player.grid_x, self.player.grid_y)
         
-        if self.player_algo in ["BFS", "IDS", "DFS"]:
-            initial_state = (self.player.grid_x, self.player.grid_y)
+        if self.player_algo in ["BFS", "IDS", "DFS"]:     
             problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
         elif self.player_algo == "PO_search":
             problem = PartialObservationProblem(self.maze)
-            
+        elif self.player_algo == "Backtracking":
+            pass
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
                              tuple(sorted(mummy_positions)))
@@ -223,6 +217,9 @@ class Game:
             result = algo_map[self.player_algo](problem, logger=self.logger)
         elif self.player_algo == "PO_search":
             result = AStar_Belief(problem, logger= self.logger)
+        elif self.player_algo == "Backtracking":
+            result = Backtracking(self.maze, initial_state,
+                                  self.maze.calculate_stair(),logger = self.logger)
         else:
             print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
             result = None
@@ -271,7 +268,8 @@ class Game:
             self.events()
             self.update()
             self.draw() 
-            self.clock.tick(FPS)
+        
+            self.clock.tick(FPS)    
         pygame.quit()
         
     def events(self):
@@ -305,9 +303,6 @@ class Game:
                     self.is_player_turn = False
         
     def update(self):
-        
-        
-        
         self.log_panel.update(self.log_panel_expanded)
         
         # Thu nhỏ cửa sổ SAU KHI panel đã co lại hoàn toàn
@@ -618,3 +613,5 @@ class Game:
         else:
             self.screen = pygame.display.set_mode((self.collapsed_width, SCREEN_HEIGHT))
             self.popup.width = 400
+            
+    
