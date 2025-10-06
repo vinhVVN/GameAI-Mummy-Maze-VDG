@@ -53,5 +53,8 @@ class GameConfig:
         "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
             ("Non_infor","Không có thông tin gì",(199, 21, 0)),
             ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
+        ],
+        "CSP: Constraint Satisfaction Problem " :[
+            ("Forward Checking", "Giống như backtracking nhưng kiểm tra lại tập giá trị sau mỗi lần đi", (144, 69, 19))
         ]
     }
