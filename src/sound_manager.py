@@ -28,9 +28,6 @@ class SoundManager:
         sound_files = {
             'human_move': 'human_move.mp3',
             'monster_move': 'monster_move.mp3',
-            'click': 'click.mp3',
-            'move': 'move.mp3',
-            'lose': 'lose.mp3'
         }
         
         for sound_name, filename in sound_files.items():

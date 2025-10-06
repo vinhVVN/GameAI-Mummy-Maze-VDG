@@ -50,10 +50,13 @@ class GameConfig:
             ("Beam", "Tìm đường theo chiều rộng nhưng giới hạn lựa chọn", (139, 69, 19)),
         ],
         "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
-            ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
+            ("AND_OR", "Tìm kiếm trong môi trường không xác định", (90, 60, 160)),
+            ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24)),
+
         ],
         "TÌM KIẾM CÓ RÀNG BUỘC":[
             ("Backtracking", "Khám phá và quay lui khi gặp ngõ cụt", (255, 215, 0)),
+            ("AC3+BT", "AC-3 thu hẹp miền + Backtracking tìm đường", (100, 180, 255)),
         ]
         
     }

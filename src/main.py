@@ -20,6 +20,8 @@ from src.algorithms.simulated_annealing import Simulated_Annealing, optimize_pat
 from src.algorithms.a_star_belief import AStar_Belief
 from src.algorithms.partial_observation import PartialObservationProblem
 from src.algorithms.backtracking import Backtracking
+from src.algorithms.and_or_search import AND_OR_Search
+from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded
 
 
 class Game:
@@ -190,8 +192,12 @@ class Game:
             problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
         elif self.player_algo == "PO_search":
             problem = PartialObservationProblem(self.maze)
+        elif self.player_algo == "AND_OR":
+            problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
         elif self.player_algo == "Backtracking":
             pass
+        elif self.player_algo == "AC3+BT":
+            problem = None  # handled separately
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
                              tuple(sorted(mummy_positions)))
@@ -217,12 +223,61 @@ class Game:
             result = algo_map[self.player_algo](problem, logger=self.logger)
         elif self.player_algo == "PO_search":
             result = AStar_Belief(problem, logger= self.logger)
+        elif self.player_algo == "AND_OR":
+            result = AND_OR_Search(problem, logger=self.logger)
         elif self.player_algo == "Backtracking":
             result = Backtracking(self.maze, initial_state,
                                   self.maze.calculate_stair(),logger = self.logger)
         else:
             print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
             result = None
+
+        if self.player_algo == "AC3+BT":
+            # Build time-expanded CSP with a reasonable horizon (upper bound steps)
+            gx, gy = self.maze.calculate_stair()
+            start = (self.player.grid_x, self.player.grid_y)
+            goal = (gx, gy)
+            # Simple upper bound: Manhattan distance in cell units (grid step=2), times a factor
+            manh = abs(start[0]-goal[0]) + abs(start[1]-goal[1])
+            horizon = max(1, manh // 2 + 8)
+            csp = build_path_csp_timeexpanded(self.maze, start, goal, horizon)
+            ac3_info = AC3(csp, logger=self.logger)
+            # Extract a feasible plan by greedy advancing within filtered domains
+            plan = []
+            current = start
+            for t in range(horizon):
+                next_domain = csp.domains[("X", t+1)]
+                # Prefer neighbor that is valid step from current and closer to goal
+                candidates = []
+                for pos in next_domain:
+                    dx = abs(pos[0]-current[0])
+                    dy = abs(pos[1]-current[1])
+                    if (dx==0 and dy==0) or (dx==2 and dy==0) or (dx==0 and dy==2):
+                        candidates.append(pos)
+                if not candidates:
+                    break
+                # pick candidate that minimizes manhattan to goal
+                candidates.sort(key=lambda p: abs(p[0]-goal[0]) + abs(p[1]-goal[1]))
+                nxt = candidates[0]
+                # convert move to action
+                if nxt == current:
+                    action = None
+                elif nxt[0] == current[0] and nxt[1] == current[1]-2:
+                    action = "UP"
+                elif nxt[0] == current[0] and nxt[1] == current[1]+2:
+                    action = "DOWN"
+                elif nxt[0] == current[0]+2 and nxt[1] == current[1]:
+                    action = "RIGHT"
+                elif nxt[0] == current[0]-2 and nxt[1] == current[1]:
+                    action = "LEFT"
+                else:
+                    action = None
+                if action:
+                    plan.append(action)
+                current = nxt
+                if current == goal:
+                    break
+            result = {"path": plan, "nodes_expanded": ac3_info.get("steps"), "time_taken": ac3_info.get("time_taken")}
 
         summary_data = {
             "Algorithm": self.player_algo,
@@ -252,7 +307,7 @@ class Game:
         self.logger.save_to_file()
         self.log_panel.update_summary(summary_data)
         
-        print(f"Player path ({self.player_algo}): {result["path"]}")
+        print(f"Player path ({self.player_algo}): {result['path']}")
         self.solution_paths = result["path"] or []
 
     def start_ai_search(self):
@@ -345,13 +400,13 @@ class Game:
                     if self.player.move(dx, dy, self.maze, self.maze.cell_size):
                         print("Người đi")
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search","AND_OR","AC3+BT"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
                     else:
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS","PO_search","AND_OR","AC3+BT"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
@@ -360,7 +415,7 @@ class Game:
                     print("AI đã chạy xong!")
 
         # di chuyển mummy
-        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search","AND_OR","AC3+BT"]:
             if not self.is_player_turn and not self.player.is_moving:
                 if not self.mummies:
                     self.is_player_turn = True
@@ -428,7 +483,7 @@ class Game:
                     self.reset_game()
 
         for mummy in self.mummies:
-            if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
+            if self.player_algo not in ["BFS", "IDS", "DFS","PO_search", "AND_OR","AC3+BT",]:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
                     print("Game Over - bị ma bắt")
                     jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
@@ -445,7 +500,7 @@ class Game:
         self.draw_path(self.screen)
         self.player.draw(self.screen)
         
-        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS","PO_search", "AND_OR","AC3+BT",]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         
