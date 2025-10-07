@@ -196,14 +196,16 @@ class Game:
     def find_path(self):
         gx, gy = self.maze.calculate_stair()
         mummy_positions = [(m.grid_x, m.grid_y) for m in self.mummies]
-        
+        initial_state = (self.player.grid_x, self.player.grid_y)
         if self.player_algo in ["BFS", "IDS", "DFS", "Forward Checking"]:
-            initial_state = (self.player.grid_x, self.player.grid_y)
+            
             problem = SimpleMazeProblem(self.maze, initial_state, (gx, gy))
         elif self.player_algo == "PO_search":
             problem = PartialObservationProblem(self.maze)
         elif self.player_algo == "Non_infor":
             problem = NoInformationProblem(self.maze)
+        elif self.player_algo == "Backtracking":
+            pass
         elif self.player_algo == "Forward Checking":
             initial_state = ((self.player.grid_x, self.player.grid_y),
                         tuple(sorted(mummy_positions)))
