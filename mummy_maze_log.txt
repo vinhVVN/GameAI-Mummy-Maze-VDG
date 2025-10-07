@@ -1,0 +1,20 @@
+--- New Session Started ---
+Với X_1 = (3, 1)
+Với X_1 = (3, 7)
+Với X_1 = (5, 1)
+Với X_1 = (5, 7)
+   Gán X_1 = (5, 7) (Thoả)
+    Gán X_2 = (3, 7) (Thoả)
+     Gán X_3 = (3, 9) (Thoả)
+      Gán X_4 = (1, 9) (Thoả)
+       Gán X_5 = (1, 11) (Thoả)
+        Gán X_6 = (3, 11) (Thoả)
+         Gán X_7 = (5, 11) (Thoả)
+          Gán X_8 = (5, 13) (Thoả)
+          Quay lui từ X_8 = (5, 13)
+          Gán X_8 = (7, 11) (Thoả)
+SUCCESS! Tìm được đường đi
+Algorithm: Backtracking
+Time (s): 0.0020
+Nodes/Iter: 25
+Path Length: 11

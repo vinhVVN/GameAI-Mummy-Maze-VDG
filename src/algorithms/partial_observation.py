@@ -38,7 +38,6 @@ class PartialObservationProblem:
         return successors
 
     def heuristic(self, belief_state):
-        """Heuristic là khoảng cách nhỏ nhất từ belief state đến đích."""
         if not belief_state:
             return float('inf')
 

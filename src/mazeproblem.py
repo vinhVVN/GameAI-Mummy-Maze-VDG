@@ -120,3 +120,43 @@ class SimpleMazeProblem:
                 new_pos = (px + dx, py + dy)
                 moves.append((new_pos, action, 0))  # cost = 1
         return moves
+
+
+
+class CSPMazeProblem:
+    def __init__(self, maze, start_pos, goal_pos, path_length):
+        self.maze = maze
+        self.start_pos = start_pos
+        self.goal_pos = goal_pos
+        self.path_length = path_length
+        
+        self.variables = [f"X_{i}" for i in range(path_length + 1)]
+        domain = set()
+        for r in range(-1, len(maze.map_data), 2):
+            for c in range(-1, len(maze.map_data[0]),2):
+                if self.maze.is_passable(c, r):
+                    domain.add((c,r))
+        self.domain = {var: domain for var in self.variables}
+        
+    def consistent(self, var, value, assignment):
+        if value in assignment.values():
+            return False
+        
+        var_index = int(var.split('_')[1])
+        if var_index > 0:
+            prev_var = f"X_{var_index - 1}"
+            if prev_var in assignment:
+                prev_pos = assignment[prev_var]
+                px, py = prev_pos
+                vx, vy = value
+                dx, dy = vx-px, vy-py
+                if not (abs(dx)== 2 and dy == 0) and not (abs(dy)==2 and dx==0):
+                    return False
+                
+                wall_x, wall_y = px + dx//2, py + dy//2
+                if not self.maze.is_passable(wall_x, wall_y):
+                    return False
+                
+        return True
+    
+    

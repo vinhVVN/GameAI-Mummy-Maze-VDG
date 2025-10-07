@@ -1,30 +1,39 @@
 import heapq
+import time
 
-def AStar(problem):
+def AStar(problem, logger = None):
+    start_time = time.perf_counter()
     start = problem.get_init_state()
     frontier = [(problem.heuristic(start), 0, start)]  
-    # (f = g + h, g, state)
 
+    iteration = 0
+    
     visited = set()
     paths = {start: None}
     costs = {start: 0}
 
     while frontier:
+        iteration += 1
+        
         f_cost, g_cost, cur_state = heapq.heappop(frontier)
 
         if cur_state in visited:
             continue
         visited.add(cur_state)
 
+        if logger:
+            logger.log(f"Bước {iteration}: cur state= {cur_state}, g={g_cost:.1f}, h={f_cost - g_cost:.1f}, f={f_cost:.1f}")
+        
         if problem.is_goal_state(cur_state):
-            # reconstruct path
             path = []
             state = cur_state
             while paths[state]:
                 prev_state, action = paths[state]
                 path.insert(0, action)
                 state = prev_state
-            return path
+            if logger:
+                logger.log(f"SUCCESS! Tìm thấy đường đi sau {iteration} bước")
+            return {"path": path, "nodes_expanded": iteration, "time_taken": time.perf_counter() - start_time, "path_length": len(path)}
 
         for next_state, action, move_cost in problem.get_move(cur_state):
             new_g = g_cost + move_cost
@@ -34,5 +43,8 @@ def AStar(problem):
                 costs[next_state] = new_g
                 heapq.heappush(frontier, (new_f, new_g, next_state))
                 paths[next_state] = (cur_state, action)
+                if logger:
+                    logger.log(f"-> Check neighbor {next_state}, {action}, g={new_g:.1f}, h = {(new_f - new_g):.1f}, f = {new_f:.1f}")
+            
 
     return None

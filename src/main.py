@@ -1,8 +1,11 @@
 import pygame
+from src.logger import Logger
+import threading
+import queue
 from src.settings import *
 from src.maze import *
 from src.character import Player, Mummy
-from src.ui import Panel , Button
+from src.ui import *
 from src.popup import AlgorithmPopup
 from src.settings import SOUNDS_PATH
 from src.mazeproblem import MazeProblem, SimpleMazeProblem
@@ -14,17 +17,25 @@ from src.algorithms.dfs import DFS
 from src.algorithms.AStart import AStar
 from src.algorithms.beam import Beam
 from src.algorithms.hill_climbing import HillClimbing
-from src.algorithms.simulated_annealing import Simulated_Annealing
+from src.algorithms.simulated_annealing import Simulated_Annealing, optimize_path
 from src.algorithms.a_star_belief import AStar_Belief
 from src.algorithms.partial_observation import PartialObservationProblem
+from src.algorithms.backtracking import Backtracking
+from src.algorithms.and_or_search import AND_OR_Search
+from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded
+
 from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 from src.algorithms.forward_checking import ForwardChecking
 
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption("MummyGame - Vinh Say Gex")
+        self.collapsed_width = MAZE_PANEL_WIDTH + CONTROL_PANEL_WIDTH
+        self.expanded_width = self.collapsed_width + LOG_PANEL_WIDTH
+        self.log_panel_expanded = False
+        
+        self.screen = pygame.display.set_mode((self.collapsed_width, SCREEN_HEIGHT))
+        pygame.display.set_caption("MummyMaze - Thoát khỏi mộ đom đóm J97")
         self.clock = pygame.time.Clock()
         self.running = True
         
@@ -49,7 +60,11 @@ class Game:
         self.player_algo = "BFS"
         self.mummy_algo = "classic"
 
+        
         self.panel = Panel(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
+        
+        log_panel_x = MAZE_PANEL_WIDTH + CONTROL_PANEL_WIDTH
+        self.log_panel = LogPanel(log_panel_x, 0, LOG_PANEL_WIDTH, SCREEN_HEIGHT)
         self.set_buttons()
         
         self.solution_paths = []
@@ -67,10 +82,16 @@ class Game:
             "LEFT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "left_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size)),
             "RIGHT": pygame.transform.scale(pygame.image.load(os.path.join(IMAGES_PATH, "right_arrow.png")).convert_alpha(), size = (self.maze.cell_size, self.maze.cell_size))
         }
+        
+        self.logger = Logger("mummy_maze_log.txt")
+        self.popup = AlgorithmPopup(self)
+        self.popup.width = 400
+        
+        
 
     def choose_algorithm_popup(self):
-        popup = AlgorithmPopup(self)
-        return popup.show()
+        
+        return self.popup.show()
 
     def load_new_map(self, map_name, player_pos=(1, 15), mummy_pos=[(1, 9)]):
         self.maze = Maze(map_name)
@@ -87,6 +108,8 @@ class Game:
         btn_w, btn_h = 220, 40
         btn_x = MAZE_PANEL_WIDTH + (CONTROL_PANEL_WIDTH - btn_w) / 2
 
+        
+        
         def toggle_player_algo():
             new_algo = self.choose_algorithm_popup()
             if new_algo:
@@ -142,17 +165,33 @@ class Game:
         def reset_game_btn():
             self.reset_game()
 
+        
+        
         btn_reset = Button(btn_x, 400, btn_w, btn_h, "Reset", reset_game_btn)
         btn_player_algo = Button(btn_x, 100, btn_w, btn_h, f"Player: {self.player_algo}", toggle_player_algo)
-        btn_mummy_algo = Button(btn_x, 150, btn_w, btn_h, f"Mummy: {self.mummy_algo}", toggle_mummy_algo)
+        # compare_button = Button(btn_x, 150, btn_w, btn_h, "Compare", command=lambda: self.set_screen("COMPARISON"))
         btn_change_map = Button(btn_x, 250, btn_w, btn_h, self.maze.map_name, change_map)
         btn_start = Button(btn_x, 350, btn_w, btn_h, "Start", start_ai)
-
+        
+        
         self.panel.add_widget(btn_player_algo)
-        self.panel.add_widget(btn_mummy_algo)
+        # self.panel.add_widget(compare_button)
         self.panel.add_widget(btn_change_map)
         self.panel.add_widget(btn_start)
         self.panel.add_widget(btn_reset)
+        
+        # Thêm nút Menu để bật/tắt Log Panel
+        menu_button_path = os.path.join(IMAGES_PATH, "hamburger.png")
+        # Đặt nút ở góc trên bên phải của Panel điều khiển
+        menu_button_x = self.panel.rect.right - 42 
+        menu_button_y = self.panel.rect.top + 10
+        
+        # Lambda function để gọi hàm toggle của log_panel
+        menu_button = ImageButton(menu_button_x, menu_button_y, 32, 32, menu_button_path, 
+                                  on_click_func=lambda: self.toggle_log_panel())
+        self.panel.add_widget(menu_button)
+        
+        
 
     def find_path(self):
         gx, gy = self.maze.calculate_stair()
@@ -183,7 +222,7 @@ class Game:
         algo_map = {
             "BFS": BFS,
             "UCS": UCS,
-            "IDS": lambda prob: IDS(prob, max_depth=100),
+            "IDS": IDS,
             "Greedy": Greedy,
             "DFS": DFS,
             "AStart": AStar,
@@ -194,6 +233,7 @@ class Game:
             "Forward Checking": lambda prob: ForwardChecking(prob, min_safe_dist=2, debug=True)
         }
 
+        
         if self.player_algo in algo_map:
             # SỬA: Gọi phương thức solve() để lấy kết quả, không gán object
             algorithm = algo_map[self.player_algo](problem)
@@ -202,17 +242,99 @@ class Game:
             else:
                 path = algorithm  # Các thuật toán khác trả về trực tiếp
         elif self.player_algo == "PO_search":
-            path = AStar_Belief(problem)
+            result = AStar_Belief(problem, logger= self.logger)
+        elif self.player_algo == "AND_OR":
+            result = AND_OR_Search(problem, logger=self.logger)
+        elif self.player_algo == "Backtracking":
+            result = Backtracking(self.maze, initial_state,
+                                  self.maze.calculate_stair(),logger = self.logger)
         else:
             print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
-            path = None
+            result = None
 
-        print(f"Player path ({self.player_algo}): {path}")
-        self.solution_paths = path or []
+        if self.player_algo == "AC3+BT":
+            # Build time-expanded CSP with a reasonable horizon (upper bound steps)
+            gx, gy = self.maze.calculate_stair()
+            start = (self.player.grid_x, self.player.grid_y)
+            goal = (gx, gy)
+            # Simple upper bound: Manhattan distance in cell units (grid step=2), times a factor
+            manh = abs(start[0]-goal[0]) + abs(start[1]-goal[1])
+            horizon = max(1, manh // 2 + 8)
+            csp = build_path_csp_timeexpanded(self.maze, start, goal, horizon)
+            ac3_info = AC3(csp, logger=self.logger)
+            # Extract a feasible plan by greedy advancing within filtered domains
+            plan = []
+            current = start
+            for t in range(horizon):
+                next_domain = csp.domains[("X", t+1)]
+                # Prefer neighbor that is valid step from current and closer to goal
+                candidates = []
+                for pos in next_domain:
+                    dx = abs(pos[0]-current[0])
+                    dy = abs(pos[1]-current[1])
+                    if (dx==0 and dy==0) or (dx==2 and dy==0) or (dx==0 and dy==2):
+                        candidates.append(pos)
+                if not candidates:
+                    break
+                # pick candidate that minimizes manhattan to goal
+                candidates.sort(key=lambda p: abs(p[0]-goal[0]) + abs(p[1]-goal[1]))
+                nxt = candidates[0]
+                # convert move to action
+                if nxt == current:
+                    action = None
+                elif nxt[0] == current[0] and nxt[1] == current[1]-2:
+                    action = "UP"
+                elif nxt[0] == current[0] and nxt[1] == current[1]+2:
+                    action = "DOWN"
+                elif nxt[0] == current[0]+2 and nxt[1] == current[1]:
+                    action = "RIGHT"
+                elif nxt[0] == current[0]-2 and nxt[1] == current[1]:
+                    action = "LEFT"
+                else:
+                    action = None
+                if action:
+                    plan.append(action)
+                current = nxt
+                if current == goal:
+                    break
+            result = {"path": plan, "nodes_expanded": ac3_info.get("steps"), "time_taken": ac3_info.get("time_taken")}
+
+        summary_data = {
+            "Algorithm": self.player_algo,
+            "Time (s)": f"{result.get('time_taken', 0):.4f}",
+            "Nodes/Iter": f"{result.get('nodes_expanded', 'N/A')}",
+        }
+        if self.player_algo == "SA" and result["path"]:
+            raw_path = result["path"]
+            self.logger.log(f"Raw path length: {len(raw_path)}")
+            good_path = optimize_path(problem, raw_path)
+            self.logger.log(f"Optimized path length: {len(good_path)}")
+            result["path"] = good_path
+            
+            
+        if "path" in result and result["path"] is not None:
+            summary_data["Path Length"] = len(result["path"])
+        if "initial_cost" in result and result["initial_cost"] is not None:
+            summary_data["Initial cost"] = result["initial_cost"]
+        if "final_cost" in result and result["final_cost"] is not None:
+            summary_data["Final_cost"] = result["final_cost"]
+        
+        
+        for key, value in summary_data.items():
+            self.logger.log(f"{key}: {value}")
+        
+        # Lưu toàn bộ log ra file
+        self.logger.save_to_file()
+        self.log_panel.update_summary(summary_data)
+        
+        print(f"Player path ({self.player_algo}): {result['path']}")
+        self.solution_paths = result["path"] or []
 
     def start_ai_search(self):
         if not self.is_player_turn or self.ai_mode_active:
             return
+        self.logger.clear()
+        self.log_panel.clear() 
         self.solution_paths = []
         self.ai_mode_active = True
         
@@ -221,7 +343,8 @@ class Game:
             self.events()
             self.update()
             self.draw() 
-            self.clock.tick(FPS)
+        
+            self.clock.tick(FPS)    
         pygame.quit()
         
     def events(self):
@@ -230,6 +353,7 @@ class Game:
                 self.running = False
 
             self.panel.handle_event(event)
+            self.log_panel.handle_event(event)
             
             if not self.ai_mode_active and event.type == pygame.KEYDOWN and not self.player.is_moving and self.is_player_turn:
                 cell_size = self.maze.cell_size
@@ -253,7 +377,14 @@ class Game:
                     self.start_wait()
                     self.is_player_turn = False
         
-    def update(self):         
+    def update(self):
+        self.log_panel.update(self.log_panel_expanded)
+        
+        # Thu nhỏ cửa sổ SAU KHI panel đã co lại hoàn toàn
+        if not self.log_panel_expanded and not self.log_panel.is_animating():
+            if self.screen.get_width() != self.collapsed_width:
+                self.screen = pygame.display.set_mode((self.collapsed_width, SCREEN_HEIGHT))
+        
         self.player.update()
         for mummy in self.mummies:
             mummy.update()
@@ -402,6 +533,7 @@ class Game:
                 mummy.draw(self.screen)
         
         self.panel.draw(self.screen)
+        self.log_panel.draw(self.screen, self.logger)
         pygame.display.flip()
     
     def draw_path(self, surface):
@@ -530,3 +662,18 @@ class Game:
                 "LEFT": pygame.Surface((new_size, new_size), pygame.SRCALPHA),
                 "RIGHT": pygame.Surface((new_size, new_size), pygame.SRCALPHA)
             }
+            
+    def toggle_log_panel(self):
+        self.log_panel_expanded = not self.log_panel_expanded
+        
+        if self.log_panel_expanded:
+            # Mở rộng cửa sổ NGAY LẬP TỨC
+            
+            self.screen = pygame.display.set_mode((self.expanded_width, SCREEN_HEIGHT))
+            self.popup.width = min(650, SCREEN_WIDTH - 40)
+            
+        else:
+            self.screen = pygame.display.set_mode((self.collapsed_width, SCREEN_HEIGHT))
+            self.popup.width = 400
+            
+    
