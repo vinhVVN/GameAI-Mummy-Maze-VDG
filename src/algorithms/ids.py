@@ -34,16 +34,16 @@ def IDS(problem, max_depth=110, logger = None):
 def _dls(problem, state, limit, nodes_counter, logger ,path_set):
     nodes_counter[0] += 1
     
-    if logger:
+    if logger and nodes_counter[0] % 10 == 0:
         logger.log(f"  Depth {limit}: Visiting {state}")
     
     if problem.is_goal_state(state):
-        if logger:
+        if logger and nodes_counter[0] % 10 == 0:
              logger.log(f"    -> Cutoff at {state}")
         return []
 
     if limit == 0:
-        if logger:
+        if logger and nodes_counter[0] % 10 == 0:
              logger.log(f"    -> Cutoff at {state}")
         return None
 
