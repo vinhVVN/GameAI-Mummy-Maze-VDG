@@ -55,7 +55,6 @@ class GameConfig:
             ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
         ],
         "CSP: Constraint Satisfaction Problem " :[
-            ("Forward Checking", "Giống như backtracking nhưng kiểm tra lại tập giá trị sau mỗi lần đi", (144, 69, 19))
             ("AND_OR", "Tìm kiếm trong môi trường không xác định", (90, 60, 160)),
             ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24)),
             ("Non_infor","Không có thông tin gì",(199, 21, 0))

@@ -1,11 +1,8 @@
 from collections import deque
+import time
 
 class ForwardChecking:
-    """
-    Thuật toán Backtracking + Forward Checking cho cả SimpleMazeProblem và MazeProblem.
-    """
-
-    def __init__(self, problem, max_depth=2000, min_safe_dist=2, debug=False):
+    def __init__(self, problem, logger, max_depth=2000, min_safe_dist=2, debug=False):
         self.problem = problem
         self.maze = problem.maze
         self.max_depth = max_depth
@@ -14,14 +11,18 @@ class ForwardChecking:
         self.found = False
         self.debug = debug
         self.is_simple_problem = not hasattr(problem, 'min_dist')  # Phân biệt loại problem
-
+        self.logger = logger
+        
     def solve(self):
+        start_time = time.perf_counter()
         start = self.problem.get_init_state()
         visited = set([start])
         self.best_path = None
         self.found = False
         self._dfs(start, [], visited, 0)
-        return self.best_path
+        end_time = time.perf_counter()
+        return {"path":self.best_path, "nodes_expanded":len(visited),
+                "time_taken": end_time-start_time, "path_length": len(self.best_path)}
 
     def _dfs(self, state, path, visited, depth):
         if depth > self.max_depth:
@@ -30,8 +31,8 @@ class ForwardChecking:
         if self.problem.is_goal_state(state):
             self.best_path = path[:]
             self.found = True
-            if self.debug:
-                print(f"✅ Found goal! Path = {path}")
+            if self.debug and self.logger:
+                self.logger.log(f"✅ Found goal! Path = {path}")
             return
 
         try:
@@ -53,8 +54,8 @@ class ForwardChecking:
             visited.add(next_state)
             path.append(action)
 
-            if self.debug:
-                print(f"→ Depth {depth}: Move {action} | State = {next_state}")
+            if self.debug and self.logger:
+                self.logger.log(f"→ Depth {depth}: Move {action} | State = {next_state}")
 
             self._dfs(next_state, path, visited, depth + 1)
             if self.found:
@@ -64,8 +65,6 @@ class ForwardChecking:
             visited.remove(next_state)
 
     def _forward_check(self, state):
-        """Forward checking cho cả SimpleMazeProblem và MazeProblem"""
-        
         # LẤY VỊ TRÍ PLAYER PHÙ HỢP VỚI TỪNG LOẠI PROBLEM
         player_pos = self._get_player_position(state)
         
@@ -89,8 +88,8 @@ class ForwardChecking:
                 md = self.problem.min_dist(list(mummies_pos), player_pos)
                 
                 if md <= self.min_safe_dist:
-                    if self.debug:
-                        print(f"☠️ Quá gần mummy (dist={md}) tại {player_pos}")
+                    if self.debug and self.logger:
+                        self.logger.log(f"☠️ Quá gần mummy (dist={md}) tại {player_pos}")
                     return False
             except Exception as e:
                 if self.debug:
@@ -98,8 +97,8 @@ class ForwardChecking:
 
         # 3️⃣ Reachability check (BFS) - QUAN TRỌNG NHẤT
         if not self._is_reachable_to_goal(player_pos):
-            if self.debug:
-                print(f"🚫 Không thể tới goal từ {player_pos}")
+            if self.debug and self.logger:
+                self.logger.log(f"🚫 Không thể tới goal từ {player_pos}")
             return False
 
         return True

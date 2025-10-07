@@ -62,14 +62,15 @@ class NoInformationProblem:
             
         return successors
 
-def BFS_NoInformation(problem):
+def BFS_NoInformation(problem, logger = None):
     """BFS đơn giản cho bài toán không có thông tin"""
     start_time = time.perf_counter()
     start_node = problem.get_init_state()
     
-    print(f"Bắt đầu BFS No Information với {len(start_node)} vị trí có thể")
-    print(f"Các vị trí ban đầu: {start_node}")
-    print(f"Vị trí goal: {problem.goal_pos}")
+    if logger:
+        logger.log(f"Bắt đầu BFS No Information với {len(start_node)} vị trí có thể")
+        logger.log(f"Các vị trí ban đầu: {start_node}")
+        logger.log(f"Vị trí goal: {problem.goal_pos}")
     
     # Queue: (belief_state, path_so_far)
     queue = deque([(start_node, [])])
@@ -82,18 +83,17 @@ def BFS_NoInformation(problem):
         current_state, path_so_far = queue.popleft()
         
         # Debug mỗi 100 bước
-        if iteration % 100 == 0:
-            print(f"BFS - Iter {iteration}: Belief size={len(current_state)}, Path length={len(path_so_far)}, Queue size={len(queue)}")
+        if logger and iteration % 100 == 0:
+            logger.log(f"BFS - Iter {iteration}: Belief size={len(current_state)}, Path length={len(path_so_far)}, Queue size={len(queue)}")
         
         # Kiểm tra goal state
         if problem.is_goal_state(current_state):
             end_time = time.perf_counter()
-            print(f"🎯 TÌM THẤY ĐƯỜNG ĐI!")
-            print(f"Độ dài đường đi: {len(path_so_far)}")
-            print(f"Số bước tìm kiếm: {iteration}")
-            print(f"Thời gian: {end_time - start_time:.2f}s")
-            print(f"Kích thước belief state cuối: {len(current_state)}")
-            return path_so_far
+            return {
+                "path": path_so_far, "nodes_expanded": iteration, 
+                "time_taken": end_time - start_time, "path_length": len(path_so_far)
+            }
+        
         
         # Giới hạn độ dài đường đi để tránh quá sâu
         if len(path_so_far) < 100:  # Tăng giới hạn đường đi
@@ -107,22 +107,24 @@ def BFS_NoInformation(problem):
                     
                     # Debug cho các belief state nhỏ
                     if len(next_state) < len(current_state):
-                        print(f"  -> Belief state giảm: {len(current_state)} -> {len(next_state)}")
+                        logger.log(f"  -> Belief state giảm: {len(current_state)} -> {len(next_state)}")
     
     end_time = time.perf_counter()
-    print(f"❌ KHÔNG TÌM THẤY ĐƯỜNG ĐI sau {iteration} bước")
-    print(f"Thời gian: {end_time - start_time:.2f}s")
-    print(f"Số trạng thái đã duyệt: {len(explored)}")
-    print(f"Kích thước queue cuối: {len(queue)}")
-    return None
+    
+    return {
+                "path": None, "nodes_expanded": len(explored), 
+                "time_taken": end_time - start_time, "path_length": len(queue)
+            }
+
 
 # Phiên bản BFS với giới hạn chặt hơn
-def BFS_NoInformation_Limited(problem, max_path_length=50):
+def BFS_NoInformation_Limited(problem, max_path_length=50, logger = None):
     """BFS với giới hạn đường đi ngắn hơn"""
     start_time = time.perf_counter()
     start_node = problem.get_init_state()
     
-    print(f"Bắt đầu BFS Limited với {len(start_node)} vị trí, max_path={max_path_length}")
+    if logger:
+        logger.log(f"Bắt đầu BFS Limited với {len(start_node)} vị trí, max_path={max_path_length}")
     
     queue = deque([(start_node, [])])
     explored = set([start_node])
@@ -132,14 +134,15 @@ def BFS_NoInformation_Limited(problem, max_path_length=50):
         iteration += 1
         current_state, path_so_far = queue.popleft()
         
-        if iteration % 50 == 0:
-            print(f"BFS Limited - Iter {iteration}: Belief size={len(current_state)}, Path length={len(path_so_far)}")
+        if iteration % 1000 == 0:
+            logger.log(f"BFS Limited - Iter {iteration}: Belief size={len(current_state)}, Path length={len(path_so_far)}")
         
         if problem.is_goal_state(current_state):
             end_time = time.perf_counter()
-            print(f"🎯 TÌM THẤY ĐƯỜNG ĐI!")
-            print(f"Độ dài đường đi: {len(path_so_far)}")
-            return path_so_far
+            return {
+                "path": path_so_far, "nodes_expanded": iteration, 
+                "time_taken": end_time - start_time, "path_length": len(path_so_far)
+            }
         
         # Giới hạn độ dài đường đi chặt hơn
         if len(path_so_far) < max_path_length:
@@ -151,5 +154,8 @@ def BFS_NoInformation_Limited(problem, max_path_length=50):
                     new_path = path_so_far + [action]
                     queue.append((next_state, new_path))
     
-    print(f"❌ BFS Limited không tìm thấy đường đi sau {iteration} bước")
-    return None
+    print(f"BFS Limited không tìm thấy đường đi sau {iteration} bước")
+    return {
+                "path": None, "nodes_expanded": len(explored), 
+                "time_taken": end_time - start_time, "path_length": len(queue)
+            }

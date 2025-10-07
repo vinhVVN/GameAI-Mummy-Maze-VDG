@@ -230,17 +230,17 @@ class Game:
             "Beam": Beam,
             "SA": Simulated_Annealing,
             "Non_infor": BFS_NoInformation_Limited,
-            "Forward Checking": lambda prob: ForwardChecking(prob, min_safe_dist=2, debug=True)
+            "Forward Checking": lambda prob, logger: ForwardChecking(prob, logger, min_safe_dist=2, debug=True)
         }
 
         
         if self.player_algo in algo_map:
             # SỬA: Gọi phương thức solve() để lấy kết quả, không gán object
-            algorithm = algo_map[self.player_algo](problem)
+            algorithm = algo_map[self.player_algo](problem, logger = self.logger)
             if hasattr(algorithm, 'solve'):
-                path = algorithm.solve()  # Gọi solve() để lấy danh sách actions
+                result = algorithm.solve()  # Gọi solve() để lấy danh sách actions
             else:
-                path = algorithm  # Các thuật toán khác trả về trực tiếp
+                result = algorithm  # Các thuật toán khác trả về trực tiếp
         elif self.player_algo == "PO_search":
             result = AStar_Belief(problem, logger= self.logger)
         elif self.player_algo == "AND_OR":
