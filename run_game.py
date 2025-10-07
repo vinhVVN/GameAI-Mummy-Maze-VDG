@@ -1,5 +1,13 @@
-import pygame
+import sys
 import os
+
+# THÊM ĐOẠN NÀY - QUAN TRỌNG
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+
+import pygame
 from src.main import Game
 from src.settings import SOUNDS_PATH
 

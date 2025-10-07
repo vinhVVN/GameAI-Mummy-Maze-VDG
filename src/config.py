@@ -46,17 +46,23 @@ class GameConfig:
             ("UCS", "Tìm đường với chi phí tích lũy nhỏ nhất", (100, 149, 237)),
         ],
         "THUẬT TOÁN TỐI ƯU": [
+            ("Hill climbing"," sẽ không bao giờ đi xuống", (255, 215, 0)),
             ("SA", "Tìm kiếm mô phỏng luyện kim", (199, 21, 133)),
             ("Beam", "Tìm đường theo chiều rộng nhưng giới hạn lựa chọn", (139, 69, 19)),
         ],
         "TÌM KIẾM TRONG MÔI TRƯỜNG PHỨC TẠP":[
+            ("Non_infor","Không có thông tin gì",(199, 21, 0)),
+            ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24))
+        ],
+        "CSP: Constraint Satisfaction Problem " :[
             ("AND_OR", "Tìm kiếm trong môi trường không xác định", (90, 60, 160)),
             ("PO_search", "Tìm kiếm mù một phần", (144, 74, 24)),
-
+            ("Non_infor","Không có thông tin gì",(199, 21, 0))
         ],
         "TÌM KIẾM CÓ RÀNG BUỘC":[
             ("Backtracking", "Khám phá và quay lui khi gặp ngõ cụt", (255, 215, 0)),
             ("AC3+BT", "AC-3 thu hẹp miền + Backtracking tìm đường", (100, 180, 255)),
+            ("Forward Checking", "Giống như backtracking nhưng kiểm tra lại tập giá trị sau mỗi lần đi", (144, 69, 19))
         ]
         
     }
