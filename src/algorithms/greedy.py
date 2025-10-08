@@ -34,7 +34,7 @@ def Greedy(problem, logger = None):
         for next_state, action, _ in problem.get_move(cur_state):
             if next_state in visited:
                 continue
-
+            
             h_cost = problem.heuristic(next_state)
             heapq.heappush(frontier, (h_cost, next_state))
             if next_state not in paths:
