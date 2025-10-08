@@ -73,9 +73,9 @@ class Maze:
             self.wall_sprites['left'] = wall_sheet.get_image(0,0,11,58)
             self.wall_sprites['up'] = wall_sheet.get_image(11,0,50,13)
             
-        if self.maze_size == 10:
-            self.wall_sprites['left'] = wall_sheet.get_image(0,0,11,49)
-            self.wall_sprites['up'] = wall_sheet.get_image(11,0,35,10)
+        elif self.maze_size == 10:
+            self.wall_sprites['left'] = wall_sheet.get_image(0, 0, 8, 48)
+            self.wall_sprites['up'] = wall_sheet.get_image(8, 0, 44, 12)
         
         stair_sheet = Spritesheet(os.path.join(IMAGES_PATH, f"stairs{self.maze_size}.png"))
         sw = stair_sheet.sheet.get_width() // 4 # chiều rộng 1 sprite

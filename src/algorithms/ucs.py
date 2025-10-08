@@ -18,7 +18,7 @@ def UCS(problem,logger = None):
             continue
         visited.add(cur_state)
         
-        if logger:
+        if logger and iteration % 5 == 1:
             logger.log(f"Bước {iteration}: cur state= {cur_state}, g={cost:.1f}")
         
         if problem.is_goal_state(cur_state):
@@ -39,7 +39,7 @@ def UCS(problem,logger = None):
                 costs[next_state] = new_cost
                 heapq.heappush(frontier, (new_cost, next_state))
                 paths[next_state] = (cur_state, action)
-                if logger:
+                if logger and iteration % 5 == 1:
                     logger.log(f"-> Check neighbor {next_state}, {action}, g={new_cost:.1f}")
     
     return None

@@ -1,44 +1,31 @@
 --- New Session Started ---
-Bắt đầu BFS Limited với 3 vị trí, max_path=50
-BFS Limited - Iter 1000: Belief size=3, Path length=7
-BFS Limited - Iter 2000: Belief size=3, Path length=7
-BFS Limited - Iter 3000: Belief size=3, Path length=8
-BFS Limited - Iter 4000: Belief size=3, Path length=8
-BFS Limited - Iter 5000: Belief size=3, Path length=9
-BFS Limited - Iter 6000: Belief size=3, Path length=9
-BFS Limited - Iter 7000: Belief size=3, Path length=9
-BFS Limited - Iter 8000: Belief size=3, Path length=9
-BFS Limited - Iter 9000: Belief size=3, Path length=9
-BFS Limited - Iter 10000: Belief size=3, Path length=10
-BFS Limited - Iter 11000: Belief size=3, Path length=10
-BFS Limited - Iter 12000: Belief size=3, Path length=10
-BFS Limited - Iter 13000: Belief size=3, Path length=10
-BFS Limited - Iter 14000: Belief size=3, Path length=10
-BFS Limited - Iter 15000: Belief size=3, Path length=10
-BFS Limited - Iter 16000: Belief size=3, Path length=10
-BFS Limited - Iter 17000: Belief size=3, Path length=10
-BFS Limited - Iter 18000: Belief size=2, Path length=10
-BFS Limited - Iter 19000: Belief size=3, Path length=11
-BFS Limited - Iter 20000: Belief size=3, Path length=11
-BFS Limited - Iter 21000: Belief size=3, Path length=11
-BFS Limited - Iter 22000: Belief size=3, Path length=11
-BFS Limited - Iter 23000: Belief size=3, Path length=11
-BFS Limited - Iter 24000: Belief size=2, Path length=11
-BFS Limited - Iter 25000: Belief size=3, Path length=11
-BFS Limited - Iter 26000: Belief size=3, Path length=11
-BFS Limited - Iter 27000: Belief size=3, Path length=11
-BFS Limited - Iter 28000: Belief size=3, Path length=11
-BFS Limited - Iter 29000: Belief size=3, Path length=11
-BFS Limited - Iter 30000: Belief size=3, Path length=11
-BFS Limited - Iter 31000: Belief size=3, Path length=12
-BFS Limited - Iter 32000: Belief size=3, Path length=12
-BFS Limited - Iter 33000: Belief size=3, Path length=12
-BFS Limited - Iter 34000: Belief size=3, Path length=12
-BFS Limited - Iter 35000: Belief size=3, Path length=12
-BFS Limited - Iter 36000: Belief size=3, Path length=12
-BFS Limited - Iter 37000: Belief size=3, Path length=12
-BFS Limited - Iter 38000: Belief size=3, Path length=12
-Algorithm: Non_infor
-Time (s): 0.3298
-Nodes/Iter: 38783
-Path Length: 12
+Bước 1: cur state= ((3, 11), ((3, 3),)), h=6.0
+-> Check neighbor ((1, 11), ((1, 5),)), LEFT, h=10.0
+-> Check neighbor ((5, 11), ((5, 5),)), RIGHT, h=8.0
+Bước 2: cur state= ((5, 11), ((5, 5),)), h=8.0
+-> Check neighbor ((3, 11), ((5, 5),)), LEFT, h=6.0
+-> Check neighbor ((7, 11), ((7, 5),)), RIGHT, h=10.0
+Bước 3: cur state= ((3, 11), ((5, 5),)), h=6.0
+-> Check neighbor ((1, 11), ((5, 5),)), LEFT, h=4.0
+Bước 4: cur state= ((1, 11), ((5, 5),)), h=4.0
+-> Check neighbor ((1, 9), ((5, 5),)), UP, h=2.0
+Bước 5: cur state= ((1, 9), ((5, 5),)), h=2.0
+-> Check neighbor ((1, 7), ((5, 5),)), UP, h=0.0
+-> Check neighbor ((3, 9), ((5, 5),)), RIGHT, h=4.0
+Bước 6: cur state= ((1, 7), ((5, 5),)), h=0.0
+-> Check neighbor ((1, 5), ((5, 5),)), UP, h=0.0
+-> Check neighbor ((3, 7), ((5, 5),)), RIGHT, h=2.0
+Bước 7: cur state= ((1, 5), ((5, 5),)), h=0.0
+-> Check neighbor ((1, 3), ((3, 3),)), UP, h=2.0
+-> Check neighbor ((3, 5), ((5, 5),)), RIGHT, h=0.0
+Bước 8: cur state= ((3, 5), ((5, 5),)), h=0.0
+Bước 9: cur state= ((1, 3), ((3, 3),)), h=2.0
+-> Check neighbor ((1, 1), ((1, 1),)), UP, h=0.0
+-> Check neighbor ((1, 5), ((1, 5),)), DOWN, h=4.0
+-> Check neighbor ((3, 3), ((3, 3),)), RIGHT, h=4.0
+Bước 10: cur state= ((1, 1), ((1, 1),)), h=0.0
+SUCCESS! Tìm thấy đường đi sau 10 bước
+Algorithm: Greedy
+Time (s): 0.0003
+Nodes/Iter: 10
+Path Length: 8

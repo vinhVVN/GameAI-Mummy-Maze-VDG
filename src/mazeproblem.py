@@ -88,36 +88,31 @@ class MazeProblem:
                 
         return min_dist_to_mummy
     
+    
     def heuristic(self, state):
-        """
-        Heuristic nâng cao: tính khoảng cách tới đích VÀ CÓ THÊM PHẦN THƯỞNG
-        khi dồn được Mummy vào thế bí.
-        """
         player_pos, mummies_pos_tuple = state
+        
+        
         dist_to_goal = abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
 
-        # 2. Tính "Điểm thưởng" khi bẫy được Mummy
         trap_bonus = 0
-        TRAP_REWARD = 50 # Điểm thưởng cho mỗi Mummy bị bẫy (bạn có thể tinh chỉnh)
-
-        # Lặp qua từng mummy trong trạng thái giả định này
+        TRAP_REWARD = self.maze.maze_size 
         for mummy_pos in mummies_pos_tuple:
-            # Đặt mummy mô phỏng vào vị trí đó để kiểm tra
             self.sim_mummy.grid_x, self.sim_mummy.grid_y = mummy_pos
-            
-            # KIỂM TRA TƯƠNG LAI: Liệu từ vị trí này, Mummy có đi được nữa không?
-            # classic_move sẽ trả về một danh sách rỗng nếu bị kẹt.
-            possible_mummy_moves = self.sim_mummy.classic_move(player_pos, self.maze)
-            
+            possible_mummy_moves = self.sim_mummy.classic_move(player_pos, self.maze) 
             if not possible_mummy_moves:
-                # Nếu mummy không thể di chuyển, ta nhận được điểm thưởng!
+                # Nếu mummy không thể di chuyển, nhận được điểm thưởng
                 trap_bonus += TRAP_REWARD
         
-        # 3. Kết hợp lại: Heuristic cuối cùng là khoảng cách trừ đi phần thưởng
-        # Dùng max(0, ...) để đảm bảo heuristic không bao giờ là số âm
+        # để hàm tính điểm thưởng ko bị đánh lừa trong TH mummy bắt được player trong next_state
+        for mummy_pos in mummies_pos_tuple:
+            if player_pos == mummy_pos:
+                trap_bonus = 0
+        
         final_heuristic = max(0, dist_to_goal - trap_bonus)
         
         return final_heuristic
+
 
 class SimpleMazeProblem:
     def __init__(self, maze, start, goal):
