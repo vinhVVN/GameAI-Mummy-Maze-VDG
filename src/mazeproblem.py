@@ -88,14 +88,31 @@ class MazeProblem:
                 
         return min_dist_to_mummy
     
+    
     def heuristic(self, state):
-        player_pos, mummies_pos = state
-        # chi phí dựa trên khoảng cách của Player tới cầu thang
-        dist_goal = abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
-        # dist_mummy = self.min_dist(mummies_pos, player_pos)
+        player_pos, mummies_pos_tuple = state
+        
+        
+        dist_to_goal = abs(player_pos[0] - self.goal_pos[0]) + abs(player_pos[1] - self.goal_pos[1])
 
-        # fear = self.FEAR_FACTOR / (dist_mummy + 1)  # FEAR_FACTOR là hằng số (ví dụ 50-200)
-        return dist_goal
+        trap_bonus = 0
+        TRAP_REWARD = self.maze.maze_size 
+        for mummy_pos in mummies_pos_tuple:
+            self.sim_mummy.grid_x, self.sim_mummy.grid_y = mummy_pos
+            possible_mummy_moves = self.sim_mummy.classic_move(player_pos, self.maze) 
+            if not possible_mummy_moves:
+                # Nếu mummy không thể di chuyển, nhận được điểm thưởng
+                trap_bonus += TRAP_REWARD
+        
+        # để hàm tính điểm thưởng ko bị đánh lừa trong TH mummy bắt được player trong next_state
+        for mummy_pos in mummies_pos_tuple:
+            if player_pos == mummy_pos:
+                trap_bonus = 0
+        
+        final_heuristic = max(0, dist_to_goal - trap_bonus)
+        
+        return final_heuristic
+
 
 class SimpleMazeProblem:
     def __init__(self, maze, start, goal):

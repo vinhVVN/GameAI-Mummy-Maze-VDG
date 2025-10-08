@@ -30,7 +30,8 @@ class GameConfig:
         "map6_3.txt": {"player": (1, 11), "mummies": [(3, 3)]},
         "map6_4.txt": {"player": (1, 11), "mummies": [(3, 3)]},
         "map6_5.txt": {"player": (1, 11), "mummies": [(9, 9)]},
-        "map8_1.txt": {"player": (1, 15), "mummies": [(15, 11), (3, 3)]}
+        "map8_1.txt": {"player": (1, 15), "mummies": [(15, 11), (3, 3)]},
+        "map10_1.txt": {"player": (1, 15), "mummies": [(15, 11), (3, 3)]}
     }
     
     # Algorithm categories for popup

@@ -132,20 +132,24 @@ class Game:
             if _new_map is not None:
                 new_map = _new_map
             else:
-                maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]
+                maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt", "map10_1.txt"]
                 current = maps.index(self.maze.map_name)
                 new_map = maps[(current + 1) % len(maps)]
-                self.scale_arrow_images(360//int(new_map[3]))
+                if new_map[3:5] == "10":
+                    self.scale_arrow_images(36)
+                else:
+                    self.scale_arrow_images(360//int(new_map[3]))
             print(f"Đổi sang {new_map}")
             
             # Cập nhật vị trí cho từng map
             map_positions = {
                 "map6_1.txt": {"player": (1, 1), "mummies": [(5, 9)]},
                 "map6_2.txt": {"player": (1, 11), "mummies": [(3, 3)]},
-                "map6_3.txt": {"player": (1, 11), "mummies": [(3, 3)]},
+                "map6_3.txt": {"player": (3, 11), "mummies": [(3, 3)]},
                 "map6_4.txt": {"player": (1, 11), "mummies": [(3, 3)]},
                 "map6_5.txt": {"player": (1, 11), "mummies": [(9, 9)]},
-                "map8_1.txt": {"player": (5, 5), "mummies": [(15, 11), (3, 3)]}
+                "map8_1.txt": {"player": (5, 5), "mummies": [(15, 11), (3, 3)]},
+                "map10_1.txt": {"player": (7, 5), "mummies": [(15, 9), (3, 17)]}
             }
             
             if new_map in map_positions:
@@ -154,7 +158,9 @@ class Game:
             
             # Cập nhật text cho button
             for widget in self.panel.widgets:
-                if hasattr(widget, 'text') and widget.text in ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt"]:
+                if hasattr(widget, 'text') and widget.text in ["map6_1.txt", "map6_2.txt", "map6_3.txt", 
+                                                               "map6_4.txt", "map6_5.txt",
+                                                               "map8_1.txt","map10_1.txt"]:
                     widget.text = str(new_map)
 
         self._change_map_func = change_map
