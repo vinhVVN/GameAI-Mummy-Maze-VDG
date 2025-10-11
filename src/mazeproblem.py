@@ -64,13 +64,13 @@ class MazeProblem:
                 
                 # Nếu bước đi này dẫn đến thua, đặt chi phí lớn
                 if min_dist_to_mummy == 0:
-                    cost = float(self.FEAR_FACTOR * 5)
+                    cost = float(50 * 5)
                 
                 elif self.trap_pos and new_player_pos == self.trap_pos:
                     cost = float('inf')
                     
                 else:
-                    cost = 1 + (self.FEAR_FACTOR / (min_dist_to_mummy + 0.1))
+                    cost = 1 + (1 / (min_dist_to_mummy + 0.1))
                     
                 moves.append((next_state, action, cost))
         
