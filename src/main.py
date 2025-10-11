@@ -440,13 +440,14 @@ class Game:
                         print("Người đi")
                         self.start_wait()
                         # SỬA: Sử dụng tên chính xác
-                        if self.player_algo in ["BFS", "IDS", "DFS", "Non_infor", "Forward Checking", "PO_search","Backtracking"]:
+
+                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
                     else:
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS",  "Non_infor", "Forward Checking", "PO_search","Backtracking"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
@@ -455,7 +456,7 @@ class Game:
                     print("AI đã chạy xong!")
 
         # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS",  "Non_infor", "Forward Checking", "PO_search","Backtracking"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking"]:
             if not self.is_player_turn and not self.player.is_moving:
                 if not self.mummies:
                     self.is_player_turn = True
@@ -527,7 +528,7 @@ class Game:
                 self.reset_game()
 
         # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "Non_infor", "Forward Checking", "PO_search", "Backtracking"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking"]:
             for mummy in self.mummies:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
                     print("Game Over - bị ma bắt")
@@ -547,7 +548,7 @@ class Game:
         self.player.draw(self.screen)
         
         # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS",  "Non_infor", "Forward Checking","PO_search","Backtracking"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking"]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         
