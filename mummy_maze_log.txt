@@ -1,31 +1,1211 @@
 --- New Session Started ---
-Bước 1: cur state= ((3, 11), ((3, 3),)), h=6.0
--> Check neighbor ((1, 11), ((1, 5),)), LEFT, h=10.0
--> Check neighbor ((5, 11), ((5, 5),)), RIGHT, h=8.0
-Bước 2: cur state= ((5, 11), ((5, 5),)), h=8.0
--> Check neighbor ((3, 11), ((5, 5),)), LEFT, h=6.0
--> Check neighbor ((7, 11), ((7, 5),)), RIGHT, h=10.0
-Bước 3: cur state= ((3, 11), ((5, 5),)), h=6.0
--> Check neighbor ((1, 11), ((5, 5),)), LEFT, h=4.0
-Bước 4: cur state= ((1, 11), ((5, 5),)), h=4.0
--> Check neighbor ((1, 9), ((5, 5),)), UP, h=2.0
-Bước 5: cur state= ((1, 9), ((5, 5),)), h=2.0
--> Check neighbor ((1, 7), ((5, 5),)), UP, h=0.0
--> Check neighbor ((3, 9), ((5, 5),)), RIGHT, h=4.0
-Bước 6: cur state= ((1, 7), ((5, 5),)), h=0.0
--> Check neighbor ((1, 5), ((5, 5),)), UP, h=0.0
--> Check neighbor ((3, 7), ((5, 5),)), RIGHT, h=2.0
-Bước 7: cur state= ((1, 5), ((5, 5),)), h=0.0
--> Check neighbor ((1, 3), ((3, 3),)), UP, h=2.0
--> Check neighbor ((3, 5), ((5, 5),)), RIGHT, h=0.0
-Bước 8: cur state= ((3, 5), ((5, 5),)), h=0.0
-Bước 9: cur state= ((1, 3), ((3, 3),)), h=2.0
--> Check neighbor ((1, 1), ((1, 1),)), UP, h=0.0
--> Check neighbor ((1, 5), ((1, 5),)), DOWN, h=4.0
--> Check neighbor ((3, 3), ((3, 3),)), RIGHT, h=4.0
-Bước 10: cur state= ((1, 1), ((1, 1),)), h=0.0
-SUCCESS! Tìm thấy đường đi sau 10 bước
-Algorithm: Greedy
-Time (s): 0.0003
-Nodes/Iter: 10
-Path Length: 8
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -2, path length 1, nodes 9
+Depth limit 3: value 2, path length 2, nodes 23
+Depth limit 4: value 2, path length 2, nodes 37
+Depth limit 5: value 6, path length 3, nodes 82
+Depth limit 6: value 6, path length 3, nodes 126
+Depth limit 7: value 10, path length 4, nodes 261
+Depth limit 8: value 10, path length 4, nodes 396
+Depth limit 9: value 14, path length 5, nodes 819
+Depth limit 10: value 12, path length 5, nodes 1228
+Depth limit 11: value inf, path length 1, nodes 1076
+Algorithm: Minimax
+Time (s): 0.0234
+Nodes/Iter: 1076
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -2, path length 1, nodes 9
+Depth limit 3: value 2, path length 2, nodes 23
+Depth limit 4: value 2, path length 2, nodes 37
+Depth limit 5: value 6, path length 3, nodes 82
+Depth limit 6: value 6, path length 3, nodes 126
+Depth limit 7: value 10, path length 4, nodes 261
+Depth limit 8: value 10, path length 4, nodes 396
+Depth limit 9: value 14, path length 5, nodes 819
+Depth limit 10: value 12, path length 5, nodes 1228
+Depth limit 11: value inf, path length 1, nodes 1076
+Algorithm: Minimax
+Time (s): 0.0234
+Nodes/Iter: 1076
+Path Length: 1
+Depth limit 1: value 2, path length 1, nodes 4
+Depth limit 2: value 2, path length 1, nodes 7
+Depth limit 3: value 6, path length 2, nodes 18
+Depth limit 4: value 6, path length 2, nodes 29
+Depth limit 5: value 10, path length 3, nodes 63
+Depth limit 6: value 10, path length 3, nodes 97
+Depth limit 7: value 14, path length 4, nodes 205
+Depth limit 8: value 12, path length 4, nodes 312
+Depth limit 9: value inf, path length 1, nodes 283
+Algorithm: Minimax
+Time (s): 0.0157
+Nodes/Iter: 283
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -2, path length 1, nodes 9
+Depth limit 3: value 2, path length 2, nodes 23
+Depth limit 4: value 2, path length 2, nodes 37
+Depth limit 5: value 6, path length 3, nodes 82
+Depth limit 6: value 6, path length 3, nodes 126
+Depth limit 7: value 10, path length 4, nodes 261
+Depth limit 8: value 10, path length 4, nodes 396
+Depth limit 9: value 14, path length 5, nodes 819
+Depth limit 10: value 12, path length 5, nodes 1228
+Depth limit 11: value inf, path length 1, nodes 1076
+Algorithm: Minimax
+Time (s): 0.0234
+Nodes/Iter: 1076
+Path Length: 1
+Depth limit 1: value 2, path length 1, nodes 4
+Depth limit 2: value 2, path length 1, nodes 7
+Depth limit 3: value 6, path length 2, nodes 18
+Depth limit 4: value 6, path length 2, nodes 29
+Depth limit 5: value 10, path length 3, nodes 63
+Depth limit 6: value 10, path length 3, nodes 97
+Depth limit 7: value 14, path length 4, nodes 205
+Depth limit 8: value 12, path length 4, nodes 312
+Depth limit 9: value inf, path length 1, nodes 283
+Algorithm: Minimax
+Time (s): 0.0157
+Nodes/Iter: 283
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 15
+Depth limit 4: value 0, path length 2, nodes 23
+Depth limit 5: value 4, path length 3, nodes 46
+Depth limit 6: value 0, path length 3, nodes 69
+Depth limit 7: value inf, path length 1, nodes 45
+Algorithm: Minimax
+Time (s): 0.0015
+Nodes/Iter: 45
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -2, path length 1, nodes 9
+Depth limit 3: value 2, path length 2, nodes 23
+Depth limit 4: value 2, path length 2, nodes 37
+Depth limit 5: value 6, path length 3, nodes 82
+Depth limit 6: value 6, path length 3, nodes 126
+Depth limit 7: value 10, path length 4, nodes 261
+Depth limit 8: value 10, path length 4, nodes 396
+Depth limit 9: value 14, path length 5, nodes 819
+Depth limit 10: value 12, path length 5, nodes 1228
+Depth limit 11: value inf, path length 1, nodes 1076
+Algorithm: Minimax
+Time (s): 0.0234
+Nodes/Iter: 1076
+Path Length: 1
+Depth limit 1: value 2, path length 1, nodes 4
+Depth limit 2: value 2, path length 1, nodes 7
+Depth limit 3: value 6, path length 2, nodes 18
+Depth limit 4: value 6, path length 2, nodes 29
+Depth limit 5: value 10, path length 3, nodes 63
+Depth limit 6: value 10, path length 3, nodes 97
+Depth limit 7: value 14, path length 4, nodes 205
+Depth limit 8: value 12, path length 4, nodes 312
+Depth limit 9: value inf, path length 1, nodes 283
+Algorithm: Minimax
+Time (s): 0.0157
+Nodes/Iter: 283
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 15
+Depth limit 4: value 0, path length 2, nodes 23
+Depth limit 5: value 4, path length 3, nodes 46
+Depth limit 6: value 0, path length 3, nodes 69
+Depth limit 7: value inf, path length 1, nodes 45
+Algorithm: Minimax
+Time (s): 0.0015
+Nodes/Iter: 45
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 12
+Depth limit 4: value 0, path length 2, nodes 17
+Depth limit 5: value inf, path length 1, nodes 6
+Algorithm: Minimax
+Time (s): 0.0004
+Nodes/Iter: 6
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -2, path length 1, nodes 9
+Depth limit 3: value 2, path length 2, nodes 23
+Depth limit 4: value 2, path length 2, nodes 37
+Depth limit 5: value 6, path length 3, nodes 82
+Depth limit 6: value 6, path length 3, nodes 126
+Depth limit 7: value 10, path length 4, nodes 261
+Depth limit 8: value 10, path length 4, nodes 396
+Depth limit 9: value 14, path length 5, nodes 819
+Depth limit 10: value 12, path length 5, nodes 1228
+Depth limit 11: value inf, path length 1, nodes 1076
+Algorithm: Minimax
+Time (s): 0.0234
+Nodes/Iter: 1076
+Path Length: 1
+Depth limit 1: value 2, path length 1, nodes 4
+Depth limit 2: value 2, path length 1, nodes 7
+Depth limit 3: value 6, path length 2, nodes 18
+Depth limit 4: value 6, path length 2, nodes 29
+Depth limit 5: value 10, path length 3, nodes 63
+Depth limit 6: value 10, path length 3, nodes 97
+Depth limit 7: value 14, path length 4, nodes 205
+Depth limit 8: value 12, path length 4, nodes 312
+Depth limit 9: value inf, path length 1, nodes 283
+Algorithm: Minimax
+Time (s): 0.0157
+Nodes/Iter: 283
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 15
+Depth limit 4: value 0, path length 2, nodes 23
+Depth limit 5: value 4, path length 3, nodes 46
+Depth limit 6: value 0, path length 3, nodes 69
+Depth limit 7: value inf, path length 1, nodes 45
+Algorithm: Minimax
+Time (s): 0.0015
+Nodes/Iter: 45
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 12
+Depth limit 4: value 0, path length 2, nodes 17
+Depth limit 5: value inf, path length 1, nodes 6
+Algorithm: Minimax
+Time (s): 0.0004
+Nodes/Iter: 6
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 3
+Depth limit 2: value 0, path length 1, nodes 5
+Depth limit 3: value inf, path length 1, nodes 4
+Algorithm: Minimax
+Time (s): 0.0001
+Nodes/Iter: 4
+Path Length: 1
+Depth limit 1: value 6, path length 1, nodes 5
+Depth limit 2: value 2, path length 1, nodes 9
+Depth limit 3: value 6, path length 2, nodes 22
+Depth limit 4: value 2, path length 2, nodes 35
+Depth limit 5: value 6, path length 3, nodes 67
+Depth limit 6: value 2, path length 3, nodes 99
+Depth limit 7: value 6, path length 4, nodes 166
+Depth limit 8: value 2, path length 4, nodes 216
+Depth limit 9: value 2, path length 5, nodes 232
+Depth limit 10: value -2, path length 5, nodes 248
+Depth limit 11: value 2, path length 6, nodes 285
+Depth limit 12: value 2, path length 6, nodes 316
+Depth limit 13: value 2, path length 7, nodes 352
+Depth limit 14: value 2, path length 7, nodes 388
+Depth limit 15: value 6, path length 8, nodes 493
+Depth limit 16: value 6, path length 8, nodes 592
+Depth limit 17: value 10, path length 9, nodes 844
+Depth limit 18: value 10, path length 9, nodes 1096
+Depth limit 19: value 14, path length 10, nodes 1874
+Depth limit 20: value 12, path length 10, nodes 2622
+Depth limit 21: value inf, path length 1, nodes 1398
+Algorithm: Minimax
+Time (s): 0.0650
+Nodes/Iter: 1398
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -6, path length 1, nodes 9
+Depth limit 3: value -2, path length 2, nodes 19
+Depth limit 4: value -6, path length 2, nodes 29
+Depth limit 5: value -2, path length 3, nodes 50
+Depth limit 6: value -10, path length 3, nodes 66
+Depth limit 7: value -6, path length 4, nodes 72
+Depth limit 8: value -6, path length 4, nodes 78
+Depth limit 9: value -2, path length 5, nodes 94
+Depth limit 10: value -2, path length 5, nodes 109
+Depth limit 11: value 2, path length 6, nodes 139
+Depth limit 12: value 2, path length 6, nodes 169
+Depth limit 13: value 6, path length 7, nodes 259
+Depth limit 14: value 6, path length 7, nodes 346
+Depth limit 15: value 10, path length 8, nodes 592
+Depth limit 16: value 10, path length 8, nodes 838
+Depth limit 17: value 14, path length 9, nodes 1601
+Depth limit 18: value 12, path length 9, nodes 2337
+Depth limit 19: value inf, path length 1, nodes 1133
+Algorithm: Minimax
+Time (s): 0.1480
+Nodes/Iter: 1133
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -10, path length 1, nodes 7
+Depth limit 3: value -6, path length 2, nodes 15
+Depth limit 4: value -10, path length 2, nodes 22
+Depth limit 5: value -6, path length 3, nodes 28
+Depth limit 6: value -6, path length 3, nodes 34
+Depth limit 7: value -2, path length 4, nodes 50
+Depth limit 8: value -2, path length 4, nodes 65
+Depth limit 9: value 2, path length 5, nodes 95
+Depth limit 10: value 2, path length 5, nodes 125
+Depth limit 11: value 6, path length 6, nodes 215
+Depth limit 12: value 6, path length 6, nodes 302
+Depth limit 13: value 10, path length 7, nodes 548
+Depth limit 14: value 10, path length 7, nodes 794
+Depth limit 15: value 14, path length 8, nodes 1557
+Depth limit 16: value 12, path length 8, nodes 2293
+Depth limit 17: value inf, path length 1, nodes 1091
+Algorithm: Minimax
+Time (s): 0.0395
+Nodes/Iter: 1091
+Path Length: 1
+Depth limit 1: value -10, path length 1, nodes 3
+Depth limit 2: value -10, path length 1, nodes 5
+Depth limit 3: value -6, path length 2, nodes 8
+Depth limit 4: value -6, path length 2, nodes 11
+Depth limit 5: value -2, path length 3, nodes 19
+Depth limit 6: value -2, path length 3, nodes 27
+Depth limit 7: value 2, path length 4, nodes 51
+Depth limit 8: value 2, path length 4, nodes 75
+Depth limit 9: value 6, path length 5, nodes 149
+Depth limit 10: value 6, path length 5, nodes 221
+Depth limit 11: value 10, path length 6, nodes 437
+Depth limit 12: value 10, path length 6, nodes 653
+Depth limit 13: value 14, path length 7, nodes 1326
+Depth limit 14: value 12, path length 7, nodes 1975
+Depth limit 15: value inf, path length 1, nodes 1080
+Algorithm: Minimax
+Time (s): 0.0874
+Nodes/Iter: 1080
+Path Length: 1
+Depth limit 1: value -6, path length 1, nodes 4
+Depth limit 2: value -6, path length 1, nodes 7
+Depth limit 3: value -2, path length 2, nodes 15
+Depth limit 4: value -2, path length 2, nodes 23
+Depth limit 5: value 2, path length 3, nodes 47
+Depth limit 6: value 2, path length 3, nodes 71
+Depth limit 7: value 6, path length 4, nodes 145
+Depth limit 8: value 6, path length 4, nodes 217
+Depth limit 9: value 10, path length 5, nodes 433
+Depth limit 10: value 10, path length 5, nodes 649
+Depth limit 11: value 14, path length 6, nodes 1322
+Depth limit 12: value 12, path length 6, nodes 1971
+Depth limit 13: value inf, path length 1, nodes 1078
+Algorithm: Minimax
+Time (s): 0.0362
+Nodes/Iter: 1078
+Path Length: 1
+Depth limit 1: value -2, path length 1, nodes 5
+Depth limit 2: value -2, path length 1, nodes 9
+Depth limit 3: value 2, path length 2, nodes 23
+Depth limit 4: value 2, path length 2, nodes 37
+Depth limit 5: value 6, path length 3, nodes 82
+Depth limit 6: value 6, path length 3, nodes 126
+Depth limit 7: value 10, path length 4, nodes 261
+Depth limit 8: value 10, path length 4, nodes 396
+Depth limit 9: value 14, path length 5, nodes 819
+Depth limit 10: value 12, path length 5, nodes 1228
+Depth limit 11: value inf, path length 1, nodes 1076
+Algorithm: Minimax
+Time (s): 0.0234
+Nodes/Iter: 1076
+Path Length: 1
+Depth limit 1: value 2, path length 1, nodes 4
+Depth limit 2: value 2, path length 1, nodes 7
+Depth limit 3: value 6, path length 2, nodes 18
+Depth limit 4: value 6, path length 2, nodes 29
+Depth limit 5: value 10, path length 3, nodes 63
+Depth limit 6: value 10, path length 3, nodes 97
+Depth limit 7: value 14, path length 4, nodes 205
+Depth limit 8: value 12, path length 4, nodes 312
+Depth limit 9: value inf, path length 1, nodes 283
+Algorithm: Minimax
+Time (s): 0.0157
+Nodes/Iter: 283
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 15
+Depth limit 4: value 0, path length 2, nodes 23
+Depth limit 5: value 4, path length 3, nodes 46
+Depth limit 6: value 0, path length 3, nodes 69
+Depth limit 7: value inf, path length 1, nodes 45
+Algorithm: Minimax
+Time (s): 0.0015
+Nodes/Iter: 45
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 4
+Depth limit 2: value 0, path length 1, nodes 7
+Depth limit 3: value 4, path length 2, nodes 12
+Depth limit 4: value 0, path length 2, nodes 17
+Depth limit 5: value inf, path length 1, nodes 6
+Algorithm: Minimax
+Time (s): 0.0004
+Nodes/Iter: 6
+Path Length: 1
+Depth limit 1: value 4, path length 1, nodes 3
+Depth limit 2: value 0, path length 1, nodes 5
+Depth limit 3: value inf, path length 1, nodes 4
+Algorithm: Minimax
+Time (s): 0.0001
+Nodes/Iter: 4
+Path Length: 1
+Depth limit 1: value inf, path length 1, nodes 2
+Algorithm: Minimax
+Time (s): 0.0000
+Nodes/Iter: 2
+Path Length: 1
