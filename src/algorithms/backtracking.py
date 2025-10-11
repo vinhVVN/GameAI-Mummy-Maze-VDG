@@ -14,7 +14,7 @@ def backtracking_RECURSIVE(assignment, problem, logger, nodes_counter):
     var = f"X_{len(assignment)}"
     for value in problem.domain[var]:
         
-        if logger and nodes_counter[0] % 100 == 1:
+        if logger and nodes_counter[0] % 10 == 0:
             logger.log(f"Với {var} = {value}")
         
         if problem.consistent(var, value, assignment):
@@ -37,7 +37,7 @@ def Backtracking(maze, start_pos, goal_pos, logger = None):
     start_time = time.perf_counter()
     nodes_counter = [0]
         
-    k = 30
+    k = 40
     problem = CSPMazeProblem(maze, start_pos, goal_pos, path_length = k)
     assignment = {f"X_0": start_pos}
     result = backtracking_RECURSIVE(assignment, problem, logger, nodes_counter)

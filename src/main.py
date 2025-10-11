@@ -8,7 +8,8 @@ from src.character import Player, Mummy
 from src.ui import *
 from src.popup import AlgorithmPopup
 from src.settings import SOUNDS_PATH
-from src.mazeproblem import MazeProblem, SimpleMazeProblem
+from src.mazeproblem import MazeProblem, SimpleMazeProblem 
+from src.mazeproblem import AdversarialMazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
 from src.algorithms.ids import IDS
@@ -23,9 +24,9 @@ from src.algorithms.partial_observation import PartialObservationProblem
 from src.algorithms.backtracking import Backtracking
 from src.algorithms.and_or_search import AND_OR_Search
 from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded
-
 from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 from src.algorithms.forward_checking import ForwardChecking
+from src.algorithms.minimax_alpha_beta import MinimaxAlphaBeta
 
 class Game:
     def __init__(self):
@@ -219,6 +220,12 @@ class Game:
                             initial_state,
                             (gx, gy), 
                             self.maze.trap_pos)
+            
+        elif self.player_algo == "Minimax":
+            initial_state = ((self.player.grid_x, self.player.grid_y),
+                            tuple(sorted([(m.grid_x, m.grid_y) for m in self.mummies])))
+            problem = AdversarialMazeProblem(self.maze, initial_state, (gx, gy), self.maze.trap_pos, max_depth=12)
+        
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
                             tuple(sorted(mummy_positions)))
@@ -256,6 +263,10 @@ class Game:
         elif self.player_algo == "Backtracking":
             result = Backtracking(self.maze, initial_state,
                                   self.maze.calculate_stair(),logger = self.logger)
+        elif self.player_algo == "Minimax":
+            
+            algorithm = MinimaxAlphaBeta(problem, logger=self.logger)
+            result = algorithm.solve()  # List actions
         else:
             print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
             result = None
@@ -429,13 +440,13 @@ class Game:
                         print("Người đi")
                         self.start_wait()
                         # SỬA: Sử dụng tên chính xác
-                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "Non_infor", "Forward Checking"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS", "Non_infor", "Forward Checking", "PO_search","Backtracking"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
                     else:
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "Non_infor", "Forward Checking"]:
+                        if self.player_algo in ["BFS", "IDS", "DFS",  "Non_infor", "Forward Checking", "PO_search","Backtracking"]:
                             self.is_player_turn = True
                         else:
                             self.is_player_turn = False
@@ -444,7 +455,7 @@ class Game:
                     print("AI đã chạy xong!")
 
         # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "Non_infor", "Forward Checking"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS",  "Non_infor", "Forward Checking", "PO_search","Backtracking"]:
             if not self.is_player_turn and not self.player.is_moving:
                 if not self.mummies:
                     self.is_player_turn = True
@@ -494,7 +505,7 @@ class Game:
         # Kiểm tra win condition
         if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
                 print("WINNNN")
-                congratulate_path = os.path.join(IMAGES_PATH, "j97_win.jpg")
+                congratulate_path = os.path.join(IMAGES_PATH, "win.png")
                 if os.path.exists(congratulate_path):
                     congratulate_image = pygame.image.load(congratulate_path).convert()
                     congratulate_image = pygame.transform.scale(congratulate_image, (MAZE_PANEL_WIDTH,SCREEN_HEIGHT))
@@ -506,24 +517,24 @@ class Game:
         # Kiểm tra trap condition
         if self.maze.trap_pos and (self.player.grid_x, self.player.grid_y) == self.maze.trap_pos:
                 print("Game Over - Đậm phải trap")
-                jumpscare_path = os.path.join(IMAGES_PATH, "dinhbay.jpg")
+                jumpscare_path = os.path.join(IMAGES_PATH, "dinhbay.png")
                 if os.path.exists(jumpscare_path):
                     jumpscare_image = pygame.image.load(jumpscare_path).convert()
-                    jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+                    jumpscare_image = pygame.transform.scale(jumpscare_image, (MAZE_PANEL_WIDTH, SCREEN_HEIGHT))
                     self.screen.blit(jumpscare_image, (0, 0))
                     pygame.display.flip()
                     pygame.time.delay(2000)
                 self.reset_game()
 
         # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "Non_infor", "Forward Checking"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS", "Non_infor", "Forward Checking", "PO_search", "Backtracking"]:
             for mummy in self.mummies:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
                     print("Game Over - bị ma bắt")
-                    jumpscare_path = os.path.join(IMAGES_PATH, "j97.jpeg")
+                    jumpscare_path = os.path.join(IMAGES_PATH, "lose.png")
                     if os.path.exists(jumpscare_path):
                         jumpscare_image = pygame.image.load(jumpscare_path).convert()
-                        jumpscare_image = pygame.transform.scale(jumpscare_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+                        jumpscare_image = pygame.transform.scale(jumpscare_image, (MAZE_PANEL_WIDTH, SCREEN_HEIGHT))
                         self.screen.blit(jumpscare_image, (0, 0))
                         pygame.display.flip()
                         pygame.time.delay(2000)
@@ -536,7 +547,7 @@ class Game:
         self.player.draw(self.screen)
         
         # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "Non_infor", "Forward Checking"]:
+        if self.player_algo not in ["BFS", "IDS", "DFS",  "Non_infor", "Forward Checking","PO_search","Backtracking"]:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         

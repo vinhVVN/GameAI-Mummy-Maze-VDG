@@ -155,6 +155,7 @@ def BFS_NoInformation_Limited(problem, max_path_length=50, logger = None):
                     queue.append((next_state, new_path))
     
     print(f"BFS Limited không tìm thấy đường đi sau {iteration} bước")
+    end_time = time.perf_counter()
     return {
                 "path": None, "nodes_expanded": len(explored), 
                 "time_taken": end_time - start_time, "path_length": len(queue)

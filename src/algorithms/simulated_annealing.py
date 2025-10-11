@@ -128,7 +128,7 @@ def random_path(problem): # loang đường đi ngẫu nhiên
             
         moves = problem.get_move(current_state)
         if not moves: 
-            return path # Bị kẹt
+            continue # Bị kẹt
 
         # ưu tiên cho các ô ít được ghé thăm
         weights = []
@@ -179,7 +179,7 @@ def Simulated_Annealing(problem, logger = None):
                     current_path = neighbor_path
                     current_cost = neighbor_cost
         
-        if logger and iteration % 20 == 0:
+        if logger and iteration % 10 == 0:
             log_message = (
                 f"Iter {iteration}: T={temper:.1f}, "
                 + f"E ={current_cost:.2f}, "
@@ -203,42 +203,59 @@ def Simulated_Annealing(problem, logger = None):
     }
     
 
-def optimize_path(problem, path): # loại bỏ chu trình
+def optimize_path(problem, path): # Loại bỏ chu trình
     if not path:
         return []
 
-    visited_coords = {} 
-    optimized_path = []
-    
+    # mô phỏng và lấy ra danh sách các trạng thái đã đi qua
+    states_along_path = [problem.get_init_state()]
     current_state = problem.get_init_state()
-    visited_coords[current_state] = -1 
-
-    for i, action in enumerate(path):
+    
+    for action in path:
         moves = problem.get_move(current_state)
         found_move = False
-        for next_state, action_sim, _ in moves:
+        for next_state_sim, action_sim, _ in moves:
             if action_sim == action:
-                if next_state in visited_coords:
-                    # Cắt bỏ chu trình
-                    first_visit_index = visited_coords[next_state]
-                    optimized_path = optimized_path[:first_visit_index + 1]
-                    
-                    keys_to_remove = []
-                    for pos, index in visited_coords.items():
-                        if index > first_visit_index:
-                            keys_to_remove.append(pos)
-                    for key in keys_to_remove:
-                        del visited_coords[key]
-                else:
-                    optimized_path.append(action)
-                    visited_coords[next_state] = i
-
-                current_state = next_state
+                current_state = next_state_sim
+                states_along_path.append(current_state)
                 found_move = True
                 break
+        if not found_move:
+            break 
+    
+    # loại bỏ chu trình khỏi danh sách các trạng thái
+    optimized_states = []
+    visited_set = set()
+    for state in states_along_path:
+        if state in visited_set:
+            # Chu trình được phát hiện. Quay lại vị trí lần đầu ghé thăm
+            first_visit_index = optimized_states.index(state)
+            
+            # Xóa các trạng thái thừa ra khỏi cả list và set
+            states_to_remove = optimized_states[first_visit_index + 1:]
+            for s in states_to_remove:
+                visited_set.remove(s)
+            optimized_states = optimized_states[:first_visit_index + 1]
+        else:
+            optimized_states.append(state)
+            visited_set.add(state)
+            
+    # chuyển đổi danh sách trạng thái đã tối ưu thành chuỗi hành động
+    final_path = []
+    for i in range(len(optimized_states) - 1):
+        state1 = optimized_states[i]
+        state2 = optimized_states[i+1]
         
-        if not found_move: 
-            return optimized_path
-
-    return optimized_path
+        # Tìm hành động để đi từ state1 đến state2
+        moves = problem.get_move(state1)
+        action_found = False
+        for next_state, action, _ in moves:
+            if next_state == state2:
+                final_path.append(action)
+                action_found = True
+                break
+        if not action_found:
+            return states_along_path # Trả về phần đã có
+            
+    return final_path
     
