@@ -27,6 +27,7 @@ from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded
 from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 from src.algorithms.forward_checking import ForwardChecking
 from src.algorithms.minimax_alpha_beta import MinimaxAlphaBeta
+#from src.map_editor import open_map_editor
 
 class Game:
     def __init__(self):
@@ -88,22 +89,44 @@ class Game:
         self.popup = AlgorithmPopup(self)
         self.popup.width = 400
         
+        self.available_maps = sorted([f for f in os.listdir(MAPS_PATH) if not f.endswith('_agent.txt')]) 
         
 
     def choose_algorithm_popup(self):
         
         return self.popup.show()
 
-    def load_new_map(self, map_name, player_pos=(1, 15), mummy_pos=[(1, 9)]):
+    def load_new_map(self, map_name):
+        print(f"Đang tải map: {map_name}")
         self.maze = Maze(map_name)
         cell_size = self.maze.cell_size
 
-        self.player = Player(player_pos[0], player_pos[1], self.maze.maze_size, cell_size)
+        # Lấy vị trí từ đối tượng maze (đã đọc từ file _agents.txt)
+        player_x, player_y = self.maze.player_start_pos
+        self.player = Player(player_x, player_y, self.maze.maze_size, cell_size)
+        
+        self.mummies = []
+        for mummy_x, mummy_y in self.maze.mummy_start_pos:
+            self.mummies.append(Mummy(mummy_x, mummy_y, self.maze.maze_size, cell_size))
 
-        self.mummies = [
-            Mummy(mx, my, self.maze.maze_size, cell_size)
-            for (mx, my) in mummy_pos
-        ]
+        # Reset lại các trạng thái của game
+        self.solution_paths = []
+        self.ai_mode_active = False
+        self.is_player_turn = True
+        self.is_waiting = False
+        self.current_mummy_index = 0
+        self.log_panel.clear()
+        self.logger.clear()
+        
+        # Cập nhật lại kích thước mũi tên nếu cần
+        if "map10" in map_name:
+            self.scale_arrow_images(36)
+        elif "map8" in map_name:
+            self.scale_arrow_images(45)
+        elif "map6" in map_name:
+            self.scale_arrow_images(60)
+
+
 
     def set_buttons(self):
         btn_w, btn_h = 220, 40
@@ -129,42 +152,19 @@ class Game:
                 if hasattr(widget, 'text') and widget.text.startswith("Mummy:"):
                     widget.text = f"Mummy: {self.mummy_algo}"
 
-        def change_map(_new_map=None):
-            if _new_map is not None:
-                new_map = _new_map
-            else:
-                maps = ["map6_1.txt", "map6_2.txt", "map6_3.txt", "map6_4.txt", "map6_5.txt", "map8_1.txt", "map10_1.txt"]
-                current = maps.index(self.maze.map_name)
-                new_map = maps[(current + 1) % len(maps)]
-                if new_map[3:5] == "10":
-                    self.scale_arrow_images(36)
-                else:
-                    self.scale_arrow_images(360//int(new_map[3]))
-            print(f"Đổi sang {new_map}")
-            
-            # Cập nhật vị trí cho từng map
-            map_positions = {
-                "map6_1.txt": {"player": (1, 1), "mummies": [(5, 9)]},
-                "map6_2.txt": {"player": (1, 11), "mummies": [(3, 3)]},
-                "map6_3.txt": {"player": (3, 11), "mummies": [(3, 3)]},
-                "map6_4.txt": {"player": (1, 11), "mummies": [(3, 3)]},
-                "map6_5.txt": {"player": (1, 11), "mummies": [(9, 9)]},
-                "map8_1.txt": {"player": (5, 5), "mummies": [(15, 11), (3, 3)]},
-                "map10_1.txt": {"player": (7, 5), "mummies": [(15, 9), (3, 17)]}
-            }
-            
-            if new_map in map_positions:
-                pos = map_positions[new_map]
-                self.load_new_map(new_map, player_pos=pos["player"], mummy_pos=pos["mummies"])
-            
-            # Cập nhật text cho button
-            for widget in self.panel.widgets:
-                if hasattr(widget, 'text') and widget.text in ["map6_1.txt", "map6_2.txt", "map6_3.txt", 
-                                                               "map6_4.txt", "map6_5.txt",
-                                                               "map8_1.txt","map10_1.txt"]:
-                    widget.text = str(new_map)
+        def change_map():
+            try:
+                current_index = self.available_maps.index(self.maze.map_name)
+                next_index = (current_index + 1) % len(self.available_maps)
+                new_map_name = self.available_maps[next_index]
+                
+                self.load_new_map(new_map_name)
+                
+                
+                btn_change_map.text = new_map_name
 
-        self._change_map_func = change_map
+            except (ValueError, IndexError) as e:
+                print(f"Lỗi khi đổi map: {e}")
 
         def start_ai():
             self.start_ai_search()
@@ -172,7 +172,6 @@ class Game:
         def reset_game_btn():
             self.reset_game()
 
-        
         
         btn_reset = Button(btn_x, 400, btn_w, btn_h, "Reset", reset_game_btn)
         btn_player_algo = Button(btn_x, 100, btn_w, btn_h, f"Player: {self.player_algo}", toggle_player_algo)
@@ -198,8 +197,9 @@ class Game:
                                   on_click_func=lambda: self.toggle_log_panel())
         self.panel.add_widget(menu_button)
         
+        # btn_create_map = Button(btn_x, 450, btn_w, btn_h, "Create Map", lambda: open_map_editor(self))
+        # self.panel.add_widget(btn_create_map)
         
-
     def find_path(self):
         gx, gy = self.maze.calculate_stair()
         mummy_positions = [(m.grid_x, m.grid_y) for m in self.mummies]
@@ -591,9 +591,19 @@ class Game:
         self.wait_start_time = pygame.time.get_ticks()
 
     def reset_game(self):
-        current_map = self.maze.map_name
-        if hasattr(self, "_change_map_func"):
-            self._change_map_func(current_map)
+        # Tải lại map hiện tại
+        current_map_name = self.maze.map_name
+        self.maze = Maze(current_map_name)
+
+        # Reset player & mummies về vị trí gốc từ file
+        cell_size = self.maze.cell_size
+
+        player_x, player_y = self.maze.player_start_pos
+        self.player = Player(player_x, player_y, self.maze.maze_size, cell_size)
+
+        self.mummies = []
+        for mummy_x, mummy_y in self.maze.mummy_start_pos:
+            self.mummies.append(Mummy(mummy_x, mummy_y, self.maze.maze_size, cell_size))
         self.solution_paths = []
         self.ai_mode_active = False
         self.is_player_turn = True
@@ -601,7 +611,7 @@ class Game:
         self.wait_start_time = 0
         self.wait_duration = 1000
         self.current_mummy_index = 0
-        print(f"Game đã reset về map {current_map}!")
+        
 
     def handle_mummy_collisions(self):
         i = 0

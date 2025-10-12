@@ -12,6 +12,9 @@ class Maze:
         self.trap_pos = None
 
         self.map_name = map_name
+        self.mummy_start_pos = [(5,9)]
+        self.player_start_pos = (1, 1)
+        
         self.loadmap(map_name)
                 
         self.maze_pixel_size = 360
@@ -42,6 +45,38 @@ class Maze:
                         self.trap_pos = (c, r)
                     
                 self.map_data.append(row)
+                
+        agent_filename = map_name.replace('.txt', '_agent.txt')
+        agent_filepath = os.path.join(MAPS_PATH, agent_filename)
+
+        if os.path.exists(agent_filepath):
+            temp_mummies = []
+            with open(agent_filepath, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+
+                    parts = line.split()
+                    if len(parts) == 3:
+                        char_type, x_str, y_str = parts
+                        try:
+                            x, y = int(x_str), int(y_str) 
+                            if char_type.upper() == 'P':
+                                self.player_start_pos = (x, y)
+                            elif char_type.upper() == 'M':
+                                temp_mummies.append((x, y))
+                        except ValueError:
+                            print(f"Cảnh báo: Không thể đọc dòng agent trong file {agent_filename}: {line}")
+
+            # Chỉ gán nếu file có dữ liệu mummy
+            if temp_mummies:
+                self.mummy_start_pos = temp_mummies
+
+        if not self.mummy_start_pos:
+            self.mummy_start_pos = ((5, 9)) # Một mummy mặc định
+        
+        
                 
     def calculate_stair(self):
         sx, sy = self.stair_pos
