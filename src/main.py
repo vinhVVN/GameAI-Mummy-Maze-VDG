@@ -27,7 +27,7 @@ from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded
 from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 from src.algorithms.forward_checking import ForwardChecking
 from src.algorithms.minimax_alpha_beta import MinimaxAlphaBeta
-#from src.map_editor import open_map_editor
+from src.map_editor import open_map_editor
 
 class Game:
     def __init__(self):
@@ -173,11 +173,11 @@ class Game:
             self.reset_game()
 
         
-        btn_reset = Button(btn_x, 400, btn_w, btn_h, "Reset", reset_game_btn)
+        btn_reset = Button(btn_x, 350, btn_w, btn_h, "Reset", reset_game_btn)
         btn_player_algo = Button(btn_x, 100, btn_w, btn_h, f"Player: {self.player_algo}", toggle_player_algo)
         # compare_button = Button(btn_x, 150, btn_w, btn_h, "Compare", command=lambda: self.set_screen("COMPARISON"))
-        btn_change_map = Button(btn_x, 250, btn_w, btn_h, self.maze.map_name, change_map)
-        btn_start = Button(btn_x, 350, btn_w, btn_h, "Start", start_ai)
+        btn_change_map = Button(btn_x, 200, btn_w, btn_h, self.maze.map_name, change_map)
+        btn_start = Button(btn_x, 300, btn_w, btn_h, "Start", start_ai)
         
         
         self.panel.add_widget(btn_player_algo)
@@ -197,8 +197,8 @@ class Game:
                                   on_click_func=lambda: self.toggle_log_panel())
         self.panel.add_widget(menu_button)
         
-        # btn_create_map = Button(btn_x, 450, btn_w, btn_h, "Create Map", lambda: open_map_editor(self))
-        # self.panel.add_widget(btn_create_map)
+        btn_create_map = Button(btn_x, 400, btn_w, btn_h, "Create Map", lambda: open_map_editor(self))
+        self.panel.add_widget(btn_create_map)
         
     def find_path(self):
         gx, gy = self.maze.calculate_stair()
