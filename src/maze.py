@@ -4,7 +4,7 @@ from src.settings import *
 from src.sprites import Spritesheet
 
 class Maze:
-    def __init__(self, map_name):
+    def __init__(self, map_name, load_file = True):
         self.map_data = []
         self.stair_pos = None
         self.key_pos = None
@@ -14,11 +14,12 @@ class Maze:
         self.map_name = map_name
         self.mummy_start_pos = [(5,9)]
         self.player_start_pos = (1, 1)
+        if load_file:
+            self.loadmap(map_name)
         
-        self.loadmap(map_name)
-                
+            
         self.maze_pixel_size = 360
-        self.maze_size = len(self.map_data) // 2
+        self.maze_size = len(self.map_data) // 2 if self.map_data else 6
         self.cell_size = self.maze_pixel_size // self.maze_size # size của 1 ô (pixel)
         
         self.backdrop_img = None

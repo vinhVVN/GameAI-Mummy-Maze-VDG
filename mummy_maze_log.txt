@@ -1,1 +1,40 @@
 --- New Session Started ---
+Bước 1: cur state= ((3, 5), ((7, 11),)), g=0.0, h=10.0, f=10.0
+-> Check neighbor ((3, 7), ((3, 11),)), DOWN, g=1.2, h = 12.0, f = 13.2
+-> Check neighbor ((1, 5), ((3, 11),)), LEFT, g=1.1, h = 12.0, f = 13.1
+-> Check neighbor ((5, 5), ((5, 9),)), RIGHT, g=1.2, h = 2.0, f = 3.2
+Bước 2: cur state= ((5, 5), ((5, 9),)), g=1.2, h=2.0, f=3.2
+-> Check neighbor ((5, 7), ((5, 9),)), DOWN, g=2.7, h = 4.0, f = 6.7
+-> Check neighbor ((3, 5), ((3, 9),)), LEFT, g=2.5, h = 4.0, f = 6.5
+-> Check neighbor ((7, 5), ((5, 9),)), RIGHT, g=2.4, h = 0.0, f = 2.4
+Bước 3: cur state= ((7, 5), ((5, 9),)), g=2.4, h=0.0, f=2.4
+-> Check neighbor ((7, 3), ((5, 9),)), UP, g=3.5, h = 0.0, f = 3.5
+-> Check neighbor ((7, 7), ((5, 9),)), DOWN, g=3.7, h = 2.0, f = 5.7
+-> Check neighbor ((9, 5), ((5, 9),)), RIGHT, g=3.5, h = 0.0, f = 3.5
+Bước 4: cur state= ((7, 3), ((5, 9),)), g=3.5, h=0.0, f=3.5
+-> Check neighbor ((5, 3), ((5, 9),)), LEFT, g=4.7, h = 0.0, f = 4.7
+-> Check neighbor ((9, 3), ((5, 9),)), RIGHT, g=4.6, h = 0.0, f = 4.6
+Bước 5: cur state= ((9, 5), ((5, 9),)), g=3.5, h=0.0, f=3.5
+-> Check neighbor ((9, 7), ((5, 9),)), DOWN, g=4.7, h = 0.0, f = 4.7
+-> Check neighbor ((11, 5), ((5, 9),)), RIGHT, g=4.6, h = 0.0, f = 4.6
+Bước 6: cur state= ((9, 3), ((5, 9),)), g=4.6, h=0.0, f=4.6
+-> Check neighbor ((9, 1), ((5, 9),)), UP, g=5.7, h = 0.0, f = 5.7
+Bước 7: cur state= ((11, 5), ((5, 9),)), g=4.6, h=0.0, f=4.6
+-> Check neighbor ((11, 3), ((5, 9),)), UP, g=5.7, h = 0.0, f = 5.7
+-> Check neighbor ((11, 7), ((5, 9),)), DOWN, g=5.8, h = 0.0, f = 5.8
+Bước 8: cur state= ((5, 3), ((5, 9),)), g=4.7, h=0.0, f=4.7
+-> Check neighbor ((5, 1), ((5, 9),)), UP, g=5.8, h = 2.0, f = 7.8
+-> Check neighbor ((3, 3), ((3, 9),)), LEFT, g=5.9, h = 2.0, f = 7.9
+Bước 9: cur state= ((9, 7), ((5, 9),)), g=4.7, h=0.0, f=4.7
+-> Check neighbor ((9, 9), ((5, 9),)), DOWN, g=5.9, h = 2.0, f = 7.9
+Bước 10: cur state= ((7, 7), ((5, 9),)), g=3.7, h=2.0, f=5.7
+-> Check neighbor ((7, 9), ((5, 9),)), DOWN, g=5.1, h = 4.0, f = 9.1
+Bước 11: cur state= ((9, 1), ((5, 9),)), g=5.7, h=0.0, f=5.7
+-> Check neighbor ((7, 1), ((5, 9),)), LEFT, g=6.8, h = 0.0, f = 6.8
+-> Check neighbor ((11, 1), ((5, 9),)), RIGHT, g=6.8, h = 0.0, f = 6.8
+Bước 12: cur state= ((11, 3), ((5, 9),)), g=5.7, h=0.0, f=5.7
+SUCCESS! Tìm thấy đường đi sau 12 bước
+Algorithm: AStart
+Time (s): 0.0005
+Nodes/Iter: 12
+Path Length: 5

@@ -215,3 +215,52 @@ class LogPanel:
         surface.blit(content_surface, self.rect.topleft, area=visible_area)
         
         pygame.draw.rect(surface, (60, 70, 80), self.rect, 2, border_radius=5)
+
+
+class TextInput:
+    def __init__(self, x, y, width, height, placeholder="", font_size=26):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color_inactive = pygame.Color('lightskyblue3')
+        self.color_active = pygame.Color('dodgerblue2')
+        self.text_color = COLOR_WHITE
+        self.placeholder_color = (150, 150, 150)
+        self.bg_color = (45, 52, 63)
+        self.font = pygame.font.Font(None, font_size)
+        self.text = ""
+        self.placeholder = placeholder
+        self.active = False
+        self.color = self.color_inactive
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Nếu người dùng click vào ô thì kích hoạt
+            self.active = self.rect.collidepoint(event.pos)
+            self.color = self.color_active if self.active else self.color_inactive
+
+        if event.type == pygame.KEYDOWN and self.active:
+            if event.key == pygame.K_RETURN:
+                print(f"Input entered: {self.text}")
+                self.active = False
+                self.color = self.color_inactive
+                return self.text
+            elif event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+        return None
+
+    def draw(self, surface):
+        # Vẽ nền
+        pygame.draw.rect(surface, self.bg_color, self.rect, border_radius=8)
+
+        # Vẽ border
+        pygame.draw.rect(surface, self.color, self.rect, 2, border_radius=8)
+
+        # Chọn text để hiển thị
+        if self.text:
+            text_surface = self.font.render(self.text, True, self.text_color)
+        else:
+            text_surface = self.font.render(self.placeholder, True, self.placeholder_color)
+
+        # Vẽ text
+        surface.blit(text_surface, (self.rect.x + 10, self.rect.y + (self.rect.height - text_surface.get_height()) // 2))
