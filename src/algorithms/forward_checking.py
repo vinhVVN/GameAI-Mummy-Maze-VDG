@@ -1,190 +1,127 @@
-from collections import deque
 import time
+from copy import deepcopy
+from src.mazeproblem import CSPMazeProblem
 
-class ForwardChecking:
-    def __init__(self, problem, logger, max_depth=2000, min_safe_dist=2, debug=False):
-        self.problem = problem
-        self.maze = problem.maze
-        self.max_depth = max_depth
-        self.min_safe_dist = min_safe_dist
-        self.best_path = None
-        self.found = False
-        self.debug = debug
-        self.is_simple_problem = not hasattr(problem, 'min_dist')  # Phân biệt loại problem
-        self.logger = logger
-        
-    def solve(self):
-        start_time = time.perf_counter()
-        start = self.problem.get_init_state()
-        visited = set([start])
-        self.best_path = None
-        self.found = False
-        self._dfs(start, [], visited, 0)
-        end_time = time.perf_counter()
-        return {"path":self.best_path, "nodes_expanded":len(visited),
-                "time_taken": end_time-start_time, "path_length": len(self.best_path)}
 
-    def _dfs(self, state, path, visited, depth):
-        if depth > self.max_depth:
-            return
+def manhattan(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-        if self.problem.is_goal_state(state):
-            self.best_path = path[:]
-            self.found = True
-            if self.debug and self.logger:
-                self.logger.log(f"✅ Found goal! Path = {path}")
-            return
 
-        try:
-            moves = self.problem.get_move(state)
-        except Exception as e:
-            if self.debug:
-                print(f"⚠️ get_move error: {e}")
-            moves = []
+def forward_checking_RECURSIVE(assignment, problem, logger, nodes_counter):
+    nodes_counter[0] += 1
 
-        for next_state, action, cost in moves:
-            # Bỏ qua nếu đã thăm hoặc cost vô hạn
-            if cost == float('inf') or next_state in visited:
-                continue
+    last_var = f"X_{len(assignment) - 1}"
+    if assignment[last_var] == problem.goal_pos:
+        return assignment
 
-            # Forward Checking - ÁP DỤNG CHO CẢ HAI LOẠI PROBLEM
-            if not self._forward_check(next_state):
-                continue
+    if len(assignment) >= len(problem.variables):
+        return None
 
-            visited.add(next_state)
-            path.append(action)
+    # --- MRV chọn biến có domain nhỏ nhất ---
+    unassigned_vars = [v for v in problem.variables if v not in assignment]
+    if not unassigned_vars:
+        return None
+    var = min(unassigned_vars, key=lambda v: len(problem.domain[v]))
 
-            if self.debug and self.logger:
-                self.logger.log(f"→ Depth {depth}: Move {action} | State = {next_state}")
+    goal = problem.goal_pos
+    sorted_values = sorted(
+        problem.domain[var],
+        key=lambda val: manhattan(val, goal)
+    )
 
-            self._dfs(next_state, path, visited, depth + 1)
-            if self.found:
-                return
+    for value in sorted_values:
+        # --- Tránh quay lại ô cũ ---
+        if value in assignment.values():
+            continue
 
-            path.pop()
-            visited.remove(next_state)
+        # --- Cắt tỉa: nếu không thể tới goal trong số bước còn lại ---
+        remaining_steps = len(problem.variables) - len(assignment)
+        if manhattan(value, goal) > remaining_steps * 2:
+            continue
 
-    def _forward_check(self, state):
-        # LẤY VỊ TRÍ PLAYER PHÙ HỢP VỚI TỪNG LOẠI PROBLEM
-        player_pos = self._get_player_position(state)
-        
-        if player_pos is None:
-            if self.debug:
-                print(f"⚠️ Không thể xác định player position từ state: {state}")
-            return False
+        if problem.consistent(var, value, assignment):
+            assignment[var] = value
 
-        # 1️⃣ Trap check (nếu có)
-        trap = getattr(self.problem, 'trap_pos', None)
-        if trap and player_pos == trap:
-            if self.debug:
-                print(f"💀 Player rơi vào bẫy tại {trap}")
-            return False
+            # --- Forward Checking cục bộ ---
+            changed_domains = {}
+            consistent = True
+            for v_k in problem.variables:
+                if v_k not in assignment:
+                    old_domain = problem.domain[v_k]
+                    new_domain = [val for val in old_domain if problem.consistent(v_k, val, assignment)]
+                    if len(new_domain) < len(old_domain):
+                        changed_domains[v_k] = old_domain
+                        problem.domain[v_k] = new_domain
+                    if not new_domain:
+                        consistent = False
+                        break
 
-        # 2️⃣ Mummy proximity check (chỉ cho MazeProblem)
-        if not self.is_simple_problem and hasattr(self.problem, 'min_dist'):
-            try:
-                # State format: (player_pos, mummies_pos)
-                mummies_pos = state[1] if isinstance(state, tuple) and len(state) == 2 else []
-                md = self.problem.min_dist(list(mummies_pos), player_pos)
-                
-                if md <= self.min_safe_dist:
-                    if self.debug and self.logger:
-                        self.logger.log(f"☠️ Quá gần mummy (dist={md}) tại {player_pos}")
-                    return False
-            except Exception as e:
-                if self.debug:
-                    print(f"⚠️ Lỗi kiểm tra mummy: {e}")
+            if consistent:
+                result = forward_checking_RECURSIVE(assignment, problem, logger, nodes_counter)
+                if result is not None:
+                    return result
 
-        # 3️⃣ Reachability check (BFS) - QUAN TRỌNG NHẤT
-        if not self._is_reachable_to_goal(player_pos):
-            if self.debug and self.logger:
-                self.logger.log(f"🚫 Không thể tới goal từ {player_pos}")
-            return False
+            # --- Quay lui: khôi phục domain đã thay đổi ---
+            for v_k, old_domain in changed_domains.items():
+                problem.domain[v_k] = old_domain
+            del assignment[var]
 
-        return True
+    return None
 
-    def _get_player_position(self, state):
-        """Lấy vị trí player từ state, hỗ trợ cả hai định dạng"""
-        try:
-            if self.is_simple_problem:
-                # SimpleMazeProblem: state là (x, y)
-                if isinstance(state, tuple) and len(state) == 2:
-                    return state
-            else:
-                # MazeProblem: state là (player_pos, mummies_pos)
-                if isinstance(state, tuple) and len(state) == 2:
-                    player_pos = state[0]
-                    if isinstance(player_pos, tuple) and len(player_pos) == 2:
-                        return player_pos
-            
-            # Fallback: thử parse bất kỳ tuple nào có 2 phần tử
-            if isinstance(state, tuple) and len(state) == 2:
-                if all(isinstance(x, int) for x in state):
-                    return state
-            
-            return None
-            
-        except Exception:
-            return None
 
-    def _is_reachable_to_goal(self, player_pos):
-        """BFS kiểm tra reachability - FIXED VERSION"""
-        if not (isinstance(player_pos, tuple) and len(player_pos) == 2):
-            return False
+def ForwardChecking(problem, logger=None, min_safe_dist=None, debug=False):
+    """
+    Forward Checking cho bài toán Maze CSP.
+    Tối ưu với MRV + LCV + pruning.
+    """
+    start_time = time.perf_counter()
+    nodes_counter = [0]
 
-        # Lấy goal position
-        goal = getattr(self.problem, 'goal_pos', None) or getattr(self.problem, 'goal', None)
-        if goal is None:
-            # Nếu không có goal, coi như reachable
-            return True
-            
-        if player_pos == goal:
-            return True
+    # --- Xác định điểm bắt đầu và kết thúc ---
+    start_pos = getattr(problem, "start_pos", None) or getattr(problem, "start_state", None)
+    goal_pos = getattr(problem, "goal_pos", None) or getattr(problem, "goal", None)
 
-        maze = self.maze
-        try:
-            width, height = maze.maze_size
-        except Exception:
-            # Fallback nếu không lấy được maze size
-            width, height = 100, 100  # Giá trị đủ lớn
+    if start_pos is None or goal_pos is None:
+        raise ValueError("Problem không có start_pos / goal_pos hoặc start_state / goal")
 
-        visited = set()
-        q = deque([player_pos])
-        visited.add(player_pos)
-        
-        # Hướng di chuyển (2 ô vì đi qua walls)
-        dirs = [(0, -2), (0, 2), (-2, 0), (2, 0)]
+    path_length = getattr(problem, "path_length", 40)
 
-        while q:
-            cx, cy = q.popleft()
-            
-            for dx, dy in dirs:
-                # Vị trí tường cần kiểm tra
-                wall_x = cx + dx // 2
-                wall_y = cy + dy // 2
-                
-                # Vị trí tiếp theo
-                nx, ny = cx + dx, cy + dy
+    if not hasattr(problem, "variables"):
+        problem = CSPMazeProblem(problem.maze, start_pos, goal_pos, path_length)
 
-                # Kiểm tra giới hạn bản đồ
-                if not (0 <= nx < width and 0 <= ny < height):
-                    continue
+    assignment = {f"X_0": problem.start_pos}
+    result = forward_checking_RECURSIVE(assignment, problem, logger, nodes_counter)
+    end_time = time.perf_counter()
 
-                # Kiểm tra tường
-                try:
-                    if not maze.is_passable(wall_x, wall_y):
-                        continue
-                except Exception:
-                    continue
+    if result:
+        path = []
+        for i in range(len(result) - 1):
+            pos1 = result[f"X_{i}"]
+            pos2 = result[f"X_{i+1}"]
+            dx, dy = pos2[0] - pos1[0], pos2[1] - pos1[1]
+            if dy == -2:
+                path.append("UP")
+            elif dy == 2:
+                path.append("DOWN")
+            elif dx == -2:
+                path.append("LEFT")
+            elif dx == 2:
+                path.append("RIGHT")
 
-                npos = (nx, ny)
-                if npos in visited:
-                    continue
-                    
-                if npos == goal:
-                    return True
-                    
-                visited.add(npos)
-                q.append(npos)
+        if logger:
+            logger.log(f" SUCCESS! Tìm được đường đi ({len(path)} bước, {nodes_counter[0]} nút mở rộng)")
+        return {
+            "path": path,
+            "nodes_expanded": nodes_counter[0],
+            "time_taken": end_time - start_time,
+            "path_length": len(path)
+        }
 
-        return False
+    if logger:
+        logger.log(f" Không tìm thấy đường đi sau {nodes_counter[0]} nút.")
+    return {
+        "path": None,
+        "nodes_expanded": nodes_counter[0],
+        "time_taken": end_time - start_time,
+        "path_length": path_length
+    }
