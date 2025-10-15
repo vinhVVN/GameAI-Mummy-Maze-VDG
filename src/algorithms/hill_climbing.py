@@ -4,10 +4,16 @@ def HillClimbing(problem, logger=None):
     start_time = time.perf_counter()
     current = problem.get_init_state()
 
+    # Nếu trạng thái ban đầu đã là goal
     if problem.is_goal_state(current):
         if logger:
             logger.log("Trạng thái ban đầu đã là goal!")
-        return {"path": [], "nodes_expanded": 0, "time_taken": 0, "path_length": 0}
+        return {
+            "path": [],
+            "nodes_expanded": 0,
+            "time_taken": 0,
+            "path_length": 0
+        }
 
     paths = {current: None}
     iteration = 0
@@ -30,13 +36,13 @@ def HillClimbing(problem, logger=None):
         if logger:
             logger.log(f"-> Chọn neighbor {next_state}, action={action}, h={problem.heuristic(next_state)}")
 
-        # nếu không cải thiện → dừng (local optimum)
+        # nếu neighbor không tốt hơn (heuristic không giảm) → local optimum
         if problem.heuristic(next_state) >= problem.heuristic(current):
             if logger:
                 logger.log("Heuristic không giảm — local optimum!")
             break
 
-        # lưu đường đi
+        # cập nhật đường đi
         paths[next_state] = (current, action)
         current = next_state
 
@@ -46,7 +52,7 @@ def HillClimbing(problem, logger=None):
                 logger.log(f"SUCCESS! Đạt goal tại {current} sau {iteration} bước.")
             break
 
-    # ---- tái tạo đường đi đã leo được ----
+    # ---- tái tạo đường đi ----
     end_time = time.perf_counter()
     path = []
     cur = current
@@ -58,12 +64,13 @@ def HillClimbing(problem, logger=None):
     if logger:
         logger.log(f"Đường đi đạt được ({len(path)} bước): {path}")
 
+    # In ra nếu cần
     print("Đường đi đạt được:")
-    print("→".join(map(str, path)))
+    print(" → ".join(map(str, path)))
 
-    # trả về kết quả dù không đạt goal
+    # ---- trả về kết quả ----
     return {
-        "path": path,
+        "path": path if problem.is_goal_state(current) else None,
         "nodes_expanded": iteration,
         "time_taken": end_time - start_time,
         "path_length": len(path)

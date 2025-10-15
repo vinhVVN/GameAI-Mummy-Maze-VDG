@@ -109,7 +109,7 @@ def ForwardChecking(problem, logger=None, min_safe_dist=None, debug=False):
                 path.append("RIGHT")
 
         if logger:
-            logger.log(f"✅ SUCCESS! Tìm được đường đi ({len(path)} bước, {nodes_counter[0]} nút mở rộng)")
+            logger.log(f" SUCCESS! Tìm được đường đi ({len(path)} bước, {nodes_counter[0]} nút mở rộng)")
         return {
             "path": path,
             "nodes_expanded": nodes_counter[0],
@@ -118,7 +118,7 @@ def ForwardChecking(problem, logger=None, min_safe_dist=None, debug=False):
         }
 
     if logger:
-        logger.log(f"❌ Không tìm thấy đường đi sau {nodes_counter[0]} nút.")
+        logger.log(f" Không tìm thấy đường đi sau {nodes_counter[0]} nút.")
     return {
         "path": None,
         "nodes_expanded": nodes_counter[0],

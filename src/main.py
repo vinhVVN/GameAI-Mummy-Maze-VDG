@@ -8,7 +8,7 @@ from src.character import Player, Mummy
 from src.ui import *
 from src.popup import AlgorithmPopup
 from src.settings import SOUNDS_PATH
-from src.mazeproblem import MazeProblem, SimpleMazeProblem 
+from src.mazeproblem import MazeProblem, SimpleMazeProblem, CSPMazeProblem
 from src.mazeproblem import AdversarialMazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
@@ -23,7 +23,7 @@ from src.algorithms.a_star_belief import AStar_Belief
 from src.algorithms.partial_observation import PartialObservationProblem
 from src.algorithms.backtracking import Backtracking
 from src.algorithms.and_or_search import AND_OR_Search
-from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded
+from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded, AC3_with_backtracking
 from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 from src.algorithms.forward_checking import ForwardChecking
 from src.algorithms.minimax_alpha_beta import MinimaxAlphaBeta
@@ -61,6 +61,10 @@ class Game:
         ]    
         self.player_algo = "BFS"
         self.mummy_algo = "classic"
+        self.mummy_enabled = True  # Trạng thái mummy: True = bật, False = tắt
+        
+        # Tự động tắt mummy cho thuật toán BFS (mặc định)
+        self._auto_set_mummy_state()
 
         
         self.panel = Panel(MAZE_PANEL_WIDTH, 0, CONTROL_PANEL_WIDTH, SCREEN_HEIGHT)
@@ -115,6 +119,7 @@ class Game:
         self.is_player_turn = True
         self.is_waiting = False
         self.current_mummy_index = 0
+        self.mummy_enabled = True  # Reset trạng thái mummy về bật
         self.log_panel.clear()
         self.logger.clear()
         
@@ -141,6 +146,9 @@ class Game:
                 for widget in self.panel.widgets:
                     if hasattr(widget, 'text') and widget.text.startswith("Player:"):
                         widget.text = f"Player: {self.player_algo}"
+                
+                # Tự động tắt/bật mummy dựa trên thuật toán
+                self._auto_set_mummy_state()
                 print(f"Đã chọn thuật toán: {new_algo}")
 
         def toggle_mummy_algo():
@@ -172,15 +180,25 @@ class Game:
         def reset_game_btn():
             self.reset_game()
 
+        def toggle_mummy():
+            self.mummy_enabled = not self.mummy_enabled
+            for widget in self.panel.widgets:
+                if hasattr(widget, 'text') and widget.text.startswith("Mummy:"):
+                    widget.text = f"Mummy: {'ON' if self.mummy_enabled else 'OFF'}"
+            print(f"Mummy {'bật' if self.mummy_enabled else 'tắt'}")
+
+
         
         btn_reset = Button(btn_x, 350, btn_w, btn_h, "Reset", reset_game_btn)
         btn_player_algo = Button(btn_x, 100, btn_w, btn_h, f"Player: {self.player_algo}", toggle_player_algo)
+        btn_mummy_toggle = Button(btn_x, 150, btn_w, btn_h, f"Mummy: {'ON' if self.mummy_enabled else 'OFF'}", toggle_mummy)
         # compare_button = Button(btn_x, 150, btn_w, btn_h, "Compare", command=lambda: self.set_screen("COMPARISON"))
         btn_change_map = Button(btn_x, 200, btn_w, btn_h, self.maze.map_name, change_map)
         btn_start = Button(btn_x, 300, btn_w, btn_h, "Start", start_ai)
         
         
         self.panel.add_widget(btn_player_algo)
+        self.panel.add_widget(btn_mummy_toggle)
         # self.panel.add_widget(compare_button)
         self.panel.add_widget(btn_change_map)
         self.panel.add_widget(btn_start)
@@ -216,10 +234,10 @@ class Game:
         elif self.player_algo == "Forward Checking":
             initial_state = ((self.player.grid_x, self.player.grid_y),
                         tuple(sorted(mummy_positions)))
-            problem = MazeProblem(self.maze, 
+            problem = CSPMazeProblem(self.maze, 
                             initial_state,
                             (gx, gy), 
-                            self.maze.trap_pos)
+                            100)
             
         elif self.player_algo == "Minimax":
             initial_state = ((self.player.grid_x, self.player.grid_y),
@@ -267,56 +285,19 @@ class Game:
             
             algorithm = MinimaxAlphaBeta(problem, logger=self.logger)
             result = algorithm.solve()  # List actions
-        else:
-            print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
-            result = None
 
-        if self.player_algo == "AC3+BT":
-            # Build time-expanded CSP with a reasonable horizon (upper bound steps)
+        elif self.player_algo == "AC3+BT":
             gx, gy = self.maze.calculate_stair()
             start = (self.player.grid_x, self.player.grid_y)
             goal = (gx, gy)
             # Simple upper bound: Manhattan distance in cell units (grid step=2), times a factor
             manh = abs(start[0]-goal[0]) + abs(start[1]-goal[1])
             horizon = max(1, manh // 2 + 8)
-            csp = build_path_csp_timeexpanded(self.maze, start, goal, horizon)
-            ac3_info = AC3(csp, logger=self.logger)
-            # Extract a feasible plan by greedy advancing within filtered domains
-            plan = []
-            current = start
-            for t in range(horizon):
-                next_domain = csp.domains[("X", t+1)]
-                # Prefer neighbor that is valid step from current and closer to goal
-                candidates = []
-                for pos in next_domain:
-                    dx = abs(pos[0]-current[0])
-                    dy = abs(pos[1]-current[1])
-                    if (dx==0 and dy==0) or (dx==2 and dy==0) or (dx==0 and dy==2):
-                        candidates.append(pos)
-                if not candidates:
-                    break
-                # pick candidate that minimizes manhattan to goal
-                candidates.sort(key=lambda p: abs(p[0]-goal[0]) + abs(p[1]-goal[1]))
-                nxt = candidates[0]
-                # convert move to action
-                if nxt == current:
-                    action = None
-                elif nxt[0] == current[0] and nxt[1] == current[1]-2:
-                    action = "UP"
-                elif nxt[0] == current[0] and nxt[1] == current[1]+2:
-                    action = "DOWN"
-                elif nxt[0] == current[0]+2 and nxt[1] == current[1]:
-                    action = "RIGHT"
-                elif nxt[0] == current[0]-2 and nxt[1] == current[1]:
-                    action = "LEFT"
-                else:
-                    action = None
-                if action:
-                    plan.append(action)
-                current = nxt
-                if current == goal:
-                    break
-            result = {"path": plan, "nodes_expanded": ac3_info.get("steps"), "time_taken": ac3_info.get("time_taken")}
+            result = AC3_with_backtracking(self.maze, start, goal, horizon, logger=self.logger)
+
+        else:
+            print(f"Thuật toán {self.player_algo} chưa được hỗ trợ!")
+            result = None
 
         summary_data = {
             "Algorithm": self.player_algo,
@@ -439,69 +420,67 @@ class Game:
                     if self.player.move(dx, dy, self.maze, self.maze.cell_size):
                         print("Người đi")
                         self.start_wait()
-                        # SỬA: Sử dụng tên chính xác
-
-                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking", "AC3+BT",]:
-                            self.is_player_turn = True
+                        # Chuyển lượt dựa trên trạng thái mummy
+                        if self.mummy_enabled:
+                            self.is_player_turn = False  # Chuyển sang lượt mummy
                         else:
-                            self.is_player_turn = False
+                            self.is_player_turn = True   # Tiếp tục lượt player
                     else:
                         self.start_wait()
-                        if self.player_algo in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking", "AC3+BT",]:
-                            self.is_player_turn = True
+                        if self.mummy_enabled:
+                            self.is_player_turn = False  # Chuyển sang lượt mummy
                         else:
-                            self.is_player_turn = False
+                            self.is_player_turn = True   # Tiếp tục lượt player
                 else:
                     self.ai_mode_active = False
                     print("AI đã chạy xong!")
 
-        # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking", "AC3+BT",]:
-            if not self.is_player_turn and not self.player.is_moving:
-                if not self.mummies:
-                    self.is_player_turn = True
-                    return
-                
-                current_mummy = self.mummies[self.current_mummy_index]
-                if not current_mummy.path:
-                    player_pos = (self.player.grid_x, self.player.grid_y)
-                    if self.mummy_algo == "classic":
-                        actions = current_mummy.classic_move(player_pos, self.maze)
-                    else:
-                        problem = MazeProblem(self.maze,
-                                            ((current_mummy.grid_x, current_mummy.grid_y),
-                                            (self.player.grid_x, self.player.grid_y)),
-                                            player_pos,
-                                            self.maze.trap_pos)
-                        actions = BFS(problem)
-                        
-                    if actions:
-                        current_mummy.path = actions
-                        print(actions)
-                
-                if current_mummy.path:
-                    action = current_mummy.path.pop(0)
-                    dx, dy = 0, 0
-                    if action == "UP":
-                        dy = -2
-                    elif action == "DOWN":
-                        dy = 2
-                    elif action == "LEFT":
-                        dx = -2
-                    elif action == "RIGHT":
-                        dx = 2
-
-                    print(f"Mummy {self.current_mummy_index + 1} at ({current_mummy.grid_x}, {current_mummy.grid_y}) moves {action}")
-                    current_mummy.move(dx, dy, self.maze, self.maze.cell_size)
-                    self.handle_mummy_collisions()
-                        
-                if not current_mummy.path:
-                    self.current_mummy_index += 1
-                    self.start_wait() 
+        # Xử lý di chuyển mummy cho tất cả thuật toán khi mummy được bật
+        if self.mummy_enabled and not self.is_player_turn and not self.player.is_moving:
+            if not self.mummies:
+                self.is_player_turn = True
+                return
+            
+            current_mummy = self.mummies[self.current_mummy_index]
+            if not current_mummy.path:
+                player_pos = (self.player.grid_x, self.player.grid_y)
+                if self.mummy_algo == "classic":
+                    actions = current_mummy.classic_move(player_pos, self.maze)
+                else:
+                    problem = MazeProblem(self.maze,
+                                        ((current_mummy.grid_x, current_mummy.grid_y),
+                                        (self.player.grid_x, self.player.grid_y)),
+                                        player_pos,
+                                        self.maze.trap_pos)
+                    actions = BFS(problem)
                     
-                    if self.current_mummy_index >= len(self.mummies):
-                        self.current_mummy_index = 0
-                        self.is_player_turn = True
+                if actions:
+                    current_mummy.path = actions
+                    print(actions)
+            
+            if current_mummy.path:
+                action = current_mummy.path.pop(0)
+                dx, dy = 0, 0
+                if action == "UP":
+                    dy = -2
+                elif action == "DOWN":
+                    dy = 2
+                elif action == "LEFT":
+                    dx = -2
+                elif action == "RIGHT":
+                    dx = 2
+
+                print(f"Mummy {self.current_mummy_index + 1} at ({current_mummy.grid_x}, {current_mummy.grid_y}) moves {action}")
+                current_mummy.move(dx, dy, self.maze, self.maze.cell_size)
+                self.handle_mummy_collisions()
+                    
+            if not current_mummy.path:
+                self.current_mummy_index += 1
+                self.start_wait() 
+                
+                if self.current_mummy_index >= len(self.mummies):
+                    self.current_mummy_index = 0
+                    self.is_player_turn = True
 
         # Kiểm tra win condition
         if ((self.player.grid_x, self.player.grid_y) == self.maze.calculate_stair()):
@@ -527,8 +506,8 @@ class Game:
                     pygame.time.delay(2000)
                 self.reset_game()
 
-        # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking", "AC3+BT",]:
+        # Kiểm tra va chạm với mummy nếu mummy được bật (cho tất cả thuật toán)
+        if self.mummy_enabled:
             for mummy in self.mummies:
                 if (self.player.grid_x == mummy.grid_x and self.player.grid_y == mummy.grid_y):
                     print("Game Over - bị ma bắt")
@@ -547,8 +526,8 @@ class Game:
         self.draw_path(self.screen)
         self.player.draw(self.screen)
         
-        # SỬA: Sử dụng tên chính xác
-        if self.player_algo not in ["BFS", "IDS", "DFS", "PO_search", "AND_OR","Non_infor", "Forward Checking","Backtracking", "AC3+BT",]:
+        # Vẽ mummy nếu được bật (cho tất cả thuật toán)
+        if self.mummy_enabled:
             for mummy in self.mummies:
                 mummy.draw(self.screen)
         
@@ -595,7 +574,7 @@ class Game:
         current_map_name = self.maze.map_name
         self.maze = Maze(current_map_name)
 
-        # Reset player & mummies về vị trí gốc từ file
+        # Reset player & mummies về vị trí gốc
         cell_size = self.maze.cell_size
 
         player_x, player_y = self.maze.player_start_pos
@@ -693,6 +672,30 @@ class Game:
                 "RIGHT": pygame.Surface((new_size, new_size), pygame.SRCALPHA)
             }
             
+    def _auto_set_mummy_state(self):
+        """Tự động tắt/bật mummy dựa trên thuật toán được chọn"""
+        # Danh sách các thuật toán tìm đường (mummy mặc định TẮT)
+        pathfinding_algorithms = [
+            "BFS", "IDS", "DFS", "PO_search", "AND_OR", "Non_infor", 
+            "Forward Checking", "Backtracking", "AC3+BT", "A*", "UCS", 
+            "Greedy", "Hill Climbing", "Simulated Annealing", "Beam Search"
+        ]
+        
+        # Tự động tắt mummy cho các thuật toán tìm đường
+        if self.player_algo in pathfinding_algorithms:
+            self.mummy_enabled = False
+        else:
+            # Các thuật toán khác (Minimax, Adversarial) mummy mặc định BẬT
+            self.mummy_enabled = True
+        
+        # Cập nhật text nút mummy (nếu panel đã được khởi tạo)
+        if hasattr(self, 'panel') and self.panel:
+            for widget in self.panel.widgets:
+                if hasattr(widget, 'text') and widget.text.startswith("Mummy:"):
+                    widget.text = f"Mummy: {'ON' if self.mummy_enabled else 'OFF'}"
+        
+        print(f"Tự động {'tắt' if not self.mummy_enabled else 'bật'} mummy cho thuật toán {self.player_algo}")
+
     def toggle_log_panel(self):
         self.log_panel_expanded = not self.log_panel_expanded
         
