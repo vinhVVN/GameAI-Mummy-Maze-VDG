@@ -110,9 +110,9 @@ def get_neighbor(problem, path):
     if not neighbor_costs:
         return get_a_neighbor(path)
     
-    scores = [1.0 / (item[1] + 1) for item in neighbor_costs] # tính xác suất chọn
-    paths = [item[0] for item in neighbor_costs]
-    chosen_path = random.choices(paths, weights=scores, k=1)[0]
+    min_cost = min(cost for _, cost in neighbor_costs)
+    best_paths = [neighbor for neighbor, cost in neighbor_costs if cost == min_cost]
+    chosen_path = random.choice(best_paths)
     
     return chosen_path
 

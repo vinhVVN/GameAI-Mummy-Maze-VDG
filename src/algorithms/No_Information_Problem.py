@@ -3,7 +3,7 @@ import random
 from collections import deque
 
 class NoInformationProblem:
-    def __init__(self, maze, initial_positions_count=3):
+    def __init__(self, maze, initial_positions_count=2):
         self.maze = maze
         self.goal_pos = maze.calculate_stair()
         
