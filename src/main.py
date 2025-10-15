@@ -8,7 +8,7 @@ from src.character import Player, Mummy
 from src.ui import *
 from src.popup import AlgorithmPopup
 from src.settings import SOUNDS_PATH
-from src.mazeproblem import MazeProblem, SimpleMazeProblem 
+from src.mazeproblem import MazeProblem, SimpleMazeProblem, CSPMazeProblem
 from src.mazeproblem import AdversarialMazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
@@ -234,10 +234,10 @@ class Game:
         elif self.player_algo == "Forward Checking":
             initial_state = ((self.player.grid_x, self.player.grid_y),
                         tuple(sorted(mummy_positions)))
-            problem = MazeProblem(self.maze, 
+            problem = CSPMazeProblem(self.maze, 
                             initial_state,
                             (gx, gy), 
-                            self.maze.trap_pos)
+                            100)
             
         elif self.player_algo == "Minimax":
             initial_state = ((self.player.grid_x, self.player.grid_y),

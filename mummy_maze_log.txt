@@ -1,6 +1,1 @@
 --- New Session Started ---
- SUCCESS! Tìm được đường đi (7 bước, 8 nút mở rộng)
-Algorithm: Forward Checking
-Time (s): 0.0040
-Nodes/Iter: 8
-Path Length: 7
