@@ -9,7 +9,6 @@ from src.ui import *
 from src.popup import AlgorithmPopup
 from src.settings import SOUNDS_PATH
 from src.mazeproblem import MazeProblem, SimpleMazeProblem, CSPMazeProblem
-from src.mazeproblem import AdversarialMazeProblem
 from src.algorithms.bfs import BFS
 from src.algorithms.ucs import UCS
 from src.algorithms.ids import IDS
@@ -26,7 +25,6 @@ from src.algorithms.and_or_search import AND_OR_Search
 from src.algorithms.ac3 import AC3, build_path_csp_timeexpanded, AC3_with_backtracking
 from src.algorithms.No_Information_Problem import NoInformationProblem, BFS_NoInformation_Limited
 from src.algorithms.forward_checking import ForwardChecking
-from src.algorithms.minimax_alpha_beta import MinimaxAlphaBeta
 from src.map_editor import open_map_editor
 
 class Game:
@@ -239,11 +237,6 @@ class Game:
                             (gx, gy), 
                             100)
             
-        elif self.player_algo == "Minimax":
-            initial_state = ((self.player.grid_x, self.player.grid_y),
-                            tuple(sorted([(m.grid_x, m.grid_y) for m in self.mummies])))
-            problem = AdversarialMazeProblem(self.maze, initial_state, (gx, gy), self.maze.trap_pos, max_depth=12)
-        
         else:
             initial_state = ((self.player.grid_x, self.player.grid_y),
                             tuple(sorted(mummy_positions)))
@@ -281,10 +274,6 @@ class Game:
         elif self.player_algo == "Backtracking":
             result = Backtracking(self.maze, initial_state,
                                   self.maze.calculate_stair(),logger = self.logger)
-        elif self.player_algo == "Minimax":
-            
-            algorithm = MinimaxAlphaBeta(problem, logger=self.logger)
-            result = algorithm.solve()  # List actions
 
         elif self.player_algo == "AC3+BT":
             gx, gy = self.maze.calculate_stair()
@@ -685,7 +674,6 @@ class Game:
         if self.player_algo in pathfinding_algorithms:
             self.mummy_enabled = False
         else:
-            # Các thuật toán khác (Minimax, Adversarial) mummy mặc định BẬT
             self.mummy_enabled = True
         
         # Cập nhật text nút mummy (nếu panel đã được khởi tạo)

@@ -60,9 +60,5 @@ class GameConfig:
             ("Backtracking", "Khám phá và quay lui khi gặp ngõ cụt", (255, 215, 0)),
             ("AC3+BT", "AC-3 thu hẹp miền + Backtracking tìm đường", (100, 180, 255)),
             ("Forward Checking", "Giống như backtracking nhưng kiểm tra lại tập giá trị sau mỗi lần đi", (144, 69, 19))
-        ],
-        "TÌM KIẾM ĐỐI KHÁNG " :[    
-            ("Minimax", "Minimax + cắt tỉa alpha-beta ", (144, 74, 24)),
         ]
-        
     }
