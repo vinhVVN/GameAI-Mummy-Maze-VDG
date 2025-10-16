@@ -89,7 +89,7 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 - **Ý tưởng:** Mở rộng theo từng tầng; tối ưu khi chi phí bước đồng nhất.  
 - **Độ phức tạp:** Thời gian `O(b^d)`; Không gian `O(b^d)`.  
 - **Ưu/nhược:** Tối ưu độ dài đường đi; **rất tốn bộ nhớ**.
-<p align="center"><img src="assets/images/gif/bfs.gif" alt="BFS" width="420"></p>
+<p align="center"><img src="assets/images/GIF/bfs.gif" alt="BFS" width="420"></p>
 
 ---
 
@@ -97,7 +97,7 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 - **Ý tưởng:** Đi sâu nhất có thể rồi quay lui khi bế tắc.  
 - **Độ phức tạp:** Thời gian `O(b^m)`; Không gian `O(bm)`.  
 - **Ưu/nhược:** **Ít bộ nhớ**, cài đặt đơn giản; **không tối ưu**, dễ lạc hướng.
-<p align="center"><img src="assets/images/gif/dfs.gif" alt="DFS" width="420"></p>
+<p align="center"><img src="assets/images/GIF/dfs.gif" alt="DFS" width="420"></p>
 
 ---
 
@@ -105,7 +105,7 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 - **Ý tưởng:** Lặp DFS với **giới hạn độ sâu tăng dần**, kết hợp ưu điểm BFS/DFS.  
 - **Độ phức tạp:** Gần `O(b^d)` về thời gian; không gian như DFS.  
 - **Ưu/nhược:** **Đầy đủ & tối ưu** khi cost đồng nhất; mở lại các nút tầng nông nhiều lần.
-<p align="center"><img src="assets/images/gif/ids.gif" alt="IDS" width="420"></p>
+<p align="center"><img src="assets/images/GIF/ids.gif" alt="IDS" width="420"></p>
 
 ---
 
@@ -113,7 +113,7 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 - **Ý tưởng:** Luôn mở rộng nút có **chi phí tích lũy nhỏ nhất** `g(n)`.  
 - **Hàm đánh giá:** `f(n) = g(n)` (cost thực).  
 - **Ưu/nhược:** **Tối ưu** cho mọi cost dương; có thể **chậm** khi nhiều nhánh có cost gần nhau.
-<p align="center"><img src="assets/images/gif/ucs.gif" alt="UCS" width="420"></p>
+<p align="center"><img src="assets/images/GIF/ucs.gif" alt="UCS" width="420"></p>
 
 ---
 
@@ -124,9 +124,9 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 - **Hàm đánh giá:** `f(n) = h(n)`.  
 - **Ưu/nhược:** **Rất nhanh**, hướng đích tốt; **không tối ưu**, dễ “thiển cận”.
 <p align="center">
-    <img src="assets/images/gif/greedy.gif" alt="Greedy" width="420">
+    <img src="assets/images/GIF/greedy.gif" alt="Greedy" width="420">
     <br>
-    <img src="assets/images/gif/greedy2.gif" alt="Greedy" width="420">
+    <img src="assets/images/GIF/greedy2.gif" alt="Greedy" width="420">
 </p>
 
 ---
@@ -135,7 +135,7 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 - **Ý tưởng:** Cân bằng chi phí thật và ước lượng.  
 - **Hàm đánh giá:** `f(n) = g(n) + h(n)`.  
 - **Ưu/nhược:** **Tối ưu** nếu `h` không vượt/nhất quán; **tốn RAM** hơn Greedy.
-<p align="center"><img src="assets/images/gif/astar.gif" alt="A*" width="420"></p>
+<p align="center"><img src="assets/images/GIF/astar.gif" alt="A*" width="420"></p>
 
 ---
 
@@ -144,7 +144,7 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 #### 🔹 **Beam Search**
 - **Ý tưởng:** Mỗi tầng chỉ giữ **k** ứng viên tốt nhất theo `h(n)` (beam width).  
 - **Ưu/nhược:** Tiết kiệm bộ nhớ, tốc độ tốt; có thể **loại sớm** đường tối ưu.
-<p align="center"><img src="assets/images/gif/beam.gif" alt="Beam Search" width="420"></p>
+<p align="center"><img src="assets/images/GIF/beam.gif" alt="Beam Search" width="420"></p>
 
 ---
 
@@ -153,14 +153,14 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 #### 🔹 **Hill-Climbing (HC)**
 - **Ý tưởng:** Luôn chuyển sang láng giềng cải thiện mục tiêu (giảm `f`/tăng điểm).  
 - **Ưu/nhược:** **Nhanh, rất ít bộ nhớ**; **dễ kẹt** cực trị cục bộ/plateau.
-<p align="center"><img src="assets/images/gif/hc.gif" alt="Hill Climbing" width="420"></p>
+<p align="center"><img src="assets/images/GIF/hc.gif" alt="Hill Climbing" width="420"></p>
 
 ---
 
 #### 🔹 **Simulated Annealing (SA)**
 - **Ý tưởng:** Cho phép nhận bước kém hơn với xác suất `P = e^(−ΔE/T)` để thoát kẹt; `T` giảm dần.  
 - **Ưu/nhược:** Dễ **thoát kẹt** hơn HC; phụ thuộc **lịch nhiệt**.
-<p align="center"><img src="assets/images/gif/sa.gif" alt="Simulated Annealing" width="420"></p>
+<p align="center"><img src="assets/images/GIF/sa.gif" alt="Simulated Annealing" width="420"></p>
 
 ---
 
@@ -169,42 +169,42 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 #### 🔹 **AND-OR Search** *(Non-Deterministic Environment)*
 - **Ý tưởng:** Mô hình cây **OR** (chọn hành động) và **AND** (mọi kết cục/phụ thuộc phải thoả). Phù hợp khi môi trường có nhiều khả năng, nhiều tác nhân/luật.  
 - **Ưu/nhược:** Lập kế hoạch có điều kiện; triển khai phức tạp hơn tìm đường tuyến tính.
-<p align="center"><img src="assets/images/gif/and_or.gif" alt="AND-OR Search" width="420"></p>
+<p align="center"><img src="assets/images/GIF/and_or.gif" alt="AND-OR Search" width="420"></p>
 
 ---
 
 #### 🔹 **Belief-State Search** *(Tìm kiếm trong không gian niềm tin)*
 - **Ý tưởng:** Khi **thiếu quan sát**, trạng thái là **tập các khả năng**. Kế hoạch phải thành công cho **mọi** trạng thái có thể.  
 - **Ưu/nhược:** Khái quát hoá tốt partial/ẩn thông tin; **không gian trạng thái bùng nổ**.
-<p align="center"><img src="assets/images/gif/belief.gif" alt="Belief-State Search" width="420"></p>
+<p align="center"><img src="assets/images/GIF/belief.gif" alt="Belief-State Search" width="420"></p>
 
 ---
 
 #### 🔹 **Partial Observation**
 - **Ý tưởng:** Chỉ biết một phần bản đồ/bẫy/đối thủ; cần chiến lược **khám phá + an toàn** (thường biểu diễn qua belief state).  
 - **Ưu/nhược:** Thực tế hơn; đòi hỏi xử lý **bất định** và cập nhật tri thức liên tục.
-<p align="center"><img src="assets/images/gif/po.gif" alt="Partial Observation" width="420"></p>
+<p align="center"><img src="assets/images/GIF/po.gif" alt="Partial Observation" width="420"></p>
 
 ---
 
 #### 🔹 **Backtracking (CSP)**
 - **Ý tưởng:** Mô hình hoá đường đi như **chuỗi biến theo thời gian** `X₀..X_T`; thử-sai và quay lui khi vi phạm ràng buộc (kề hợp lệ/không xuyên tường/không vào bẫy/đến Goal).  
 - **Ưu/nhược:** Dễ cài đặt; có thể **rất chậm** nếu không cắt tỉa tốt.
-<p align="center"><img src="assets/images/gif/backtracking.gif" alt="Backtracking" width="420"></p>
+<p align="center"><img src="assets/images/GIF/backtracking.gif" alt="Backtracking" width="420"></p>
 
 ---
 
 #### 🔹 **Forward Backtracking (CSP có suy diễn tiến)**
 - **Ý tưởng:** Kết hợp backtracking với **forward checking / inference** để **cắt tỉa trước** domain các biến chưa gán, giảm lỗi muộn.  
 - **Ưu/nhược:** Nhanh hơn backtracking thuần; chi phí suy diễn tăng thêm.
-<p align="center"><img src="assets/images/gif/forwardbacktracking.gif" alt="Forward Backtracking" width="420"></p>
+<p align="center"><img src="assets/images/GIF/forwardbacktracking.gif" alt="Forward Backtracking" width="420"></p>
 
 ---
 
 #### 🔹 **Arc Consistency (AC-3)**
 - **Ý tưởng:** Duy trì **nhất quán cung**: với mọi giá trị của `Xi` phải tồn tại giá trị tương thích ở `Xj`; lặp cho đến khi ổn định để **thu hẹp domain** trước/khi tìm kiếm.  
 - **Ưu/nhược:** Giảm mạnh không gian tìm kiếm; có thể **tốn thời gian tiền xử lý** trên đồ thị ràng buộc dày.
-<p align="center"><img src="assets/images/gif/ac3.gif" alt="AC-3" width="420"></p>
+<p align="center"><img src="assets/images/GIF/ac3.gif" alt="AC-3" width="420"></p>
 
 ---
 
