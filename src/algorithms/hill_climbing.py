@@ -61,17 +61,22 @@ def HillClimbing(problem, logger=None):
         path.insert(0, act)
         cur = prev
 
+    # Log kết quả
     if logger:
-        logger.log(f"Đường đi đạt được ({len(path)} bước): {path}")
+        if problem.is_goal_state(current):
+            logger.log(f"Đạt goal! Đường đi ({len(path)} bước): {path}")
+        else:
+            logger.log(f"Dừng tại local optimum sau {iteration} bước. Đường đi tạm thời ({len(path)} bước): {path}")
 
     # In ra nếu cần
     print("Đường đi đạt được:")
-    print(" → ".join(map(str, path)))
+    print(" → ".join(map(str, path)) if path else "(Trống)")
 
     # ---- trả về kết quả ----
     return {
-        "path": path if problem.is_goal_state(current) else None,
+        "path": path,  #  Luôn trả lại đường đi dù chưa tới goal
         "nodes_expanded": iteration,
         "time_taken": end_time - start_time,
-        "path_length": len(path)
+        "path_length": len(path),
+        "reached_goal": problem.is_goal_state(current)
     }
