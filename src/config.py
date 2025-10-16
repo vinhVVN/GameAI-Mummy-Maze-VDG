@@ -42,7 +42,7 @@ class GameConfig:
             ("IDS", "Tìm kiếm theo chiều sâu lặp", (70, 130, 180)),
         ],
         "TÌM KIẾM CÓ THÔNG TIN": [
-            ("AStart", "Tìm đường thông minh kết hợp chi phí và heuristic", (255, 165, 0)),
+            ("AStar", "Tìm đường thông minh kết hợp chi phí và heuristic", (255, 165, 0)),
             ("Greedy", "Tìm đường dựa trên heuristic", (255, 215, 0)),
             ("UCS", "Tìm đường với chi phí tích lũy nhỏ nhất", (100, 149, 237)),
         ],
