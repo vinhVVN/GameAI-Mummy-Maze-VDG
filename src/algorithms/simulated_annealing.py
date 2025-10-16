@@ -24,7 +24,7 @@ def cost_path(problem, path):
     if not problem.is_goal_state(current_state):
         return float('inf')
     
-    return total_cost
+    return total_cost + problem.heuristic(current_state)
 
 def swap_adjacent_moves(path):
     #Hoán đổi hai hành động liền kề
