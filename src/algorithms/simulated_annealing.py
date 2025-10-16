@@ -207,7 +207,7 @@ def optimize_path(problem, path): # Loại bỏ chu trình
     if not path:
         return []
 
-    # mô phỏng và lấy ra danh sách các trạng thái đã đi qua
+    # lấy ra danh sách các trạng thái 
     states_along_path = [problem.get_init_state()]
     current_state = problem.get_init_state()
     
@@ -217,21 +217,21 @@ def optimize_path(problem, path): # Loại bỏ chu trình
         for next_state_sim, action_sim, _ in moves:
             if action_sim == action:
                 current_state = next_state_sim
-                states_along_path.append(current_state)
+                states_along_path.append(next_state_sim)
                 found_move = True
                 break
         if not found_move:
             break 
     
-    # loại bỏ chu trình khỏi danh sách các trạng thái
+    # loại bỏ chu trình 
     optimized_states = []
     visited_set = set()
     for state in states_along_path:
         if state in visited_set:
-            # Chu trình được phát hiện. Quay lại vị trí lần đầu ghé thăm
+            # quay lại vị trí lần đầu ghé thăm
             first_visit_index = optimized_states.index(state)
             
-            # Xóa các trạng thái thừa ra khỏi cả list và set
+            # xóa các trạng thái thừa 
             states_to_remove = optimized_states[first_visit_index + 1:]
             for s in states_to_remove:
                 visited_set.remove(s)
@@ -240,13 +240,12 @@ def optimize_path(problem, path): # Loại bỏ chu trình
             optimized_states.append(state)
             visited_set.add(state)
             
-    # chuyển đổi danh sách trạng thái đã tối ưu thành chuỗi hành động
+    # chuyển đổi thành chuỗi hành động
     final_path = []
     for i in range(len(optimized_states) - 1):
         state1 = optimized_states[i]
         state2 = optimized_states[i+1]
-        
-        # Tìm hành động để đi từ state1 đến state2
+    
         moves = problem.get_move(state1)
         action_found = False
         for next_state, action, _ in moves:
