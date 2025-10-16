@@ -125,7 +125,7 @@ class Player(Character):
 
 class Mummy(Character):
     def __init__(self, start_pos_x, start_pos_y, maze_size, cell_size):
-        sprite_path = os.path.join(IMAGES_PATH, f"mummy_white{maze_size}.png")
+        sprite_path = os.path.join(IMAGES_PATH, f"mummy{maze_size}.png")
         super().__init__(sprite_path, start_pos_x, start_pos_y, cell_size)
         self.move_turns = 0
         self.path = []

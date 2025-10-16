@@ -40,7 +40,6 @@ class MapEditor:
                  for c in range(self.grid_size)] for r in range(self.grid_size)]
 
     def expand_to_file_format(self):
-        # trả về map_data hiện tại (không tự động thêm tường)
         return [row[:] for row in self.map_data]
 
     def entry(self, placeholder):
@@ -92,7 +91,6 @@ class MapEditor:
             self.buttons.append(btn)
             btn_y += 50
         
-        # Nút vẽ tường
         def draw_vertical_wall():
             self.selected_tool = 'vertical_wall'
             print("Selected tool: Vertical Wall")

@@ -1,1 +1,66 @@
---- New Session Started ---
+----------------------
+Bắt đầu với độ sâu thứ 0
+Bắt đầu với độ sâu thứ 1
+Bắt đầu với độ sâu thứ 2
+  Depth 1: Visiting (5, 7)
+Bắt đầu với độ sâu thứ 3
+  Depth 0: Visiting (3, 1)
+    -> Cutoff at (3, 1)
+  Depth 0: Visiting (7, 5)
+    -> Cutoff at (7, 5)
+Bắt đầu với độ sâu thứ 4
+  Depth 3: Visiting (5, 3)
+  Depth 1: Visiting (9, 3)
+  Depth 1: Visiting (7, 5)
+  Depth 1: Visiting (3, 1)
+Bắt đầu với độ sâu thứ 5
+  Depth 3: Visiting (5, 1)
+  Depth 0: Visiting (11, 1)
+    -> Cutoff at (11, 1)
+  Depth 0: Visiting (11, 1)
+    -> Cutoff at (11, 1)
+  Depth 1: Visiting (1, 9)
+  Depth 0: Visiting (5, 11)
+    -> Cutoff at (5, 11)
+  Depth 3: Visiting (3, 3)
+  Depth 3: Visiting (1, 5)
+Bắt đầu với độ sâu thứ 6
+  Depth 1: Visiting (3, 5)
+  Depth 0: Visiting (9, 5)
+    -> Cutoff at (9, 5)
+  Depth 0: Visiting (9, 9)
+    -> Cutoff at (9, 9)
+  Depth 0: Visiting (5, 1)
+    -> Cutoff at (5, 1)
+  Depth 4: Visiting (3, 7)
+  Depth 1: Visiting (1, 7)
+  Depth 1: Visiting (9, 3)
+  Depth 2: Visiting (9, 9)
+  Depth 1: Visiting (13, 7)
+  Depth 1: Visiting (5, 3)
+  Depth 2: Visiting (1, 9)
+Bắt đầu với độ sâu thứ 7
+  Depth 4: Visiting (3, 1)
+  Depth 0: Visiting (3, 5)
+    -> Cutoff at (3, 5)
+  Depth 0: Visiting (11, 5)
+    -> Cutoff at (11, 5)
+  Depth 0: Visiting (9, 11)
+    -> Cutoff at (9, 11)
+  Depth 0: Visiting (11, 5)
+    -> Cutoff at (11, 5)
+  Depth 1: Visiting (13, 1)
+  Depth 0: Visiting (11, 5)
+    -> Cutoff at (11, 5)
+  Depth 1: Visiting (1, 13)
+  Depth 3: Visiting (1, 9)
+  Depth 5: Visiting (7, 7)
+  Depth 0: Visiting (11, 1)
+    -> Cutoff at (11, 1)
+  Depth 0: Visiting (3, 9)
+    -> Cutoff at (3, 9)
+SUCCESS! Tìm thấy đường đi ở độ sâu thứ 7.
+Algorithm: IDS
+Time (s): 0.0019
+Nodes/Iter: 374
+Path Length: 7
