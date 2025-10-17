@@ -259,3 +259,21 @@ MummyGame/
 ├── README.md
 └── run_game.py
 ```
+### 4.2. **Giao diện chương trình**
+**Giao diện Home*
+<img width="917" height="717" alt="image" src="https://github.com/user-attachments/assets/2f0cf4be-79f4-4189-a435-00d28bc804d1" />
+**Giao diện game*
+<img width="975" height="579" alt="image" src="https://github.com/user-attachments/assets/bcbb6870-74f3-441b-a7a7-2d6611485201" />
+**Giao diện chọn thuật toán*
+<img width="925" height="553" alt="image" src="https://github.com/user-attachments/assets/5b85438f-5130-4a2e-92cf-3677f5700b3d" />
+**Giao diện chọn map*
+<img width="895" height="537" alt="image" src="https://github.com/user-attachments/assets/d189386d-ac86-45b9-9e1d-932f42259448" />
+**Giao diện tạo map*
+<img width="905" height="672" alt="image" src="https://github.com/user-attachments/assets/bffa9d9b-52f9-4cdf-932b-874939021f34" />
+### 4.3. **Hướng dẫn cài đặt chương trình**
+- Bước 1: Tải toàn bộ chương trình về từ github
+- Bước 2: Cài đặt các thư viện yêu cầu bằng lệnh:
+pip install -r requirements.txt
+- Bước 3: Chạy file run_game.py bằng giao diện hoặc bằng lệnh (phải vào thư mục có chứa tệp): python run_game.py
+
+
