@@ -260,7 +260,7 @@ class Game:
             "IDS": IDS,
             "Greedy": Greedy,
             "DFS": DFS,
-            "AStart": AStar,
+            "AStar": AStar,
             "Hill climbing": HillClimbing,
             "Beam": Beam,
             "SA": Simulated_Annealing,
