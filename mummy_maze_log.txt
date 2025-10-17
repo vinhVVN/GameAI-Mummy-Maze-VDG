@@ -1,169 +1,61 @@
 ----------------------
-Iter 10: T=913.5, E =3251.16, E'=3251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 20: T=826.2, E =2751.16, E'=2751.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 30: T=747.2, E =2751.16, E'=2751.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 40: T=675.7, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 50: T=611.1, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 60: T=552.7, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 70: T=499.8, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 80: T=452.0, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 90: T=408.8, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 100: T=369.7, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 110: T=334.4, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 120: T=302.4, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 130: T=273.5, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 140: T=247.3, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 150: T=223.7, E =1251.16, E'=1251.16, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 160: T=202.3, E =260.62, E'=260.62, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 170: T=183.0, E =263.02, E'=763.02, dE =500.00, p =0.065, Status: REJECT
-Iter 180: T=165.5, E =262.90, E'=262.90, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 190: T=149.6, E =267.35, E'=267.35, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 200: T=135.3, E =271.79, E'=271.79, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 210: T=122.4, E =271.86, E'=1251.16, dE =979.31, p =0.000, Status: REJECT
-Iter 220: T=110.7, E =272.05, E'=1251.16, dE =979.11, p =0.000, Status: REJECT
-Iter 230: T=100.1, E =276.50, E'=276.50, dE =2.22, p =0.978, Status: ACCEPT (Worse)
-Iter 240: T=90.5, E =280.94, E'=280.94, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 250: T=81.9, E =281.15, E'=781.15, dE =500.00, p =0.002, Status: REJECT
-Iter 260: T=74.0, E =285.70, E'=285.70, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 270: T=67.0, E =285.56, E'=1251.16, dE =965.61, p =0.000, Status: REJECT
-Iter 280: T=60.6, E =292.35, E'=1251.16, dE =958.82, p =0.000, Status: REJECT
-Iter 290: T=54.8, E =292.10, E'=292.10, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 300: T=49.5, E =294.49, E'=1251.16, dE =956.68, p =0.000, Status: REJECT
-Iter 310: T=44.8, E =299.29, E'=299.29, dE =-0.04, p =N/A, Status: ACCEPT (Better)
-Iter 320: T=40.5, E =301.88, E'=301.88, dE =0.13, p =0.997, Status: ACCEPT (Worse)
-Iter 330: T=36.6, E =308.63, E'=1251.16, dE =942.53, p =0.000, Status: REJECT
-Iter 340: T=33.1, E =320.09, E'=320.09, dE =2.22, p =0.935, Status: ACCEPT (Worse)
-Iter 350: T=30.0, E =319.98, E'=319.98, dE =-0.04, p =N/A, Status: ACCEPT (Better)
-Iter 360: T=27.1, E =326.96, E'=1251.16, dE =924.20, p =0.000, Status: REJECT
-Iter 370: T=24.5, E =326.96, E'=326.96, dE =0.06, p =0.997, Status: ACCEPT (Worse)
-Iter 380: T=22.2, E =331.50, E'=331.50, dE =2.29, p =0.902, Status: ACCEPT (Worse)
-Iter 390: T=20.0, E =334.27, E'=334.27, dE =0.06, p =0.997, Status: ACCEPT (Worse)
-Iter 400: T=18.1, E =343.29, E'=343.29, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 410: T=16.4, E =345.71, E'=1251.16, dE =905.45, p =0.000, Status: REJECT
-Iter 420: T=14.8, E =347.81, E'=347.81, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 430: T=13.4, E =352.26, E'=352.26, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 440: T=12.1, E =356.94, E'=1251.16, dE =894.23, p =0.000, Status: REJECT
-Iter 450: T=11.0, E =361.57, E'=361.57, dE =2.22, p =0.817, Status: ACCEPT (Worse)
-Iter 460: T=9.9, E =366.51, E'=366.51, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 470: T=9.0, E =371.21, E'=371.21, dE =0.06, p =0.993, Status: ACCEPT (Worse)
-Iter 480: T=8.1, E =375.77, E'=1251.16, dE =875.39, p =0.000, Status: REJECT
-Iter 490: T=7.3, E =380.45, E'=1251.16, dE =870.71, p =0.000, Status: REJECT
-Iter 500: T=6.6, E =387.35, E'=387.35, dE =2.33, p =0.704, Status: ACCEPT (Worse)
-Iter 510: T=6.0, E =387.27, E'=1751.16, dE =1363.89, p =0.000, Status: REJECT
-Iter 520: T=5.4, E =389.50, E'=1751.16, dE =1361.67, p =0.000, Status: REJECT
-Iter 530: T=4.9, E =391.61, E'=inf, dE =inf, p =0.000, Status: REJECT
-Iter 540: T=4.4, E =395.99, E'=1751.16, dE =1355.17, p =0.000, Status: REJECT
-Iter 550: T=4.0, E =398.28, E'=1751.16, dE =1352.88, p =0.000, Status: REJECT
-Iter 560: T=3.6, E =400.50, E'=400.50, dE =2.29, p =0.533, Status: ACCEPT (Worse)
-Iter 570: T=3.3, E =407.24, E'=1751.16, dE =1343.93, p =0.000, Status: REJECT
-Iter 580: T=3.0, E =407.17, E'=1751.16, dE =1343.99, p =0.000, Status: REJECT
-Iter 590: T=2.7, E =414.22, E'=414.22, dE =2.29, p =0.427, Status: ACCEPT (Worse)
-Iter 600: T=2.4, E =416.51, E'=1751.16, dE =1334.66, p =0.000, Status: REJECT
-Iter 610: T=2.2, E =418.79, E'=1751.16, dE =1332.37, p =0.000, Status: REJECT
-Iter 620: T=2.0, E =418.79, E'=1751.16, dE =1332.37, p =0.000, Status: REJECT
-Iter 630: T=1.8, E =418.75, E'=1751.16, dE =1332.41, p =0.000, Status: REJECT
-Iter 640: T=1.6, E =418.86, E'=418.86, dE =0.11, p =0.937, Status: ACCEPT (Worse)
-Iter 650: T=1.5, E =418.69, E'=418.69, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 660: T=1.3, E =418.59, E'=1751.16, dE =1332.57, p =0.000, Status: REJECT
-Iter 670: T=1.2, E =418.72, E'=418.72, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 680: T=1.1, E =418.72, E'=421.01, dE =2.29, p =0.122, Status: REJECT
-Iter 690: T=1.0, E =418.79, E'=1751.16, dE =1332.38, p =0.000, Status: REJECT
-Iter 700: T=0.9, E =418.79, E'=418.79, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 710: T=0.8, E =418.76, E'=418.76, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 720: T=0.7, E =418.70, E'=1751.16, dE =1332.47, p =0.000, Status: REJECT
-Iter 730: T=0.7, E =418.74, E'=418.74, dE =0.04, p =0.940, Status: ACCEPT (Worse)
-Iter 740: T=0.6, E =418.80, E'=1751.16, dE =1332.36, p =0.000, Status: REJECT
-Iter 750: T=0.5, E =418.92, E'=421.21, dE =2.29, p =0.014, Status: REJECT
-Iter 760: T=0.5, E =418.96, E'=1751.16, dE =1332.20, p =0.000, Status: REJECT
-Iter 770: T=0.4, E =418.96, E'=421.25, dE =2.29, p =0.006, Status: REJECT
-Iter 780: T=0.4, E =418.61, E'=1251.16, dE =832.55, p =0.000, Status: REJECT
-Iter 790: T=0.4, E =418.55, E'=418.55, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 800: T=0.3, E =418.44, E'=420.73, dE =2.29, p =0.001, Status: REJECT
-Iter 810: T=0.3, E =418.44, E'=1251.16, dE =832.72, p =0.000, Status: REJECT
-Iter 820: T=0.3, E =418.44, E'=1251.16, dE =832.72, p =0.000, Status: REJECT
-Iter 830: T=0.2, E =418.38, E'=418.38, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 840: T=0.2, E =418.38, E'=1251.16, dE =832.79, p =0.000, Status: REJECT
-Iter 850: T=0.2, E =418.31, E'=1251.16, dE =832.85, p =0.000, Status: REJECT
-Iter 860: T=0.2, E =418.31, E'=1251.16, dE =832.85, p =0.000, Status: REJECT
-Iter 870: T=0.2, E =418.31, E'=420.64, dE =2.33, p =0.000, Status: REJECT
-Iter 880: T=0.1, E =418.34, E'=1251.16, dE =832.83, p =0.000, Status: REJECT
-Iter 890: T=0.1, E =418.40, E'=1751.16, dE =1332.76, p =0.000, Status: REJECT
-Iter 900: T=0.1, E =418.09, E'=420.38, dE =2.29, p =0.000, Status: REJECT
-Iter 910: T=0.1, E =418.06, E'=1251.16, dE =833.10, p =0.000, Status: REJECT
-Iter 920: T=0.1, E =418.06, E'=1251.16, dE =833.10, p =0.000, Status: REJECT
-Iter 930: T=0.1, E =417.94, E'=417.94, dE =-0.12, p =N/A, Status: ACCEPT (Better)
-Iter 940: T=0.1, E =417.92, E'=1251.16, dE =833.25, p =0.000, Status: REJECT
-Iter 950: T=0.1, E =417.92, E'=1251.16, dE =833.25, p =0.000, Status: REJECT
-Iter 960: T=0.1, E =417.76, E'=1251.16, dE =833.41, p =0.000, Status: REJECT
-Iter 970: T=0.1, E =417.65, E'=417.65, dE =-0.04, p =N/A, Status: ACCEPT (Better)
-Iter 980: T=0.1, E =417.59, E'=1251.16, dE =833.58, p =0.000, Status: REJECT
-Iter 990: T=0.0, E =417.59, E'=419.87, dE =2.29, p =0.000, Status: REJECT
-Iter 1000: T=0.0, E =417.55, E'=419.77, dE =2.22, p =0.000, Status: REJECT
-Iter 1010: T=0.0, E =417.55, E'=417.55, dE =-0.06, p =N/A, Status: ACCEPT (Better)
-Iter 1020: T=0.0, E =417.55, E'=417.61, dE =0.06, p =0.162, Status: REJECT
-Iter 1030: T=0.0, E =417.55, E'=1251.16, dE =833.62, p =0.000, Status: REJECT
-Iter 1040: T=0.0, E =417.55, E'=419.83, dE =2.29, p =0.000, Status: REJECT
-Iter 1050: T=0.0, E =267.52, E'=267.52, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1060: T=0.0, E =267.45, E'=269.68, dE =2.22, p =0.000, Status: REJECT
-Iter 1070: T=0.0, E =267.45, E'=269.68, dE =2.22, p =0.000, Status: REJECT
-Iter 1080: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1090: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1100: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1110: T=0.0, E =267.45, E'=269.74, dE =2.29, p =0.000, Status: REJECT
-Iter 1120: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.007, Status: REJECT
-Iter 1130: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1140: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1150: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1160: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1170: T=0.0, E =267.45, E'=269.68, dE =2.22, p =0.000, Status: REJECT
-Iter 1180: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1190: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1200: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1210: T=0.0, E =267.45, E'=269.74, dE =2.29, p =0.000, Status: REJECT
-Iter 1220: T=0.0, E =267.45, E'=269.68, dE =2.22, p =0.000, Status: REJECT
-Iter 1230: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1240: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.000, Status: REJECT
-Iter 1250: T=0.0, E =267.45, E'=269.74, dE =2.29, p =0.000, Status: REJECT
-Iter 1260: T=0.0, E =267.45, E'=269.74, dE =2.29, p =0.000, Status: REJECT
-Iter 1270: T=0.0, E =267.45, E'=767.45, dE =500.00, p =0.000, Status: REJECT
-Iter 1280: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1290: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1300: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1310: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1320: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.000, Status: REJECT
-Iter 1330: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.000, Status: REJECT
-Iter 1340: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1350: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1360: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1370: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1380: T=0.0, E =267.45, E'=269.68, dE =2.22, p =0.000, Status: REJECT
-Iter 1390: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1400: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1410: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.000, Status: REJECT
-Iter 1420: T=0.0, E =267.45, E'=269.68, dE =2.22, p =0.000, Status: REJECT
-Iter 1430: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1440: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.000, Status: REJECT
-Iter 1450: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1460: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1470: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1480: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1490: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1500: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1510: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1520: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1530: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1540: T=0.0, E =267.45, E'=767.45, dE =500.00, p =0.000, Status: REJECT
-Iter 1550: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1560: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1570: T=0.0, E =267.45, E'=1251.16, dE =983.71, p =0.000, Status: REJECT
-Iter 1580: T=0.0, E =267.45, E'=269.74, dE =2.29, p =0.000, Status: REJECT
-Iter 1590: T=0.0, E =267.45, E'=267.45, dE =0.00, p =1.000, Status: ACCEPT (Worse)
-Iter 1600: T=0.0, E =267.45, E'=267.52, dE =0.06, p =0.000, Status: REJECT
-Raw path length: 16
-Optimized path length: 8
-Algorithm: SA
-Time (s): 1.4049
-Nodes/Iter: 1604
-Path Length: 8
-Initial cost: 18251.16393442623
-Final_cost: 267.45407869995
+Bước 1: Belief state size =36  | g=0   | h=20  | f=20 
+-> Check when UP, g=0.0, h = 18.0, f = 18.0
+-> Check when UP, g=0.0, h = 18.0, f = 18.0
+-> Check when DOWN, g=0.0, h = 20.0, f = 20.0
+-> Check when LEFT, g=0.0, h = 20.0, f = 20.0
+-> Check when RIGHT, g=0.0, h = 18.0, f = 18.0
+-> Check when RIGHT, g=0.0, h = 20.0, f = 20.0
+Bước 2: Belief state size =28  | g=0   | h=18  | f=18 
+-> Check when UP, g=0.0, h = 16.0, f = 16.0
+-> Check when UP, g=0.0, h = 18.0, f = 18.0
+-> Check when DOWN, g=0.0, h = 20.0, f = 20.0
+-> Check when LEFT, g=0.0, h = 18.0, f = 18.0
+-> Check when RIGHT, g=0.0, h = 16.0, f = 16.0
+-> Check when RIGHT, g=0.0, h = 20.0, f = 20.0
+Bước 3: Belief state size =20  | g=0   | h=16  | f=16 
+-> Check when UP, g=0.0, h = 12.0, f = 12.0
+-> Check when UP, g=0.0, h = 16.0, f = 16.0
+-> Check when DOWN, g=0.0, h = 18.0, f = 18.0
+-> Check when LEFT, g=0.0, h = 16.0, f = 16.0
+-> Check when RIGHT, g=0.0, h = 14.0, f = 14.0
+-> Check when RIGHT, g=0.0, h = 16.0, f = 16.0
+Bước 4: Belief state size =12  | g=0   | h=12  | f=12 
+-> Check when UP, g=0.0, h = 10.0, f = 10.0
+-> Check when UP, g=0.0, h = 14.0, f = 14.0
+-> Check when DOWN, g=0.0, h = 14.0, f = 14.0
+-> Check when LEFT, g=0.0, h = 12.0, f = 12.0
+-> Check when RIGHT, g=0.0, h = 10.0, f = 10.0
+Bước 5: Belief state size =8   | g=0   | h=10  | f=10 
+-> Check when UP, g=0.0, h = 8.0, f = 8.0
+-> Check when UP, g=0.0, h = 12.0, f = 12.0
+-> Check when DOWN, g=0.0, h = 12.0, f = 12.0
+-> Check when LEFT, g=0.0, h = 12.0, f = 12.0
+-> Check when RIGHT, g=0.0, h = 8.0, f = 8.0
+Bước 6: Belief state size =4   | g=0   | h=8   | f=8  
+-> Check when UP, g=0.0, h = 8.0, f = 8.0
+-> Check when LEFT, g=0.0, h = 10.0, f = 10.0
+-> Check when RIGHT, g=0.0, h = 6.0, f = 6.0
+Bước 7: Belief state size =4   | g=0   | h=6   | f=6  
+-> Check when UP, g=0.0, h = 6.0, f = 6.0
+-> Check when DOWN, g=0.0, h = 8.0, f = 8.0
+-> Check when LEFT, g=0.0, h = 8.0, f = 8.0
+-> Check when RIGHT, g=0.0, h = 4.0, f = 4.0
+-> Check when RIGHT, g=0.0, h = 6.0, f = 6.0
+Bước 8: Belief state size =3   | g=0   | h=4   | f=4  
+-> Check when UP, g=0.0, h = 4.0, f = 4.0
+-> Check when DOWN, g=0.0, h = 6.0, f = 6.0
+-> Check when LEFT, g=0.0, h = 6.0, f = 6.0
+-> Check when RIGHT, g=0.0, h = 2.0, f = 2.0
+-> Check when RIGHT, g=0.0, h = 4.0, f = 4.0
+Bước 9: Belief state size =2   | g=0   | h=2   | f=2  
+-> Check when UP, g=0.0, h = 4.0, f = 4.0
+-> Check when DOWN, g=0.0, h = 4.0, f = 4.0
+-> Check when LEFT, g=0.0, h = 4.0, f = 4.0
+-> Check when RIGHT, g=0.0, h = 0.0, f = 0.0
+Bước 10: Belief state size =1   | g=0   | h=0   | f=0  
+SUCCESS! Tìm thấy đường đi sau 10 bước
+Algorithm: PO_search
+Time (s): 0.0025
+Nodes/Iter: 10
+Path Length: 9

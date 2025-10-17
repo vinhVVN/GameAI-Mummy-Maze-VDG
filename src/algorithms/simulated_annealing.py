@@ -254,7 +254,7 @@ def optimize_path(problem, path): # Loại bỏ chu trình
                 action_found = True
                 break
         if not action_found:
-            return states_along_path # Trả về phần đã có
+            return final_path # Trả về phần đã có
             
     return final_path
     

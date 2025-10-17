@@ -211,3 +211,51 @@ Bài toán được biểu diễn dưới dạng **một bài toán tìm kiếm 
 ## 🕹️ 4. Giao diện và cách chạy chương trình
 
 ### 4.1. **Cấu trúc thư mục**
+```
+MummyGame/
+├── assets/
+│   ├── images/
+│   ├── maps/
+│   └── sounds/
+├── src/
+│   ├── algorithms/
+│   │   ├── a_star_belief.py
+│   │   ├── ac3.py
+│   │   ├── and_or_search.py
+│   │   ├── AStar.py
+│   │   ├── backtracking.py
+│   │   ├── beam.py
+│   │   ├── bfs.py
+│   │   ├── dfs.py
+│   │   ├── forward_checking.py
+│   │   ├── greedy.py
+│   │   ├── hill_climbing.py
+│   │   ├── ids.py
+│   │   ├── No_Information_Problem.py
+│   │   ├── partial_observation.py
+│   │   ├── simulated_annealing.py
+│   │   └── ucs.py
+│   ├── algorithm_manager.py
+│   ├── animation_system.py
+│   ├── character.py
+│   ├── config.py
+│   ├── font_fixer.py
+│   ├── gamestate.py
+│   ├── logger.py
+│   ├── main.py
+│   ├── map_editor.py
+│   ├── maze.py
+│   ├── mazeproblem.py
+│   ├── popup.py
+│   ├── settings.py
+│   ├── sound_manager.py
+│   ├── sprites.py
+│   └── ui.py
+├── static/
+├── mummy_maze_log.txt
+├── note.txt
+├── note_uninformed_search
+├── NotoSans-Regular.ttf
+├── README.md
+└── run_game.py
+```
